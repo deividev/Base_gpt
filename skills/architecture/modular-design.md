@@ -1,6 +1,7 @@
 # Modular Design in Angular
 
 ## 📋 Metadata
+
 - **Difficulty**: Advanced
 - **Prerequisites**: routing.md, component-creation.md, services.md
 - **Estimated Time**: 4-6 hours
@@ -10,7 +11,7 @@
 ## 📖 Documentación Implementada
 
 > **IMPORTANTE**: La arquitectura modular está documentada en detalle en `docs/architecture/`.
-> 
+>
 > - **Estructura de carpetas**: [01-overview.md](../../../docs/architecture/01-overview.md)
 > - **Crear features**: [02-features.md](../../../docs/architecture/02-features.md)
 > - **Servicios core**: [06-core-services.md](../../../docs/architecture/06-core-services.md)
@@ -18,6 +19,7 @@
 > Esta skill proporciona fundamentos teóricos. Para la implementación práctica del proyecto, consultar la documentación de arquitectura.
 
 ## 🎯 Learning Objectives
+
 - Organize applications with modular architecture
 - Implement lazy loading for optimal performance
 - Design reusable feature, shared, and core modules
@@ -29,11 +31,12 @@
 ## 📦 Module Types in Angular
 
 ### 1. Core Module (Singleton Services)
+
 **Purpose**: Global singleton services, guards, interceptors
 
 ```typescript
 // core/auth/auth.service.ts
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class AuthService {
   private userSignal = signal<User | null>(null);
   user = this.userSignal.asReadonly();
@@ -41,27 +44,27 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: Credentials): Observable<User> {
-    return this.http.post<User>('/api/auth/login', credentials).pipe(
-      tap(user => this.userSignal.set(user))
-    );
+    return this.http
+      .post<User>("/api/auth/login", credentials)
+      .pipe(tap((user) => this.userSignal.set(user)));
   }
 
   logout(): void {
     this.userSignal.set(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   }
 }
 
 // core/interceptors/auth.interceptor.ts
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('token');
-  
+  const token = localStorage.getItem("token");
+
   if (token) {
     req = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
+      setHeaders: { Authorization: `Bearer ${token}` },
     });
   }
-  
+
   return next(req);
 };
 
@@ -69,74 +72,81 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  
+
   if (authService.user()) {
     return true;
   }
-  
-  return router.createUrlTree(['/login']);
+
+  return router.createUrlTree(["/login"]);
 };
 
 // core/index.ts (Barrel export)
-export * from './auth/auth.service';
-export * from './interceptors/auth.interceptor';
-export * from './guards/auth.guard';
+export * from "./auth/auth.service";
+export * from "./interceptors/auth.interceptor";
+export * from "./guards/auth.guard";
 ```
 
 ### 2. Shared Module (Reusable Components/Pipes/Directives)
+
 **Purpose**: Common UI components, pipes, directives usados en toda la app
 
 ```typescript
 // shared/components/button/button.component.ts
 @Component({
-  selector: 'app-button',
+  selector: "app-button",
   standalone: true,
   template: `
-    <button 
-      [type]="type" 
-      [disabled]="disabled"
-      [class]="'btn btn-' + variant">
+    <button [type]="type" [disabled]="disabled" [class]="'btn btn-' + variant">
       <ng-content></ng-content>
     </button>
   `,
-  styles: [`
-    .btn { padding: 0.5rem 1rem; border-radius: 4px; }
-    .btn-primary { background: #007bff; color: white; }
-    .btn-secondary { background: #6c757d; color: white; }
-  `]
+  styles: [
+    `
+      .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+      .btn-primary {
+        background: #007bff;
+        color: white;
+      }
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+    `,
+  ],
 })
 export class ButtonComponent {
-  @Input() type: 'button' | 'submit' = 'button';
-  @Input() variant: 'primary' | 'secondary' = 'primary';
+  @Input() type: "button" | "submit" = "button";
+  @Input() variant: "primary" | "secondary" = "primary";
   @Input() disabled = false;
 }
 
 // shared/pipes/truncate.pipe.ts
-@Pipe({ name: 'truncate', standalone: true })
+@Pipe({ name: "truncate", standalone: true })
 export class TruncatePipe implements PipeTransform {
-  transform(value: string, limit: number = 50, trail: string = '...'): string {
-    return value.length > limit 
-      ? value.substring(0, limit) + trail 
-      : value;
+  transform(value: string, limit: number = 50, trail: string = "..."): string {
+    return value.length > limit ? value.substring(0, limit) + trail : value;
   }
 }
 
 // shared/directives/highlight.directive.ts
 @Directive({
-  selector: '[appHighlight]',
-  standalone: true
+  selector: "[appHighlight]",
+  standalone: true,
 })
 export class HighlightDirective {
-  @Input() appHighlight = 'yellow';
+  @Input() appHighlight = "yellow";
 
   constructor(private el: ElementRef) {}
 
-  @HostListener('mouseenter') onMouseEnter() {
+  @HostListener("mouseenter") onMouseEnter() {
     this.el.nativeElement.style.backgroundColor = this.appHighlight;
   }
 
-  @HostListener('mouseleave') onMouseLeave() {
-    this.el.nativeElement.style.backgroundColor = '';
+  @HostListener("mouseleave") onMouseLeave() {
+    this.el.nativeElement.style.backgroundColor = "";
   }
 }
 
@@ -144,46 +154,43 @@ export class HighlightDirective {
 export const SHARED_COMPONENTS = [
   ButtonComponent,
   CardComponent,
-  ModalComponent
+  ModalComponent,
 ] as const;
 
-export const SHARED_PIPES = [
-  TruncatePipe,
-  DateAgoPipe,
-  SafeHtmlPipe
-] as const;
+export const SHARED_PIPES = [TruncatePipe, DateAgoPipe, SafeHtmlPipe] as const;
 
 export const SHARED_DIRECTIVES = [
   HighlightDirective,
-  AutofocusDirective
+  AutofocusDirective,
 ] as const;
 
 export const SHARED_IMPORTS = [
   ...SHARED_COMPONENTS,
   ...SHARED_PIPES,
-  ...SHARED_DIRECTIVES
+  ...SHARED_DIRECTIVES,
 ] as const;
 ```
 
 ### 3. Feature Module (Business Logic)
+
 **Purpose**: Funcionalidad específica de negocio agrupada
 
 ```typescript
 // features/products/products.routes.ts
 export const PRODUCTS_ROUTES: Routes = [
   {
-    path: '',
+    path: "",
     component: ProductsLayoutComponent,
     children: [
-      { path: '', component: ProductListComponent },
-      { path: ':id', component: ProductDetailComponent },
-      { path: ':id/edit', component: ProductEditComponent }
-    ]
-  }
+      { path: "", component: ProductListComponent },
+      { path: ":id", component: ProductDetailComponent },
+      { path: ":id/edit", component: ProductEditComponent },
+    ],
+  },
 ];
 
 // features/products/products.service.ts
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ProductsService {
   private productsSignal = signal<Product[]>([]);
   products = this.productsSignal.asReadonly();
@@ -191,9 +198,9 @@ export class ProductsService {
   constructor(private http: HttpClient) {}
 
   loadProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>('/api/products').pipe(
-      tap(products => this.productsSignal.set(products))
-    );
+    return this.http
+      .get<Product[]>("/api/products")
+      .pipe(tap((products) => this.productsSignal.set(products)));
   }
 
   getProduct(id: string): Observable<Product> {
@@ -201,17 +208,17 @@ export class ProductsService {
   }
 
   createProduct(product: ProductInput): Observable<Product> {
-    return this.http.post<Product>('/api/products', product).pipe(
-      tap(newProduct => {
-        this.productsSignal.update(products => [...products, newProduct]);
-      })
+    return this.http.post<Product>("/api/products", product).pipe(
+      tap((newProduct) => {
+        this.productsSignal.update((products) => [...products, newProduct]);
+      }),
     );
   }
 }
 
 // features/products/components/product-list.component.ts
 @Component({
-  selector: 'app-product-list',
+  selector: "app-product-list",
   standalone: true,
   imports: [SHARED_IMPORTS],
   template: `
@@ -219,20 +226,20 @@ export class ProductsService {
     @for (product of products(); track product.id) {
       <app-card>
         <h3>{{ product.name }}</h3>
-        <p>{{ product.description | truncate:100 }}</p>
+        <p>{{ product.description | truncate: 100 }}</p>
         <app-button (click)="viewProduct(product.id)">
           View Details
         </app-button>
       </app-card>
     }
-  `
+  `,
 })
 export class ProductListComponent {
   products = this.productsService.products;
 
   constructor(
     private productsService: ProductsService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -240,7 +247,7 @@ export class ProductListComponent {
   }
 
   viewProduct(id: string) {
-    this.router.navigate(['/products', id]);
+    this.router.navigate(["/products", id]);
   }
 }
 ```
@@ -250,6 +257,7 @@ export class ProductListComponent {
 ## 🗂️ Folder Structure: Feature-First
 
 ### Recommended Structure
+
 ```
 src/
 ├── app/
@@ -337,42 +345,41 @@ src/
 ```typescript
 // app.routes.ts
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  
+  { path: "", redirectTo: "/dashboard", pathMatch: "full" },
+
   // Lazy load features
   {
-    path: 'products',
-    loadChildren: () => 
-      import('./features/products/products.routes')
-        .then(m => m.PRODUCTS_ROUTES)
+    path: "products",
+    loadChildren: () =>
+      import("./features/products/products.routes").then(
+        (m) => m.PRODUCTS_ROUTES,
+      ),
   },
-  
+
   {
-    path: 'users',
-    loadChildren: () => 
-      import('./features/users/users.routes')
-        .then(m => m.USERS_ROUTES)
+    path: "users",
+    loadChildren: () =>
+      import("./features/users/users.routes").then((m) => m.USERS_ROUTES),
   },
-  
+
   {
-    path: 'orders',
+    path: "orders",
     canActivate: [authGuard],
-    loadChildren: () => 
-      import('./features/orders/orders.routes')
-        .then(m => m.ORDERS_ROUTES)
+    loadChildren: () =>
+      import("./features/orders/orders.routes").then((m) => m.ORDERS_ROUTES),
   },
-  
+
   // Lazy load layout + children
   {
-    path: 'admin',
+    path: "admin",
     canActivate: [authGuard, adminGuard],
     loadComponent: () =>
-      import('./features/admin/admin-layout.component')
-        .then(m => m.AdminLayoutComponent),
+      import("./features/admin/admin-layout.component").then(
+        (m) => m.AdminLayoutComponent,
+      ),
     loadChildren: () =>
-      import('./features/admin/admin.routes')
-        .then(m => m.ADMIN_ROUTES)
-  }
+      import("./features/admin/admin.routes").then((m) => m.ADMIN_ROUTES),
+  },
 ];
 ```
 
@@ -381,14 +388,14 @@ export const routes: Routes = [
 ```typescript
 // Lazy load modal on demand
 @Component({
-  selector: 'app-product-list',
+  selector: "app-product-list",
   standalone: true,
   template: `
     <button (click)="openModal()">Create Product</button>
     @if (showModal) {
       <ng-container *ngComponentOutlet="modalComponent | async" />
     }
-  `
+  `,
 })
 export class ProductListComponent {
   showModal = false;
@@ -396,10 +403,11 @@ export class ProductListComponent {
 
   async openModal() {
     this.showModal = true;
-    
+
     // Lazy load component
-    this.modalComponent = import('./product-modal.component')
-      .then(m => m.ProductModalComponent);
+    this.modalComponent = import("./product-modal.component").then(
+      (m) => m.ProductModalComponent,
+    );
   }
 }
 ```
@@ -444,20 +452,19 @@ export const appConfig: ApplicationConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])
-    ),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideAnimations(),
-    
+
     // Global providers
     { provide: APP_INITIALIZER, useFactory: initializeApp, multi: true },
-    { provide: LOGGER, useClass: ConsoleLogger }
-  ]
+    { provide: LOGGER, useClass: ConsoleLogger },
+  ],
 };
 
 // main.ts
-bootstrapApplication(AppComponent, appConfig)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch((err) =>
+  console.error(err),
+);
 ```
 
 ### Feature with Standalone Components
@@ -466,29 +473,31 @@ bootstrapApplication(AppComponent, appConfig)
 // features/dashboard/dashboard.routes.ts
 export const DASHBOARD_ROUTES: Routes = [
   {
-    path: '',
+    path: "",
     loadComponent: () =>
-      import('./dashboard.component').then(m => m.DashboardComponent),
+      import("./dashboard.component").then((m) => m.DashboardComponent),
     children: [
       {
-        path: 'overview',
+        path: "overview",
         loadComponent: () =>
-          import('./widgets/overview-widget.component')
-            .then(m => m.OverviewWidgetComponent)
+          import("./widgets/overview-widget.component").then(
+            (m) => m.OverviewWidgetComponent,
+          ),
       },
       {
-        path: 'analytics',
+        path: "analytics",
         loadComponent: () =>
-          import('./widgets/analytics-widget.component')
-            .then(m => m.AnalyticsWidgetComponent)
-      }
-    ]
-  }
+          import("./widgets/analytics-widget.component").then(
+            (m) => m.AnalyticsWidgetComponent,
+          ),
+      },
+    ],
+  },
 ];
 
 // features/dashboard/dashboard.component.ts
 @Component({
-  selector: 'app-dashboard',
+  selector: "app-dashboard",
   standalone: true,
   imports: [RouterOutlet, SHARED_IMPORTS],
   template: `
@@ -499,7 +508,7 @@ export const DASHBOARD_ROUTES: Routes = [
       </nav>
       <router-outlet />
     </div>
-  `
+  `,
 })
 export class DashboardComponent {}
 ```
@@ -509,45 +518,46 @@ export class DashboardComponent {}
 ## 🔗 Barrel Exports & Index Files
 
 ### Purpose
+
 Simplificar imports y controlar API pública del módulo
 
 ### ✅ Good Barrel Exports
 
 ```typescript
 // shared/components/index.ts
-export { ButtonComponent } from './button/button.component';
-export { CardComponent } from './card/card.component';
-export { ModalComponent } from './modal/modal.component';
+export { ButtonComponent } from "./button/button.component";
+export { CardComponent } from "./card/card.component";
+export { ModalComponent } from "./modal/modal.component";
 
 export const SHARED_COMPONENTS = [
   ButtonComponent,
   CardComponent,
-  ModalComponent
+  ModalComponent,
 ] as const;
 
 // shared/index.ts
-export * from './components';
-export * from './pipes';
-export * from './directives';
-export { SHARED_IMPORTS } from './shared-imports';
+export * from "./components";
+export * from "./pipes";
+export * from "./directives";
+export { SHARED_IMPORTS } from "./shared-imports";
 
 // Usage
-import { SHARED_IMPORTS } from '@app/shared';
-import { ButtonComponent } from '@app/shared';
+import { SHARED_IMPORTS } from "@app/shared";
+import { ButtonComponent } from "@app/shared";
 ```
 
 ### ❌ Barrel Export Anti-patterns
 
 ```typescript
 // ❌ BAD: Re-exporting everything (circular dependencies)
-export * from './component-a';
-export * from './component-b';  // si component-b importa component-a
+export * from "./component-a";
+export * from "./component-b"; // si component-b importa component-a
 
 // ❌ BAD: Exporting too much (exposes internals)
-export * from './internal-service';  // Debería ser privado
+export * from "./internal-service"; // Debería ser privado
 
 // ✅ GOOD: Explicit exports
-export { PublicService } from './public.service';
+export { PublicService } from "./public.service";
 // InternalService NO se exporta
 ```
 
@@ -560,7 +570,7 @@ export { PublicService } from './public.service';
 ```typescript
 /**
  * REGLAS DE DEPENDENCIAS:
- * 
+ *
  * 1. Core NO depende de Features ni Shared
  * 2. Shared NO depende de Features ni Core
  * 3. Features pueden depender de Core y Shared
@@ -569,19 +579,19 @@ export { PublicService } from './public.service';
 
 // ✅ GOOD
 // features/products/product-list.component.ts
-import { AuthService } from '@core/auth';     // ✅ Feature -> Core
-import { ButtonComponent } from '@shared';    // ✅ Feature -> Shared
+import { AuthService } from "@core/auth"; // ✅ Feature -> Core
+import { ButtonComponent } from "@shared"; // ✅ Feature -> Shared
 
 // ❌ BAD
 // features/products/product-service.ts
-import { UserService } from '@features/users';  // ❌ Feature -> Feature
+import { UserService } from "@features/users"; // ❌ Feature -> Feature
 
 // ✅ GOOD: Extract to core if shared
 // core/api/api.service.ts (usado por múltiples features)
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ApiService {
   constructor(private http: HttpClient) {}
-  
+
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
   }
@@ -618,7 +628,7 @@ export class OrdersFacadeService {
   // Exposes simple API to components
   orders = this.ordersService.orders;
   loading = this.ordersService.loading;
-  
+
   constructor(
     private ordersService: OrdersService,
     private ordersApiService: OrdersApiService,
@@ -676,9 +686,9 @@ export interface Repository<T> {
 }
 
 // features/products/data/products.repository.ts
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ProductsRepository implements Repository<Product> {
-  private readonly endpoint = '/api/products';
+  private readonly endpoint = "/api/products";
 
   constructor(private http: HttpClient) {}
 
@@ -812,12 +822,12 @@ export class CartComponent {
 
 ```typescript
 // ✅ GOOD: Provideable in 'root' (tree-shakeable)
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ProductsService {}
 
 // ❌ BAD: Provider in module (not tree-shakeable)
 @NgModule({
-  providers: [ProductsService]
+  providers: [ProductsService],
 })
 export class ProductsModule {}
 ```
@@ -848,9 +858,9 @@ export class ProductsModule {}
 ```typescript
 // All feature components use OnPush
 @Component({
-  selector: 'app-product-list',
+  selector: "app-product-list",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `...`
+  template: `...`,
 })
 export class ProductListComponent {
   // Use signals for reactive data
@@ -866,28 +876,28 @@ export class ProductListComponent {
 
 ```typescript
 // features/products/services/products.service.spec.ts
-describe('ProductsService', () => {
+describe("ProductsService", () => {
   let service: ProductsService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductsService]
+      providers: [ProductsService],
     });
 
     service = TestBed.inject(ProductsService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should load products', () => {
-    const mockProducts = [{ id: '1', name: 'Product 1' }];
+  it("should load products", () => {
+    const mockProducts = [{ id: "1", name: "Product 1" }];
 
-    service.loadProducts().subscribe(products => {
+    service.loadProducts().subscribe((products) => {
       expect(products).toEqual(mockProducts);
     });
 
-    const req = httpMock.expectOne('/api/products');
+    const req = httpMock.expectOne("/api/products");
     req.flush(mockProducts);
   });
 
@@ -901,33 +911,33 @@ describe('ProductsService', () => {
 
 ```typescript
 // features/products/products.integration.spec.ts
-describe('Products Feature Integration', () => {
+describe("Products Feature Integration", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         ProductListComponent,
         HttpClientTestingModule,
-        RouterTestingModule
-      ]
+        RouterTestingModule,
+      ],
     }).compileComponents();
   });
 
-  it('should display products', () => {
+  it("should display products", () => {
     const fixture = TestBed.createComponent(ProductListComponent);
     const httpMock = TestBed.inject(HttpTestingController);
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('/api/products');
+    const req = httpMock.expectOne("/api/products");
     req.flush([
-      { id: '1', name: 'Product 1' },
-      { id: '2', name: 'Product 2' }
+      { id: "1", name: "Product 1" },
+      { id: "2", name: "Product 2" },
     ]);
 
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelectorAll('.product-card').length).toBe(2);
+    expect(compiled.querySelectorAll(".product-card").length).toBe(2);
   });
 });
 ```
@@ -941,14 +951,14 @@ describe('Products Feature Integration', () => {
 ```typescript
 // ❌ BAD
 // feature-a.service.ts
-import { FeatureBService } from './feature-b.service';
+import { FeatureBService } from "./feature-b.service";
 
 // feature-b.service.ts
-import { FeatureAService } from './feature-a.service';
+import { FeatureAService } from "./feature-a.service";
 
 // ✅ GOOD: Extract common logic to shared service
 // shared/common.service.ts
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CommonService {}
 ```
 
@@ -957,12 +967,8 @@ export class CommonService {}
 ```typescript
 // ❌ BAD: Module with everything
 @NgModule({
-  declarations: [
-    Component1, Component2, ... Component50
-  ],
-  providers: [
-    Service1, Service2, ... Service30
-  ]
+  declarations: [Component1, Component2, ...Component50],
+  providers: [Service1, Service2, ...Service30],
 })
 export class GodModule {}
 
@@ -974,11 +980,11 @@ export class GodModule {}
 ```typescript
 // ❌ BAD
 // features/products/product.service.ts
-import { UsersService } from '../users/users.service';
+import { UsersService } from "../users/users.service";
 
 // ✅ GOOD: Extract to core
 // core/data/data.service.ts
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DataService {}
 ```
 
@@ -987,6 +993,7 @@ export class DataService {}
 ## ✅ Checklist
 
 ### Structure
+
 - [ ] Core module para singleton services
 - [ ] Shared module para componentes reutilizables
 - [ ] Feature modules agrupados por funcionalidad
@@ -994,24 +1001,28 @@ export class DataService {}
 - [ ] Path aliases configurados en tsconfig.json
 
 ### Lazy Loading
+
 - [ ] Feature routes con loadChildren/loadComponent
 - [ ] Preloading strategy configurada
 - [ ] Bundle size monitoreado
 - [ ] Code splitting por feature
 
 ### Dependencies
+
 - [ ] Core NO depende de Features
 - [ ] Shared NO depende de Features
 - [ ] Features NO dependen entre sí
 - [ ] Barrel exports para public API
 
 ### Performance
+
 - [ ] Provideable in 'root' para tree-shaking
 - [ ] OnPush change detection
 - [ ] Lazy loading de modals/dialogs
 - [ ] Bundle budget configurado
 
 ### Testing
+
 - [ ] Unit tests para servicios
 - [ ] Integration tests para features
 - [ ] E2E tests para flujos críticos
@@ -1021,6 +1032,7 @@ export class DataService {}
 ## 🎓 Conclusión
 
 Modular design en Angular permite:
+
 - **Scalability**: Agregar features sin afectar existentes
 - **Maintainability**: Código organizado y localizado
 - **Performance**: Lazy loading y tree-shaking

@@ -27,12 +27,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "config/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "angular-app"
-  ]
+  "include": ["config/**/*"],
+  "exclude": ["node_modules", "dist", "angular-app"]
 }

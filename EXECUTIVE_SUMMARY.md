@@ -4,18 +4,18 @@
 
 Un framework que permite a Claude AI trabajar de forma **más precisa y autónoma** mediante:
 
-1. **Agents** (Agentes) → Roles especializados  
+1. **Agents** (Agentes) → Roles especializados
 2. **Skills** (Habilidades) → Conocimientos específicos aplicables
 
 ## 🔥 Beneficios Clave
 
-| Beneficio | Descripción |
-|-----------|-------------|
-| 🎯 **Precisión** | Código que sigue estrictamente las mejores prácticas |
-| 🤖 **Autonomía** | Claude puede tomar decisiones informadas basadas en skills |
-| 📚 **Consistencia** | Mismo estándar de código en todo el proyecto |
-| 🚀 **Velocidad** | Menos iteraciones, más acción directa |
-| 📖 **Documentación** | Todo documentado y reutilizable |
+| Beneficio            | Descripción                                                |
+| -------------------- | ---------------------------------------------------------- |
+| 🎯 **Precisión**     | Código que sigue estrictamente las mejores prácticas       |
+| 🤖 **Autonomía**     | Claude puede tomar decisiones informadas basadas en skills |
+| 📚 **Consistencia**  | Mismo estándar de código en todo el proyecto               |
+| 🚀 **Velocidad**     | Menos iteraciones, más acción directa                      |
+| 📖 **Documentación** | Todo documentado y reutilizable                            |
 
 ## 📊 Arquitectura Visual
 
@@ -62,6 +62,7 @@ Un framework que permite a Claude AI trabajar de forma **más precisa y autónom
 ## 🎮 Ejemplo Práctico
 
 ### Sin el sistema:
+
 ```
 Usuario: "Crea un componente de perfil"
 Claude: [Crea componente básico con prácticas antiguas]
@@ -74,6 +75,7 @@ Usuario: "Y usa la nueva sintaxis de control flow"
 ```
 
 ### Con el sistema:
+
 ```
 Usuario: "Crea un componente de perfil"
 Claude: [Activa Angular Developer Agent]
@@ -91,16 +93,17 @@ Claude: [Activa Angular Developer Agent]
 
 ## 📋 Agents Disponibles
 
-| Agent | Uso | Skills Principales |
-|-------|-----|-------------------|
+| Agent                    | Uso                                    | Skills Principales                    |
+| ------------------------ | -------------------------------------- | ------------------------------------- |
 | 🎨 **Angular Developer** | Crear componentes, servicios, features | component-creation, services, routing |
-| 🏗️ **Architecture** | Diseñar estructura y patrones | clean-architecture, solid, patterns |
-| 🧪 **Testing** | Crear y mantener tests | unit-testing, e2e-testing, tdd |
-| 👀 **Code Reviewer** | Revisar y mejorar código | best-practices, performance, security |
+| 🏗️ **Architecture**      | Diseñar estructura y patrones          | clean-architecture, solid, patterns   |
+| 🧪 **Testing**           | Crear y mantener tests                 | unit-testing, e2e-testing, tdd        |
+| 👀 **Code Reviewer**     | Revisar y mejorar código               | best-practices, performance, security |
 
 ## 📚 Skills Disponibles (Ejemplos)
 
 ### Angular Skills
+
 - ✅ `component-creation` - Componentes standalone con signals
 - ✅ `services` - Dependency injection moderna
 - 📝 `routing` - Rutas, guards, resolvers
@@ -109,11 +112,13 @@ Claude: [Activa Angular Developer Agent]
 - 📝 `http-client` - APIs y HTTP
 
 ### Architecture Skills
+
 - ✅ `clean-architecture` - Capas y separación de responsabilidades
 - 📝 `design-patterns` - Patrones aplicables
 - 📝 `solid-principles` - Principios SOLID
 
 ### Core Skills
+
 - ✅ `typescript-advanced` - TypeScript avanzado
 - 📝 `error-handling` - Manejo de errores
 - 📝 `performance` - Optimización
@@ -123,6 +128,7 @@ Claude: [Activa Angular Developer Agent]
 ## 🚀 Inicio Rápido
 
 ### 1. Explorar
+
 ```bash
 # Ver README principal
 cat README.md
@@ -135,15 +141,17 @@ cd skills/angular
 ```
 
 ### 2. Crear Proyecto Angular
+
 ```bash
 ng new angular-app --standalone --routing --style=scss
 cd angular-app
 ```
 
 ### 3. Usar el Sistema
+
 ```
-"Como Angular Developer Agent, usando la skill de 
-component-creation, crea un dashboard con signals 
+"Como Angular Developer Agent, usando la skill de
+component-creation, crea un dashboard con signals
 para mostrar estadísticas en tiempo real"
 ```
 
@@ -188,6 +196,7 @@ Base_Skills/
 ## 🎯 Casos de Uso
 
 ### 1. Desarrollo de Features
+
 ```
 "Crea un módulo completo de gestión de productos con:
 - Listado con paginación
@@ -196,22 +205,27 @@ Base_Skills/
 - Integración con API REST
 Usa Clean Architecture"
 ```
+
 **Agent activado:** Angular Developer + Architecture  
 **Skills usadas:** component-creation, services, forms, http-client, clean-architecture
 
 ### 2. Refactoring
+
 ```
-"Revisa esta carpeta y refactoriza el código 
+"Revisa esta carpeta y refactoriza el código
 para seguir Clean Architecture y usar signals"
 ```
+
 **Agent activado:** Code Reviewer + Angular Developer  
 **Skills usadas:** best-practices, clean-architecture, component-creation
 
 ### 3. Testing
+
 ```
-"Crea tests completos para todos los componentes 
+"Crea tests completos para todos los componentes
 del módulo de usuarios"
 ```
+
 **Agent activado:** Testing Agent  
 **Skills usadas:** unit-testing, integration-testing
 
@@ -226,6 +240,7 @@ del módulo de usuarios"
 ## 📈 Roadmap
 
 ### Fase 1: Base (✅ Completada)
+
 - [x] Estructura de carpetas
 - [x] Sistema de agents
 - [x] Sistema de skills
@@ -233,6 +248,7 @@ del módulo de usuarios"
 - [x] Documentación inicial
 
 ### Fase 2: Expansión (📋 Siguiente)
+
 - [ ] Agregar skills de Angular avanzadas
 - [ ] Skills de testing completas
 - [ ] Skills de performance
@@ -240,6 +256,7 @@ del módulo de usuarios"
 - [ ] Ejemplos de proyectos completos
 
 ### Fase 3: Personalización (🔮 Futuro)
+
 - [ ] Skills personalizadas del usuario
 - [ ] Agents personalizados
 - [ ] Integración con CI/CD

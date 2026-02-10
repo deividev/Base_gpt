@@ -3,12 +3,14 @@
 ## ApiService
 
 El `ApiService` es el cliente HTTP centralizado que proporciona:
+
 - Métodos tipados (GET, POST, PUT, PATCH, DELETE)
 - Timeout automático
 - Logging de peticiones
 - Manejo de errores consistente
 
 ### Ubicación
+
 ```
 src/app/core/services/api.ts
 ```
@@ -16,38 +18,38 @@ src/app/core/services/api.ts
 ### Uso Básico
 
 ```typescript
-import { inject } from '@angular/core';
-import { ApiService } from '@core/services';
+import { inject } from "@angular/core";
+import { ApiService } from "@core/services";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ProductService {
   private readonly api = inject(ApiService);
-  
+
   // GET
   getProducts(): Observable<Product[]> {
-    return this.api.get<Product[]>('/products');
+    return this.api.get<Product[]>("/products");
   }
-  
+
   // GET con parámetros
   getProductById(id: string): Observable<Product> {
     return this.api.get<Product>(`/products/${id}`);
   }
-  
+
   // POST
   createProduct(data: CreateProductDto): Observable<Product> {
-    return this.api.post<Product>('/products', data);
+    return this.api.post<Product>("/products", data);
   }
-  
+
   // PUT (reemplazo completo)
   updateProduct(id: string, data: Product): Observable<Product> {
     return this.api.put<Product>(`/products/${id}`, data);
   }
-  
+
   // PATCH (actualización parcial)
   patchProduct(id: string, data: Partial<Product>): Observable<Product> {
     return this.api.patch<Product>(`/products/${id}`, data);
   }
-  
+
   // DELETE
   deleteProduct(id: string): Observable<void> {
     return this.api.delete<void>(`/products/${id}`);
@@ -111,13 +113,13 @@ export interface ProductFilters {
 
 ### Nombrado de DTOs
 
-| Tipo | Sufijo | Ejemplo |
-|------|--------|---------|
-| Entidad completa | (sin sufijo) | `Product`, `User` |
-| Crear | CreateDto | `CreateProductDto` |
-| Actualizar | UpdateDto | `UpdateProductDto` |
-| Filtros | Filters | `ProductFilters` |
-| Respuesta paginada | Response | `ProductListResponse` |
+| Tipo               | Sufijo       | Ejemplo               |
+| ------------------ | ------------ | --------------------- |
+| Entidad completa   | (sin sufijo) | `Product`, `User`     |
+| Crear              | CreateDto    | `CreateProductDto`    |
+| Actualizar         | UpdateDto    | `UpdateProductDto`    |
+| Filtros            | Filters      | `ProductFilters`      |
+| Respuesta paginada | Response     | `ProductListResponse` |
 
 ## Query Parameters
 
@@ -128,7 +130,7 @@ import { HttpParams } from '@angular/common/http';
 
 getProducts(filters: ProductFilters): Observable<Product[]> {
   let params = new HttpParams();
-  
+
   if (filters.category) {
     params = params.set('category', filters.category);
   }
@@ -138,7 +140,7 @@ getProducts(filters: ProductFilters): Observable<Product[]> {
   if (filters.search) {
     params = params.set('q', filters.search);
   }
-  
+
   return this.api.get<Product[]>('/products', { params });
 }
 ```
@@ -151,13 +153,13 @@ import { HttpParams } from '@angular/common/http';
 
 export function toHttpParams(obj: Record<string, any>): HttpParams {
   let params = new HttpParams();
-  
+
   Object.entries(obj).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== '') {
       params = params.set(key, String(value));
     }
   });
-  
+
   return params;
 }
 
@@ -241,11 +243,11 @@ export interface ApiError {
 @Component({...})
 export class Products {
   protected readonly error = signal<string | null>(null);
-  
+
   loadProducts(): void {
     this.loading.set(true);
     this.error.set(null);
-    
+
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products.set(products);
@@ -254,7 +256,7 @@ export class Products {
       error: (err: ApiError) => {
         this.error.set(err.message);
         this.loading.set(false);
-        
+
         // Manejo específico por código de error
         if (err.status === 404) {
           this.error.set('No se encontraron productos');
@@ -295,11 +297,11 @@ import { HttpHeaders } from '@angular/common/http';
 uploadFile(file: File): Observable<UploadResponse> {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   const headers = new HttpHeaders({
     'X-Upload-Type': 'document'
   });
-  
+
   return this.api.post<UploadResponse>('/upload', formData, { headers });
 }
 
@@ -308,7 +310,7 @@ getDataSilently(): Observable<Data> {
   const headers = new HttpHeaders({
     'X-Skip-Loading': 'true'
   });
-  
+
   return this.api.get<Data>('/data', { headers });
 }
 ```
@@ -348,20 +350,20 @@ getUser(id: string): Observable<User> {
 
 ```typescript
 // src/app/features/products/services/product.service.ts
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from '@core/services';
-import { API_ENDPOINTS } from '@core/config';
-import type { 
-  Product, 
-  CreateProductDto, 
+import { Injectable, inject } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "@core/services";
+import { API_ENDPOINTS } from "@core/config";
+import type {
+  Product,
+  CreateProductDto,
   UpdateProductDto,
-  ProductFilters 
-} from '../models/product.dto';
-import type { PaginatedResponse } from '@core/models';
-import { toHttpParams } from '@shared/utils';
+  ProductFilters,
+} from "../models/product.dto";
+import type { PaginatedResponse } from "@core/models";
+import { toHttpParams } from "@shared/utils";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ProductService {
   private readonly api = inject(ApiService);
   private readonly endpoint = API_ENDPOINTS.products;
@@ -370,17 +372,19 @@ export class ProductService {
    * Listar productos con paginación y filtros
    */
   getProducts(
-    page: number = 1, 
+    page: number = 1,
     pageSize: number = 10,
-    filters?: ProductFilters
+    filters?: ProductFilters,
   ): Observable<PaginatedResponse<Product>> {
     const params = toHttpParams({
       page,
       pageSize,
-      ...filters
+      ...filters,
     });
-    
-    return this.api.get<PaginatedResponse<Product>>(this.endpoint.base, { params });
+
+    return this.api.get<PaginatedResponse<Product>>(this.endpoint.base, {
+      params,
+    });
   }
 
   /**
@@ -428,7 +432,7 @@ El timeout se configura en `environment.ts`:
 // src/environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: "http://localhost:3000/api",
   apiTimeout: 30000, // 30 segundos
 };
 ```

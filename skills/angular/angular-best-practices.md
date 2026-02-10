@@ -17,6 +17,7 @@ Aplicar las mejores prácticas modernas de Angular 21 incluyendo signals, standa
 ## 📝 TypeScript
 
 ### ✅ Reglas
+
 - **Usar strict type checking** habilitado en `tsconfig.json`
 - **Preferir type inference** cuando el tipo es obvio
 - **Evitar `any`** - usar `unknown` cuando el tipo es incierto
@@ -24,7 +25,7 @@ Aplicar las mejores prácticas modernas de Angular 21 incluyendo signals, standa
 
 ```typescript
 // ✅ CORRECTO - Type inference
-const userName = 'John Doe'; // TypeScript infiere string
+const userName = "John Doe"; // TypeScript infiere string
 
 // ✅ CORRECTO - Unknown para tipos inciertos
 function parseJSON(json: string): unknown {
@@ -45,36 +46,26 @@ function parseJSON(json: string): any {
 
 1. **Siempre usar standalone components**
    - **NO** establecer `standalone: true` — es el default en v20+
-   
 2. **Usar `ChangeDetectionStrategy.OnPush`** siempre
-   
 3. **Usar funciones `input()` y `output()`** en lugar de decoradores
-   
 4. **Usar `computed()` para estado derivado**
-   
 5. **Mantener componentes pequeños** con responsabilidad única
-   
 6. **Preferir inline templates** para componentes pequeños
-   
 7. **Usar Reactive forms** sobre Template-driven
-   
 8. **Usar `class` bindings** en lugar de `ngClass`
-   
 9. **Usar `style` bindings** en lugar de `ngStyle`
-   
 10. **Para templates/styles externos**, usar rutas relativas al archivo TS
-    
 11. **NO usar `@HostBinding`/`@HostListener`** — usar el objeto `host` en el decorator
 
 ```typescript
 // ✅ CORRECTO - Componente moderno Angular 21
 @Component({
-  selector: 'app-user-card',
+  selector: "app-user-card",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   host: {
-    '[class.active]': 'isActive()',
-    '(click)': 'handleClick()',
+    "[class.active]": "isActive()",
+    "(click)": "handleClick()",
   },
   template: `
     <div [class.highlighted]="isHighlighted()">
@@ -86,20 +77,18 @@ function parseJSON(json: string): any {
 export class UserCardComponent {
   // Inputs usando signals
   userName = input.required<string>();
-  description = input<string>('');
-  
+  description = input<string>("");
+
   // Outputs
   userClicked = output<string>();
-  
+
   // Estado local
   isActive = signal(false);
   isHighlighted = signal(false);
-  
+
   // Computed
-  textColor = computed(() => 
-    this.isActive() ? '#007bff' : '#6c757d'
-  );
-  
+  textColor = computed(() => (this.isActive() ? "#007bff" : "#6c757d"));
+
   handleClick() {
     this.userClicked.emit(this.userName());
   }
@@ -109,14 +98,14 @@ export class UserCardComponent {
 ```typescript
 // ❌ INCORRECTO - Prácticas antiguas
 @Component({
-  selector: 'app-user-card',
+  selector: "app-user-card",
   standalone: true, // Innecesario en v21 (es default)
   // No hay changeDetection especificada (usa Default)
 })
 export class UserCardComponent {
   @Input() userName?: string; // Vieja API
   @Output() userClicked = new EventEmitter<string>(); // Vieja API
-  @HostListener('click') onClick() {} // Usar host object en su lugar
+  @HostListener("click") onClick() {} // Usar host object en su lugar
 }
 ```
 
@@ -136,25 +125,23 @@ export class UserCardComponent {
 export class ProductListComponent {
   // Estado base
   products = signal<Product[]>([]);
-  filter = signal<string>('');
-  
+  filter = signal<string>("");
+
   // Estado derivado
   filteredProducts = computed(() => {
     const query = this.filter().toLowerCase();
-    return this.products().filter(p => 
-      p.name.toLowerCase().includes(query)
-    );
+    return this.products().filter((p) => p.name.toLowerCase().includes(query));
   });
-  
+
   productsCount = computed(() => this.filteredProducts().length);
-  
+
   // Actualización de estado
   addProduct(product: Product) {
-    this.products.update(products => [...products, product]);
+    this.products.update((products) => [...products, product]);
   }
-  
+
   clearFilter() {
-    this.filter.set('');
+    this.filter.set("");
   }
 }
 ```
@@ -177,25 +164,22 @@ Usar `resource()` para fetching de datos asíncronos con signals:
 ```typescript
 export class UserProfileComponent {
   userId = input.required<number>();
-  
+
   // Resource para cargar datos del usuario
   userResource = resource({
     params: () => ({ id: this.userId() }),
-    loader: ({ params, abortSignal }) => 
-      fetch(`/api/users/${params.id}`, { signal: abortSignal })
-        .then(r => r.json()),
+    loader: ({ params, abortSignal }) =>
+      fetch(`/api/users/${params.id}`, { signal: abortSignal }).then((r) =>
+        r.json(),
+      ),
   });
-  
+
   // Estado derivado del resource
-  userName = computed(() => 
-    this.userResource.hasValue() 
-      ? this.userResource.value().name 
-      : undefined
+  userName = computed(() =>
+    this.userResource.hasValue() ? this.userResource.value().name : undefined,
   );
-  
-  isLoading = computed(() => 
-    this.userResource.status() === 'loading'
-  );
+
+  isLoading = computed(() => this.userResource.status() === "loading");
 }
 ```
 
@@ -231,18 +215,18 @@ export class UserProfileComponent {
         @for (item of items(); track item.id) {
           <app-item-card [item]="item" />
         }
-        
+
         @if (items().length === 0) {
           <p>No items found</p>
         }
       </div>
     }
-    
+
     @switch (status()) {
-      @case ('pending') {
+      @case ("pending") {
         <span class="badge-warning">Pending</span>
       }
-      @case ('approved') {
+      @case ("approved") {
         <span class="badge-success">Approved</span>
       }
       @default {
@@ -254,9 +238,9 @@ export class UserProfileComponent {
 export class ExampleComponent {
   isLoading = signal(false);
   hasError = signal(false);
-  errorMessage = signal('');
+  errorMessage = signal("");
   items = signal<Item[]>([]);
-  status = signal<string>('pending');
+  status = signal<string>("pending");
 }
 ```
 
@@ -266,10 +250,10 @@ export class ExampleComponent {
   template: `
     <div *ngIf="isLoading">Loading...</div>
     <div *ngFor="let item of items">{{ item.name }}</div>
-    
+
     <!-- ❌ INCORRECTO - Arrow function en template -->
     <div *ngFor="let item of items.filter(i => i.active)">
-    
+
     <!-- ❌ INCORRECTO - Usar new Date() en template -->
     <p>{{ new Date() | date }}</p>
   `,
@@ -288,21 +272,21 @@ export class ExampleComponent {
 
 ```typescript
 // ✅ CORRECTO - Servicio moderno
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  
+
   private usersSignal = signal<User[]>([]);
   readonly users = this.usersSignal.asReadonly();
-  
+
   loadUsers(): void {
-    this.http.get<User[]>('/api/users').subscribe({
+    this.http.get<User[]>("/api/users").subscribe({
       next: (users) => this.usersSignal.set(users),
-      error: (err) => console.error('Error loading users:', err),
+      error: (err) => console.error("Error loading users:", err),
     });
   }
-  
+
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`/api/users/${id}`);
   }
@@ -314,7 +298,7 @@ export class UserService {
 export class UserService {
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 }
 ```
@@ -329,19 +313,17 @@ export class UserService {
 // ✅ CORRECTO - Lazy loading de componentes
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () => 
-      import('./home/home.page').then(m => m.HomePage),
+    path: "",
+    loadComponent: () => import("./home/home.page").then((m) => m.HomePage),
   },
   {
-    path: 'admin',
-    loadComponent: () => 
-      import('./admin/admin.page').then(m => m.AdminPage),
+    path: "admin",
+    loadComponent: () => import("./admin/admin.page").then((m) => m.AdminPage),
   },
   {
-    path: 'profile/:id',
-    loadComponent: () => 
-      import('./profile/profile.page').then(m => m.ProfilePage),
+    path: "profile/:id",
+    loadComponent: () =>
+      import("./profile/profile.page").then((m) => m.ProfilePage),
   },
 ];
 ```
@@ -381,11 +363,11 @@ feature/
 ## 🎨 Icons (ng-icon)
 
 ```typescript
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroSparkles, heroTrash } from '@ng-icons/heroicons/outline';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { heroSparkles, heroTrash } from "@ng-icons/heroicons/outline";
 
 @Component({
-  selector: 'app-example',
+  selector: "app-example",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgIcon],
   providers: [provideIcons({ heroSparkles, heroTrash })],
@@ -410,15 +392,15 @@ export class ExampleComponent {}
 2. **`NgOptimizedImage` NO funciona** para imágenes base64 inline
 
 ```typescript
-import { NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
   imports: [NgOptimizedImage],
   template: `
-    <img 
-      ngSrc="/assets/hero.jpg" 
-      alt="Hero image" 
-      width="800" 
+    <img
+      ngSrc="/assets/hero.jpg"
+      alt="Hero image"
+      width="800"
       height="600"
       priority
     />
@@ -455,7 +437,7 @@ export class HeroComponent {}
 // ✅ CORRECTO - Accesibilidad aplicada
 @Component({
   template: `
-    <button 
+    <button
       type="button"
       [attr.aria-label]="'Delete ' + itemName()"
       [attr.aria-pressed]="isSelected()"
@@ -464,20 +446,20 @@ export class HeroComponent {}
       <ng-icon name="heroTrash" aria-hidden="true" />
       <span class="sr-only">Delete {{ itemName() }}</span>
     </button>
-    
+
     <form [formGroup]="form">
       <label for="email">Email Address</label>
-      <input 
+      <input
         id="email"
         type="email"
         formControlName="email"
         [attr.aria-invalid]="form.get('email')?.invalid"
-        [attr.aria-describedby]="form.get('email')?.invalid ? 'email-error' : null"
+        [attr.aria-describedby]="
+          form.get('email')?.invalid ? 'email-error' : null
+        "
       />
-      @if (form.get('email')?.invalid) {
-        <span id="email-error" role="alert">
-          Please enter a valid email
-        </span>
+      @if (form.get("email")?.invalid) {
+        <span id="email-error" role="alert"> Please enter a valid email </span>
       }
     </form>
   `,
@@ -531,6 +513,7 @@ export class AccessibleComponent {}
 ## 📝 Fuente
 
 Esta skill ha sido adaptada del proyecto open-source de Boise State University:
+
 - **Repositorio**: [agentcore-public-stack](https://github.com/Boise-State-Development/agentcore-public-stack)
 - **Licencia**: MIT
 - **Créditos**: Boise State Development Team

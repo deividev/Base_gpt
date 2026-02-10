@@ -7,6 +7,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 ## 📚 Categorías de Skills
 
 ### Angular Skills (`angular/`)
+
 - Creación de componentes
 - Servicios y dependency injection
 - Routing y navegación
@@ -17,6 +18,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 - Optimización y performance
 
 ### Architecture Skills (`architecture/`)
+
 - Clean Architecture
 - Design Patterns (Singleton, Factory, Observer, etc.)
 - SOLID Principles
@@ -25,6 +27,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 - Modular architecture
 
 ### Testing Skills (`testing/`)
+
 - Unit Testing
 - Integration Testing
 - E2E Testing
@@ -33,6 +36,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 - Code Coverage
 
 ### Core Skills (`core/`)
+
 - TypeScript avanzado
 - Git workflows
 - Code documentation
@@ -41,6 +45,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 - Performance optimization
 
 ### Design Skills (`design/`)
+
 - Design System & UI Guidelines
 - Paletas de colores configurables
 - Tipografía y escalas
@@ -53,6 +58,7 @@ Las skills son conjuntos de conocimientos, patrones y buenas prácticas específ
 ## 📝 Formato de Skills
 
 Cada skill incluye:
+
 ```json
 {
   "name": "skill-name",
@@ -74,6 +80,7 @@ Cada skill incluye:
 ## 🎯 Objetivo
 
 Cada skill debe ser:
+
 - **Específica**: Enfocada en una tarea concreta
 - **Clara**: Fácil de entender y aplicar
 - **Completa**: Con ejemplos y explicaciones

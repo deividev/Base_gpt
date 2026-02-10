@@ -23,16 +23,19 @@ Explicación más detallada del propósito y alcance de la skill.
 ## ✅ Reglas Fundamentales
 
 ### 1. Primera Regla
+
 ```typescript
 // Código de ejemplo
 ```
 
 ### 2. Segunda Regla
+
 ```typescript
 // Código de ejemplo
 ```
 
 ### 3. Tercera Regla
+
 ```typescript
 // Código de ejemplo
 ```
@@ -40,11 +43,13 @@ Explicación más detallada del propósito y alcance de la skill.
 ## 📝 Patrones y Ejemplos
 
 ### Patrón Básico
+
 ```typescript
 // Ejemplo completo de implementación
 ```
 
 ### Patrón Avanzado
+
 ```typescript
 // Ejemplo más complejo
 ```
@@ -52,23 +57,29 @@ Explicación más detallada del propósito y alcance de la skill.
 ## 🚫 Anti-Patrones (Qué NO Hacer)
 
 ### ❌ Anti-Patrón 1
+
 ```typescript
 // Código incorrecto
 ```
+
 **Por qué es malo**: Explicación
 
 **Solución**:
+
 ```typescript
 // Código correcto
 ```
 
 ### ❌ Anti-Patrón 2
+
 ```typescript
 // Código incorrecto
 ```
+
 **Por qué es malo**: Explicación
 
 **Solución**:
+
 ```typescript
 // Código correcto
 ```
@@ -76,9 +87,11 @@ Explicación más detallada del propósito y alcance de la skill.
 ## ✨ Características Avanzadas
 
 ### Feature 1
+
 Descripción y ejemplo
 
 ### Feature 2
+
 Descripción y ejemplo
 
 ## 📋 Checklist de Implementación
@@ -104,21 +117,25 @@ Descripción y ejemplo
 ## 🐛 Problemas Comunes y Soluciones
 
 ### Problema 1
+
 **Síntoma**: Qué ves cuando ocurre
 
 **Causa**: Por qué sucede
 
 **Solución**:
+
 ```typescript
 // Código de solución
 ```
 
 ### Problema 2
+
 **Síntoma**: Qué ves cuando ocurre
 
 **Causa**: Por qué sucede
 
 **Solución**:
+
 ```typescript
 // Código de solución
 ```
@@ -132,4 +149,5 @@ Descripción y ejemplo
 ## 🔄 Changelog
 
 ### v1.0.0 (YYYY-MM-DD)
+
 - Versión inicial

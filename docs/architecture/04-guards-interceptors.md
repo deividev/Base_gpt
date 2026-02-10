@@ -5,6 +5,7 @@
 Los interceptors son middleware que interceptan todas las peticiones/respuestas HTTP.
 
 ### Ubicación
+
 ```
 src/app/core/interceptors/
 ├── error.interceptor.ts
@@ -16,8 +17,8 @@ src/app/core/interceptors/
 
 ```typescript
 // src/app/app.config.ts
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { errorInterceptor, loadingInterceptor } from '@core/interceptors';
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { errorInterceptor, loadingInterceptor } from "@core/interceptors";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,10 +27,10 @@ export const appConfig: ApplicationConfig = {
         errorInterceptor,
         loadingInterceptor,
         // authInterceptor, // agregar cuando se implemente auth
-      ])
+      ]),
     ),
     // ...
-  ]
+  ],
 };
 ```
 
@@ -41,10 +42,10 @@ Maneja todos los errores HTTP de forma centralizada.
 
 ```typescript
 // src/app/core/interceptors/error.interceptor.ts
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
-import { LoggerService } from '@core/services';
+import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { catchError, throwError } from "rxjs";
+import { LoggerService } from "@core/services";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const logger = inject(LoggerService);
@@ -60,35 +61,35 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // Manejo por código de estado
       switch (error.status) {
         case 0:
-          logger.error('Error de red - verifica tu conexión');
+          logger.error("Error de red - verifica tu conexión");
           break;
         case 401:
           // Redirigir a login o refrescar token
           handleUnauthorized();
           break;
         case 403:
-          logger.warn('Acceso denegado');
+          logger.warn("Acceso denegado");
           break;
         case 404:
-          logger.warn('Recurso no encontrado');
+          logger.warn("Recurso no encontrado");
           break;
         case 500:
         case 502:
         case 503:
-          logger.error('Error del servidor');
+          logger.error("Error del servidor");
           break;
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 
 function handleUnauthorized(): void {
   // Limpiar tokens
-  localStorage.removeItem('auth_token');
+  localStorage.removeItem("auth_token");
   // Redirigir a login (inyectar Router si es necesario)
-  window.location.href = '/login';
+  window.location.href = "/login";
 }
 ```
 
@@ -96,18 +97,18 @@ function handleUnauthorized(): void {
 
 ```typescript
 // Para mostrar notificaciones
-import { inject } from '@angular/core';
-import { NotificationService } from '@shared/services';
+import { inject } from "@angular/core";
+import { NotificationService } from "@shared/services";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const notification = inject(NotificationService);
-  
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       // Mostrar toast de error
       notification.error(getErrorMessage(error));
       return throwError(() => error);
-    })
+    }),
   );
 };
 
@@ -115,15 +116,22 @@ function getErrorMessage(error: HttpErrorResponse): string {
   if (error.error?.message) {
     return error.error.message;
   }
-  
+
   switch (error.status) {
-    case 0: return 'Sin conexión a internet';
-    case 400: return 'Solicitud inválida';
-    case 401: return 'Sesión expirada';
-    case 403: return 'Sin permisos';
-    case 404: return 'No encontrado';
-    case 500: return 'Error del servidor';
-    default: return 'Error desconocido';
+    case 0:
+      return "Sin conexión a internet";
+    case 400:
+      return "Solicitud inválida";
+    case 401:
+      return "Sesión expirada";
+    case 403:
+      return "Sin permisos";
+    case 404:
+      return "No encontrado";
+    case 500:
+      return "Error del servidor";
+    default:
+      return "Error desconocido";
   }
 }
 ```
@@ -136,17 +144,17 @@ Gestiona automáticamente el estado de carga para todas las peticiones.
 
 ```typescript
 // src/app/core/interceptors/loading.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { finalize } from 'rxjs';
-import { LoadingService } from '@core/services';
+import { HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { finalize } from "rxjs";
+import { LoadingService } from "@core/services";
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
-  
+
   // Saltar loading para ciertas peticiones
-  const skipLoading = req.headers.has('X-Skip-Loading');
-  
+  const skipLoading = req.headers.has("X-Skip-Loading");
+
   if (!skipLoading) {
     loadingService.show();
   }
@@ -156,7 +164,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
       if (!skipLoading) {
         loadingService.hide();
       }
-    })
+    }),
   );
 };
 ```
@@ -172,9 +180,9 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
         <app-spinner />
       </div>
     }
-    
+
     <router-outlet />
-  `
+  `,
 })
 export class App {
   protected readonly loading = inject(LoadingService);
@@ -199,32 +207,32 @@ Agrega automáticamente el token de autenticación a las peticiones.
 
 ```typescript
 // src/app/core/interceptors/auth.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { StorageService } from '@core/services';
-import { STORAGE_KEYS } from '@core/config';
+import { HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { StorageService } from "@core/services";
+import { STORAGE_KEYS } from "@core/config";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const storage = inject(StorageService);
-  
+
   // Saltar auth para ciertas peticiones (login, registro, etc.)
-  const skipAuth = req.headers.has('X-Skip-Auth');
-  
+  const skipAuth = req.headers.has("X-Skip-Auth");
+
   if (skipAuth) {
     return next(req);
   }
-  
+
   const token = storage.get<string>(STORAGE_KEYS.authToken);
-  
+
   if (token) {
     const authReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return next(authReq);
   }
-  
+
   return next(req);
 };
 ```
@@ -236,6 +244,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 Los guards protegen las rutas de navegación.
 
 ### Ubicación
+
 ```
 src/app/core/guards/
 ├── auth.guard.ts
@@ -250,10 +259,10 @@ Protege rutas que requieren autenticación.
 
 ```typescript
 // src/app/core/guards/auth.guard.ts
-import { inject } from '@angular/core';
-import { Router, CanActivateFn, UrlTree } from '@angular/router';
-import { StorageService, LoggerService } from '@core/services';
-import { STORAGE_KEYS } from '@core/config';
+import { inject } from "@angular/core";
+import { Router, CanActivateFn, UrlTree } from "@angular/router";
+import { StorageService, LoggerService } from "@core/services";
+import { STORAGE_KEYS } from "@core/config";
 
 export const authGuard: CanActivateFn = (route, state): boolean | UrlTree => {
   const storage = inject(StorageService);
@@ -261,19 +270,19 @@ export const authGuard: CanActivateFn = (route, state): boolean | UrlTree => {
   const logger = inject(LoggerService);
 
   const token = storage.get<string>(STORAGE_KEYS.authToken);
-  
+
   if (token) {
-    logger.debug('[AuthGuard] Usuario autenticado');
+    logger.debug("[AuthGuard] Usuario autenticado");
     return true;
   }
 
-  logger.warn('[AuthGuard] Usuario no autenticado, redirigiendo a login');
-  
+  logger.warn("[AuthGuard] Usuario no autenticado, redirigiendo a login");
+
   // Guardar URL intentada para redirección post-login
-  storage.setSession('redirect_url', state.url);
-  
-  return router.createUrlTree(['/login'], {
-    queryParams: { returnUrl: state.url }
+  storage.setSession("redirect_url", state.url);
+
+  return router.createUrlTree(["/login"], {
+    queryParams: { returnUrl: state.url },
   });
 };
 ```
@@ -282,39 +291,39 @@ export const authGuard: CanActivateFn = (route, state): boolean | UrlTree => {
 
 ```typescript
 // src/app/app.routes.ts
-import { authGuard, guestGuard, roleGuard } from '@core/guards';
+import { authGuard, guestGuard, roleGuard } from "@core/guards";
 
 export const routes: Routes = [
   // Ruta pública
   {
-    path: '',
-    loadComponent: () => import('./features/landing/landing'),
-    title: 'Home'
+    path: "",
+    loadComponent: () => import("./features/landing/landing"),
+    title: "Home",
   },
-  
+
   // Solo usuarios NO autenticados
   {
-    path: 'login',
-    loadComponent: () => import('./features/auth/login/login'),
+    path: "login",
+    loadComponent: () => import("./features/auth/login/login"),
     canActivate: [guestGuard],
-    title: 'Login'
+    title: "Login",
   },
-  
+
   // Requiere autenticación
   {
-    path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard'),
+    path: "dashboard",
+    loadComponent: () => import("./features/dashboard/dashboard"),
     canActivate: [authGuard],
-    title: 'Dashboard'
+    title: "Dashboard",
   },
-  
+
   // Requiere rol específico
   {
-    path: 'admin',
-    loadComponent: () => import('./features/admin/admin'),
-    canActivate: [authGuard, roleGuard(['admin', 'superadmin'])],
-    title: 'Admin Panel'
-  }
+    path: "admin",
+    loadComponent: () => import("./features/admin/admin"),
+    canActivate: [authGuard, roleGuard(["admin", "superadmin"])],
+    title: "Admin Panel",
+  },
 ];
 ```
 
@@ -331,13 +340,13 @@ export const guestGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   const token = storage.get<string>(STORAGE_KEYS.authToken);
-  
+
   if (!token) {
     return true; // Permitir acceso
   }
 
   // Usuario ya autenticado, redirigir a home
-  return router.createUrlTree(['/']);
+  return router.createUrlTree(["/"]);
 };
 ```
 
@@ -362,19 +371,19 @@ export function roleGuard(allowedRoles: string[]): CanActivateFn {
 
     const user = storage.get<UserData>(STORAGE_KEYS.user);
     const userRoles = user?.roles ?? (user?.role ? [user.role] : []);
-    
-    const hasRole = allowedRoles.some(role => userRoles.includes(role));
-    
+
+    const hasRole = allowedRoles.some((role) => userRoles.includes(role));
+
     if (hasRole) {
       return true;
     }
 
-    logger.warn('[RoleGuard] Usuario sin permisos', { 
-      required: allowedRoles, 
-      user: userRoles 
+    logger.warn("[RoleGuard] Usuario sin permisos", {
+      required: allowedRoles,
+      user: userRoles,
     });
-    
-    return router.createUrlTree(['/unauthorized']);
+
+    return router.createUrlTree(["/unauthorized"]);
   };
 }
 ```
@@ -404,7 +413,7 @@ export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (componen
 @Component({...})
 export class EditProduct implements HasUnsavedChanges {
   private formDirty = signal(false);
-  
+
   hasUnsavedChanges(): boolean {
     return this.formDirty();
   }
@@ -423,17 +432,17 @@ export class EditProduct implements HasUnsavedChanges {
 
 ## Resumen de Guards
 
-| Guard | Propósito | Uso |
-|-------|-----------|-----|
-| `authGuard` | Requiere autenticación | Rutas protegidas |
-| `guestGuard` | Solo NO autenticados | Login, Registro |
-| `roleGuard(['admin'])` | Requiere rol específico | Admin panel |
-| `unsavedChangesGuard` | Previene pérdida de datos | Formularios |
+| Guard                  | Propósito                 | Uso              |
+| ---------------------- | ------------------------- | ---------------- |
+| `authGuard`            | Requiere autenticación    | Rutas protegidas |
+| `guestGuard`           | Solo NO autenticados      | Login, Registro  |
+| `roleGuard(['admin'])` | Requiere rol específico   | Admin panel      |
+| `unsavedChangesGuard`  | Previene pérdida de datos | Formularios      |
 
 ## Resumen de Interceptors
 
-| Interceptor | Propósito |
-|-------------|-----------|
-| `errorInterceptor` | Manejo centralizado de errores HTTP |
-| `loadingInterceptor` | Estado de loading automático |
-| `authInterceptor` | Agregar token Bearer automáticamente |
+| Interceptor          | Propósito                            |
+| -------------------- | ------------------------------------ |
+| `errorInterceptor`   | Manejo centralizado de errores HTTP  |
+| `loadingInterceptor` | Estado de loading automático         |
+| `authInterceptor`    | Agregar token Bearer automáticamente |

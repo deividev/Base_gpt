@@ -14,14 +14,14 @@ Esta skill proporciona una vista rápida de la arquitectura implementada en el p
 
 ## 📖 Documentación de Referencia
 
-| Documento | Ubicación | Contenido |
-|-----------|-----------|-----------|
-| **Overview** | [01-overview.md](../../../docs/architecture/01-overview.md) | Estructura de carpetas, capas, path aliases |
-| **Features** | [02-features.md](../../../docs/architecture/02-features.md) | Guía paso a paso para crear features |
-| **API Guide** | [03-api-guide.md](../../../docs/architecture/03-api-guide.md) | Cliente HTTP, payloads, DTOs |
-| **Guards/Interceptors** | [04-guards-interceptors.md](../../../docs/architecture/04-guards-interceptors.md) | Guards funcionales, HTTP interceptors |
-| **Models** | [05-models-types.md](../../../docs/architecture/05-models-types.md) | Interfaces, DTOs, type guards |
-| **Core Services** | [06-core-services.md](../../../docs/architecture/06-core-services.md) | Servicios singleton |
+| Documento               | Ubicación                                                                         | Contenido                                   |
+| ----------------------- | --------------------------------------------------------------------------------- | ------------------------------------------- |
+| **Overview**            | [01-overview.md](../../../docs/architecture/01-overview.md)                       | Estructura de carpetas, capas, path aliases |
+| **Features**            | [02-features.md](../../../docs/architecture/02-features.md)                       | Guía paso a paso para crear features        |
+| **API Guide**           | [03-api-guide.md](../../../docs/architecture/03-api-guide.md)                     | Cliente HTTP, payloads, DTOs                |
+| **Guards/Interceptors** | [04-guards-interceptors.md](../../../docs/architecture/04-guards-interceptors.md) | Guards funcionales, HTTP interceptors       |
+| **Models**              | [05-models-types.md](../../../docs/architecture/05-models-types.md)               | Interfaces, DTOs, type guards               |
+| **Core Services**       | [06-core-services.md](../../../docs/architecture/06-core-services.md)             | Servicios singleton                         |
 
 ---
 
@@ -54,40 +54,47 @@ src/app/
 ## 🔧 Servicios Core Disponibles
 
 ### ApiService
+
 ```typescript
-import { ApiService } from '@core/services';
+import { ApiService } from "@core/services";
 
 // GET, POST, PUT, PATCH, DELETE tipados
-this.api.get<User[]>('/users');
-this.api.post<User>('/users', userData);
+this.api.get<User[]>("/users");
+this.api.post<User>("/users", userData);
 ```
+
 📖 Documentación: `docs/architecture/03-api-guide.md`
 
 ### StorageService
+
 ```typescript
-import { StorageService } from '@core/services';
+import { StorageService } from "@core/services";
 
 // localStorage
-this.storage.set('key', value);
-this.storage.get<Type>('key');
+this.storage.set("key", value);
+this.storage.get<Type>("key");
 
 // sessionStorage
-this.storage.setSession('key', value);
+this.storage.setSession("key", value);
 ```
+
 📖 Documentación: `docs/architecture/06-core-services.md`
 
 ### LoggerService
-```typescript
-import { LoggerService } from '@core/services';
 
-this.logger.debug('Mensaje debug');
-this.logger.info('Información');
-this.logger.warn('Advertencia');
-this.logger.error('Error', errorObject);
+```typescript
+import { LoggerService } from "@core/services";
+
+this.logger.debug("Mensaje debug");
+this.logger.info("Información");
+this.logger.warn("Advertencia");
+this.logger.error("Error", errorObject);
 ```
+
 📖 Documentación: `docs/architecture/06-core-services.md`
 
 ### LoadingService
+
 ```typescript
 import { LoadingService } from '@core/services';
 
@@ -95,6 +102,7 @@ import { LoadingService } from '@core/services';
 // En template:
 @if (loading.isLoading()) { <spinner /> }
 ```
+
 📖 Documentación: `docs/architecture/06-core-services.md`
 
 ---
@@ -113,6 +121,7 @@ import { authGuard, guestGuard, roleGuard } from '@core/guards';
 // Requiere rol específico
 { path: 'admin', canActivate: [authGuard, roleGuard(['admin'])] }
 ```
+
 📖 Documentación: `docs/architecture/04-guards-interceptors.md`
 
 ---
@@ -123,11 +132,12 @@ import { authGuard, guestGuard, roleGuard } from '@core/guards';
 // app.config.ts
 provideHttpClient(
   withInterceptors([
-    errorInterceptor,   // Manejo centralizado de errores
+    errorInterceptor, // Manejo centralizado de errores
     loadingInterceptor, // Estado de loading automático
-  ])
-)
+  ]),
+);
 ```
+
 📖 Documentación: `docs/architecture/04-guards-interceptors.md`
 
 ---
@@ -154,14 +164,15 @@ provideHttpClient(
 ```typescript
 // ✅ Correcto
 const spy = vi.fn();
-vi.spyOn(service, 'method');
+vi.spyOn(service, "method");
 
 // ❌ Incorrecto (Jasmine - NO USAR)
 jasmine.createSpy();
-spyOn(service, 'method');
+spyOn(service, "method");
 ```
 
 **Comandos:**
+
 ```bash
 npm test           # Ejecutar tests
 npm test -- --watch    # Modo watch

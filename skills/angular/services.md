@@ -14,10 +14,11 @@ Crear servicios Angular robustos, reutilizables y con dependency injection aprop
 ## ✅ Reglas Fundamentales
 
 ### 1. Usar Injectable con providedIn
+
 ```typescript
 // ✅ CORRECTO
 @Injectable({
-  providedIn: 'root' // Singleton en toda la app
+  providedIn: "root", // Singleton en toda la app
 })
 export class UserService {
   // ...
@@ -25,27 +26,28 @@ export class UserService {
 ```
 
 ### 2. Estructura de Servicio
+
 ```typescript
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UserService {
   // Usar inject() en lugar de constructor injection
   private http = inject(HttpClient);
-  private apiUrl = '/api/users';
-  
+  private apiUrl = "/api/users";
+
   // Estado con signals si es necesario
   private usersSignal = signal<User[]>([]);
   readonly users = this.usersSignal.asReadonly();
-  
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
-  
+
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
@@ -53,6 +55,7 @@ export class UserService {
 ```
 
 ### 3. inject() vs Constructor Injection
+
 ```typescript
 // ✅ CORRECTO - Moderna (Angular 14+)
 export class UserService {
@@ -64,7 +67,7 @@ export class UserService {
 export class UserService {
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 }
 ```

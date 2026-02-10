@@ -1,6 +1,7 @@
 # Design Patterns in Angular & TypeScript
 
 ## 📋 Metadata
+
 - **Difficulty**: Advanced
 - **Prerequisites**: solid-principles.md, services.md, rxjs.md
 - **Estimated Time**: 6-8 hours
@@ -8,6 +9,7 @@
 - **Category**: Architecture
 
 ## 🎯 Learning Objectives
+
 - Apply classic design patterns in Angular context
 - Recognize when to use each pattern
 - Implement creational, structural, and behavioral patterns
@@ -65,9 +67,9 @@ export class ComponentB {
 // ❌ BAD: Manual singleton (antipatrón en Angular)
 export class ConfigService {
   private static instance: ConfigService;
-  
+
   private constructor() {}
-  
+
   static getInstance(): ConfigService {
     if (!ConfigService.instance) {
       ConfigService.instance = new ConfigService();
@@ -101,7 +103,7 @@ export class EmailNotification implements Notification {
   constructor(private http: HttpClient) {}
 
   send(message: string): Observable<void> {
-    return this.http.post<void>('/api/notifications/email', { message });
+    return this.http.post<void>("/api/notifications/email", { message });
   }
 }
 
@@ -109,7 +111,7 @@ export class SmsNotification implements Notification {
   constructor(private http: HttpClient) {}
 
   send(message: string): Observable<void> {
-    return this.http.post<void>('/api/notifications/sms', { message });
+    return this.http.post<void>("/api/notifications/sms", { message });
   }
 }
 
@@ -117,22 +119,22 @@ export class PushNotification implements Notification {
   constructor(private http: HttpClient) {}
 
   send(message: string): Observable<void> {
-    return this.http.post<void>('/api/notifications/push', { message });
+    return this.http.post<void>("/api/notifications/push", { message });
   }
 }
 
 // Factory
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NotificationFactory {
   constructor(private http: HttpClient) {}
 
-  create(type: 'email' | 'sms' | 'push'): Notification {
+  create(type: "email" | "sms" | "push"): Notification {
     switch (type) {
-      case 'email':
+      case "email":
         return new EmailNotification(this.http);
-      case 'sms':
+      case "sms":
         return new SmsNotification(this.http);
-      case 'push':
+      case "push":
         return new PushNotification(this.http);
       default:
         throw new Error(`Unknown notification type: ${type}`);
@@ -141,11 +143,11 @@ export class NotificationFactory {
 }
 
 // Usage
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NotificationService {
   constructor(private factory: NotificationFactory) {}
 
-  notify(type: 'email' | 'sms' | 'push', message: string): Observable<void> {
+  notify(type: "email" | "sms" | "push", message: string): Observable<void> {
     const notification = this.factory.create(type);
     return notification.send(message);
   }
@@ -189,8 +191,8 @@ export const chartProviders = [
   {
     provide: CHART_FACTORY,
     useFactory: () => {
-      return environment.useChartJs 
-        ? new ChartJsFactory() 
+      return environment.useChartJs
+        ? new ChartJsFactory()
         : new D3Factory();
     }
   }
@@ -312,8 +314,8 @@ export class FormBuilder {
   }
 
   addEmail(name: string, required = true): this {
-    const validators = required 
-      ? [Validators.required, Validators.email] 
+    const validators = required
+      ? [Validators.required, Validators.email]
       : [Validators.email];
     return this.addControl(name, '', validators);
   }
@@ -351,7 +353,7 @@ const form = new FormBuilder()
 @Injectable({ providedIn: 'root' })
 export class OrderApiService {
   constructor(private http: HttpClient) {}
-  
+
   createOrder(order: Order): Observable<Order> {
     return this.http.post<Order>('/api/orders', order);
   }
@@ -590,16 +592,16 @@ export const dataSourceProviders = [
     useFactory: (http: HttpClient, logger: Logger) => {
       // Base
       let source: DataSource = new ApiDataSource(http);
-      
+
       // Add retry
       source = new RetryDataSource(source);
-      
+
       // Add caching
       source = new CachedDataSource(source);
-      
+
       // Add logging
       source = new LoggedDataSource(source, logger);
-      
+
       return source;
     },
     deps: [HttpClient, Logger]
@@ -643,20 +645,22 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 
 ```typescript
 // Subject = Observable + Observer
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CartService {
   private itemsSubject = new BehaviorSubject<CartItem[]>([]);
-  
+
   // Observable stream
   items$ = this.itemsSubject.asObservable();
-  
+
   // Computed observables
   totalPrice$ = this.items$.pipe(
-    map(items => items.reduce((sum, item) => sum + item.price * item.quantity, 0))
+    map((items) =>
+      items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    ),
   );
 
   totalItems$ = this.items$.pipe(
-    map(items => items.reduce((sum, item) => sum + item.quantity, 0))
+    map((items) => items.reduce((sum, item) => sum + item.quantity, 0)),
   );
 
   addItem(item: CartItem): void {
@@ -666,34 +670,28 @@ export class CartService {
 
   removeItem(id: string): void {
     const current = this.itemsSubject.value;
-    this.itemsSubject.next(current.filter(item => item.id !== id));
+    this.itemsSubject.next(current.filter((item) => item.id !== id));
   }
 }
 
 // Multiple observers
 @Component({
-  selector: 'app-cart-icon',
-  template: `
-    <button>
-      Cart ({{ totalItems$ | async }})
-    </button>
-  `
+  selector: "app-cart-icon",
+  template: ` <button>Cart ({{ totalItems$ | async }})</button> `,
 })
 export class CartIconComponent {
   totalItems$ = this.cartService.totalItems$;
-  
+
   constructor(private cartService: CartService) {}
 }
 
 @Component({
-  selector: 'app-cart-summary',
-  template: `
-    <div>Total: {{ totalPrice$ | async | currency }}</div>
-  `
+  selector: "app-cart-summary",
+  template: ` <div>Total: {{ totalPrice$ | async | currency }}</div> `,
 })
 export class CartSummaryComponent {
   totalPrice$ = this.cartService.totalPrice$;
-  
+
   constructor(private cartService: CartService) {}
 }
 
@@ -704,24 +702,24 @@ export class CartSummaryComponent {
 
 ```typescript
 @Component({
-  selector: 'app-child',
-  template: `<button (click)="onClick()">Click Me</button>`
+  selector: "app-child",
+  template: `<button (click)="onClick()">Click Me</button>`,
 })
 export class ChildComponent {
   @Output() itemSelected = new EventEmitter<string>();
 
   onClick() {
-    this.itemSelected.emit('Item 1');
+    this.itemSelected.emit("Item 1");
   }
 }
 
 @Component({
-  selector: 'app-parent',
-  template: `<app-child (itemSelected)="onItemSelected($event)" />`
+  selector: "app-parent",
+  template: `<app-child (itemSelected)="onItemSelected($event)" />`,
 })
 export class ParentComponent {
   onItemSelected(item: string) {
-    console.log('Selected:', item);
+    console.log("Selected:", item);
   }
 }
 ```
@@ -778,7 +776,7 @@ export class SortService<T> {
 @Component({...})
 export class ListComponent {
   items: string[] = ['Zebra', 'Apple', 'Mango'];
-  
+
   constructor(private sortService: SortService<string>) {}
 
   sortAlphabetically() {
@@ -913,7 +911,7 @@ export abstract class BaseListComponent<T> implements OnInit {
 
   // Abstract methods
   protected abstract fetchData(): Observable<T[]>;
-  
+
   // Hook methods with default implementation
   protected processData(data: T[]): T[] {
     return data; // No processing by default
@@ -969,76 +967,76 @@ export interface OrderState {
 // Concrete states
 export class PendingState implements OrderState {
   cancel(order: Order): void {
-    console.log('Order cancelled');
+    console.log("Order cancelled");
     order.setState(new CancelledState());
   }
 
   ship(order: Order): void {
-    console.log('Order shipped');
+    console.log("Order shipped");
     order.setState(new ShippedState());
   }
 
   deliver(order: Order): void {
-    throw new Error('Cannot deliver pending order');
+    throw new Error("Cannot deliver pending order");
   }
 
   getStatus(): string {
-    return 'Pending';
+    return "Pending";
   }
 }
 
 export class ShippedState implements OrderState {
   cancel(order: Order): void {
-    throw new Error('Cannot cancel shipped order');
+    throw new Error("Cannot cancel shipped order");
   }
 
   ship(order: Order): void {
-    throw new Error('Order already shipped');
+    throw new Error("Order already shipped");
   }
 
   deliver(order: Order): void {
-    console.log('Order delivered');
+    console.log("Order delivered");
     order.setState(new DeliveredState());
   }
 
   getStatus(): string {
-    return 'Shipped';
+    return "Shipped";
   }
 }
 
 export class DeliveredState implements OrderState {
   cancel(order: Order): void {
-    throw new Error('Cannot cancel delivered order');
+    throw new Error("Cannot cancel delivered order");
   }
 
   ship(order: Order): void {
-    throw new Error('Order already delivered');
+    throw new Error("Order already delivered");
   }
 
   deliver(order: Order): void {
-    throw new Error('Order already delivered');
+    throw new Error("Order already delivered");
   }
 
   getStatus(): string {
-    return 'Delivered';
+    return "Delivered";
   }
 }
 
 export class CancelledState implements OrderState {
   cancel(order: Order): void {
-    throw new Error('Order already cancelled');
+    throw new Error("Order already cancelled");
   }
 
   ship(order: Order): void {
-    throw new Error('Cannot ship cancelled order');
+    throw new Error("Cannot ship cancelled order");
   }
 
   deliver(order: Order): void {
-    throw new Error('Cannot deliver cancelled order');
+    throw new Error("Cannot deliver cancelled order");
   }
 
   getStatus(): string {
-    return 'Cancelled';
+    return "Cancelled";
   }
 }
 
@@ -1101,7 +1099,7 @@ export class MyComponent {
 export class MyComponent {
   private userService = inject(UserService);
   private router = inject(Router);
-  
+
   // Can use in initializers
   users = toSignal(this.userService.getUsers());
 }
@@ -1175,7 +1173,7 @@ export abstract class BaseRepository<T extends { id: ID }, ID> implements Reposi
   }
 
   findById(id: ID): Signal<T | undefined> {
-    return computed(() => 
+    return computed(() =>
       this.items().find(item => item.id === id)
     );
   }
@@ -1286,21 +1284,25 @@ const calculator = new Calculator();
 ## ✅ Checklist
 
 ### Creational
+
 - [ ] Use `providedIn: 'root'` for singletons
 - [ ] Factory for creating related objects
 - [ ] Builder for complex object construction
 
 ### Structural
+
 - [ ] Facade to simplify complex APIs
 - [ ] Adapter to integrate third-party libraries
 - [ ] Decorator (interceptors, pipe operators)
 
 ### Behavioral
+
 - [ ] Observer (RxJS, Signals) for reactive data
 - [ ] Strategy for interchangeable algorithms
 - [ ] State for complex state machines
 
 ### Angular-Specific
+
 - [ ] DI for loose coupling
 - [ ] Repository for data access layer
 - [ ] Smart/Presentation component split

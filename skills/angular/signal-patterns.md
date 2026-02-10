@@ -22,24 +22,21 @@ Este patrón demuestra cómo construir un grafo de dependencias de computed sign
 
 ```typescript
 @Component({
-  selector: 'app-cost-dashboard',
+  selector: "app-cost-dashboard",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="stats-grid">
       @if (isLoading()) {
         <app-loading-spinner />
       } @else {
-        <app-stat-card 
-          label="Total Cost" 
-          [value]="totalCost() | currency" 
+        <app-stat-card label="Total Cost" [value]="totalCost() | currency" />
+        <app-stat-card
+          label="Avg Cost/Request"
+          [value]="averageCostPerRequest() | currency"
         />
-        <app-stat-card 
-          label="Avg Cost/Request" 
-          [value]="averageCostPerRequest() | currency" 
-        />
-        <app-stat-card 
-          label="Cache Savings" 
-          [value]="cacheSavingsPercentage() | percent" 
+        <app-stat-card
+          label="Cache Savings"
+          [value]="cacheSavingsPercentage() | percent"
         />
       }
     </div>
@@ -49,12 +46,12 @@ export class CostDashboardComponent {
   // ════════════════════════════════════════════════════════════
   // Layer 1: Source signals (Signals de origen)
   // ════════════════════════════════════════════════════════════
-  readonly selectedPeriodType = signal<'current' | 'custom'>('current');
-  
+  readonly selectedPeriodType = signal<"current" | "custom">("current");
+
   readonly costSummary = resource({
-    loader: () => fetch('/api/cost-summary').then(r => r.json()),
+    loader: () => fetch("/api/cost-summary").then((r) => r.json()),
   });
-  
+
   readonly customReportData = signal<CostData | null>(null);
 
   // ════════════════════════════════════════════════════════════
@@ -64,7 +61,7 @@ export class CostDashboardComponent {
   // basado en la selección del usuario
   readonly activeData = computed(() => {
     const periodType = this.selectedPeriodType();
-    if (periodType === 'current') {
+    if (periodType === "current") {
       return this.costSummary.value();
     } else {
       return this.customReportData();
@@ -75,30 +72,28 @@ export class CostDashboardComponent {
   // Layer 3: Direct derivations from active data
   // ════════════════════════════════════════════════════════════
   // Manejo seguro de null con nullish coalescing
-  readonly totalCost = computed(() => 
-    this.activeData()?.totalCost ?? 0
+  readonly totalCost = computed(() => this.activeData()?.totalCost ?? 0);
+
+  readonly totalRequests = computed(
+    () => this.activeData()?.totalRequests ?? 0,
   );
-  
-  readonly totalRequests = computed(() => 
-    this.activeData()?.totalRequests ?? 0
+
+  readonly totalInputTokens = computed(
+    () => this.activeData()?.totalInputTokens ?? 0,
   );
-  
-  readonly totalInputTokens = computed(() => 
-    this.activeData()?.totalInputTokens ?? 0
+
+  readonly totalOutputTokens = computed(
+    () => this.activeData()?.totalOutputTokens ?? 0,
   );
-  
-  readonly totalOutputTokens = computed(() => 
-    this.activeData()?.totalOutputTokens ?? 0
-  );
-  
-  readonly totalCacheSavings = computed(() => 
-    this.activeData()?.cacheSavings ?? 0
+
+  readonly totalCacheSavings = computed(
+    () => this.activeData()?.cacheSavings ?? 0,
   );
 
   // ════════════════════════════════════════════════════════════
   // Layer 4: Business logic computed from Layer 3
   // ════════════════════════════════════════════════════════════
-  // Los cálculos encapsulados en computed signals 
+  // Los cálculos encapsulados en computed signals
   // mantienen los templates simples
   readonly averageCostPerRequest = computed(() => {
     const total = this.totalCost();
@@ -106,22 +101,18 @@ export class CostDashboardComponent {
     return requests > 0 ? total / requests : 0;
   });
 
-  readonly totalTokens = computed(() => 
-    this.totalInputTokens() + this.totalOutputTokens()
+  readonly totalTokens = computed(
+    () => this.totalInputTokens() + this.totalOutputTokens(),
   );
 
   readonly cacheSavingsPercentage = computed(() => {
     const savings = this.totalCacheSavings();
     const cost = this.totalCost();
     const totalWithoutSavings = cost + savings;
-    return totalWithoutSavings > 0 
-      ? (savings / totalWithoutSavings) * 100 
-      : 0;
+    return totalWithoutSavings > 0 ? (savings / totalWithoutSavings) * 100 : 0;
   });
-  
-  readonly isLoading = computed(() => 
-    this.costSummary.status() === 'loading'
-  );
+
+  readonly isLoading = computed(() => this.costSummary.status() === "loading");
 }
 ```
 
@@ -141,39 +132,34 @@ Combinar reactive forms con signals para gestionar el estado del formulario.
 
 ```typescript
 @Component({
-  selector: 'app-user-form',
+  selector: "app-user-form",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">Email</label>
-        <input 
-          id="email" 
-          type="email" 
+        <input
+          id="email"
+          type="email"
           formControlName="email"
-          [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+          [class.invalid]="
+            form.get('email')?.invalid && form.get('email')?.touched
+          "
         />
       </div>
-      
+
       <div class="form-group">
         <label for="name">Name</label>
-        <input 
-          id="name" 
-          type="text" 
-          formControlName="name"
-        />
+        <input id="name" type="text" formControlName="name" />
       </div>
-      
+
       @if (submitError()) {
         <div class="error-message" role="alert">
           {{ submitError() }}
         </div>
       }
-      
-      <button 
-        type="submit" 
-        [disabled]="!canSubmit()"
-      >
+
+      <button type="submit" [disabled]="!canSubmit()">
         @if (isSubmitting()) {
           <span>Submitting...</span>
         } @else {
@@ -188,31 +174,27 @@ export class UserFormComponent {
   private readonly userService = inject(UserService);
 
   readonly form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    name: ['', Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    name: ["", Validators.required],
   });
 
   // Derivar estado de submission
   readonly isSubmitting = signal(false);
   readonly submitError = signal<string | null>(null);
 
-  readonly canSubmit = computed(() => 
-    this.form.valid && !this.isSubmitting()
-  );
+  readonly canSubmit = computed(() => this.form.valid && !this.isSubmitting());
 
   async onSubmit() {
     if (!this.canSubmit()) return;
-    
+
     this.isSubmitting.set(true);
     this.submitError.set(null);
-    
+
     try {
       await this.userService.save(this.form.getRawValue());
       this.form.reset();
     } catch (e) {
-      this.submitError.set(
-        e instanceof Error ? e.message : 'Unknown error'
-      );
+      this.submitError.set(e instanceof Error ? e.message : "Unknown error");
     } finally {
       this.isSubmitting.set(false);
     }
@@ -230,7 +212,7 @@ Comunicación reactiva entre componentes padre e hijo usando signals.
 
 ```typescript
 @Component({
-  selector: 'app-counter',
+  selector: "app-counter",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="counter">
@@ -239,24 +221,26 @@ Comunicación reactiva entre componentes padre e hijo usando signals.
       <button (click)="increment()">+</button>
     </div>
   `,
-  styles: [`
-    .counter {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .count {
-      font-size: 1.5rem;
-      font-weight: bold;
-      min-width: 3rem;
-      text-align: center;
-    }
-  `],
+  styles: [
+    `
+      .counter {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .count {
+        font-size: 1.5rem;
+        font-weight: bold;
+        min-width: 3rem;
+        text-align: center;
+      }
+    `,
+  ],
 })
 export class CounterComponent {
   // Input signal - valor del contador
   readonly value = input.required<number>();
-  
+
   // Output - emite cambios de valor
   readonly valueChange = output<number>();
 
@@ -274,24 +258,21 @@ export class CounterComponent {
 
 ```typescript
 @Component({
-  selector: 'app-parent',
+  selector: "app-parent",
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CounterComponent],
   template: `
     <div class="container">
       <h2>Counter Demo</h2>
-      
-      <app-counter 
-        [value]="count()" 
-        (valueChange)="count.set($event)" 
-      />
-      
+
+      <app-counter [value]="count()" (valueChange)="count.set($event)" />
+
       <div class="info">
         <p>Current value: {{ count() }}</p>
         <p>Double: {{ doubled() }}</p>
-        <p>Is even: {{ isEven() ? 'Yes' : 'No' }}</p>
+        <p>Is even: {{ isEven() ? "Yes" : "No" }}</p>
       </div>
-      
+
       <button (click)="reset()">Reset</button>
     </div>
   `,
@@ -299,11 +280,11 @@ export class CounterComponent {
 export class ParentComponent {
   // Estado en el padre
   readonly count = signal(0);
-  
+
   // Estado derivado
   readonly doubled = computed(() => this.count() * 2);
   readonly isEven = computed(() => this.count() % 2 === 0);
-  
+
   reset() {
     this.count.set(0);
   }
@@ -324,13 +305,13 @@ interface Item {
 }
 
 @Component({
-  selector: 'app-item-list',
+  selector: "app-item-list",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="list-container">
       <div class="list-header">
         <label>
-          <input 
+          <input
             type="checkbox"
             [checked]="allSelected()"
             [indeterminate]="someSelected()"
@@ -338,19 +319,17 @@ interface Item {
           />
           Select All ({{ selectedIds().size }} / {{ items().length }})
         </label>
-        
+
         @if (selectedIds().size > 0) {
-          <button (click)="deleteSelected()">
-            Delete Selected
-          </button>
+          <button (click)="deleteSelected()">Delete Selected</button>
         }
       </div>
-      
+
       <div class="list-items">
         @for (item of items(); track item.id) {
           <div class="item">
             <label>
-              <input 
+              <input
                 type="checkbox"
                 [checked]="selectedIds().has(item.id)"
                 (change)="toggleItem(item.id)"
@@ -363,7 +342,7 @@ interface Item {
           </div>
         }
       </div>
-      
+
       @if (selectedItems().length > 0) {
         <div class="selection-summary">
           <h3>Selected Items:</h3>
@@ -380,28 +359,29 @@ interface Item {
 export class ItemListComponent {
   // Input: lista de items
   readonly items = input.required<Item[]>();
-  
+
   // Estado: IDs seleccionados
   readonly selectedIds = signal<Set<string>>(new Set());
 
   // Estado derivado: items seleccionados
-  readonly selectedItems = computed(() => 
-    this.items().filter(item => this.selectedIds().has(item.id))
+  readonly selectedItems = computed(() =>
+    this.items().filter((item) => this.selectedIds().has(item.id)),
   );
 
   // Estado derivado: todos seleccionados
-  readonly allSelected = computed(() => 
-    this.items().length > 0 && 
-    this.selectedIds().size === this.items().length
+  readonly allSelected = computed(
+    () =>
+      this.items().length > 0 &&
+      this.selectedIds().size === this.items().length,
   );
 
   // Estado derivado: algunos seleccionados (indeterminate state)
-  readonly someSelected = computed(() => 
-    this.selectedIds().size > 0 && !this.allSelected()
+  readonly someSelected = computed(
+    () => this.selectedIds().size > 0 && !this.allSelected(),
   );
 
   toggleItem(id: string) {
-    this.selectedIds.update(ids => {
+    this.selectedIds.update((ids) => {
       const next = new Set(ids);
       if (next.has(id)) {
         next.delete(id);
@@ -416,13 +396,13 @@ export class ItemListComponent {
     if (this.allSelected()) {
       this.selectedIds.set(new Set());
     } else {
-      this.selectedIds.set(new Set(this.items().map(i => i.id)));
+      this.selectedIds.set(new Set(this.items().map((i) => i.id)));
     }
   }
-  
+
   deleteSelected() {
     // Lógica para eliminar items seleccionados
-    console.log('Deleting:', this.selectedItems());
+    console.log("Deleting:", this.selectedItems());
     this.selectedIds.set(new Set());
   }
 }
@@ -436,24 +416,24 @@ Búsqueda y filtrado con debounce usando signals y effects.
 
 ```typescript
 @Component({
-  selector: 'app-search-list',
+  selector: "app-search-list",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="search-container">
-      <input 
+      <input
         type="search"
         [value]="searchQuery()"
         (input)="searchQuery.set($any($event.target).value)"
         placeholder="Search items..."
       />
-      
+
       @if (isSearching()) {
         <span class="searching">Searching...</span>
       }
-      
+
       <div class="results">
         <p>Found {{ filteredItems().length }} items</p>
-        
+
         @for (item of filteredItems(); track item.id) {
           <div class="item">{{ item.name }}</div>
         }
@@ -463,46 +443,47 @@ Búsqueda y filtrado con debounce usando signals y effects.
 })
 export class SearchListComponent implements OnInit {
   private readonly searchService = inject(SearchService);
-  
+
   // Estado: query de búsqueda
-  readonly searchQuery = signal('');
-  
+  readonly searchQuery = signal("");
+
   // Estado: resultados
   readonly items = signal<Item[]>([]);
   readonly isSearching = signal(false);
-  
+
   // Estado derivado: items filtrados
   readonly filteredItems = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
     if (!query) return this.items();
-    
-    return this.items().filter(item => 
-      item.name.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query)
+
+    return this.items().filter(
+      (item) =>
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query),
     );
   });
-  
+
   ngOnInit() {
     // Effect con debounce para búsqueda
     let timeoutId: any;
     effect(() => {
       const query = this.searchQuery();
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!query.trim()) {
         this.items.set([]);
         return;
       }
-      
+
       this.isSearching.set(true);
-      
+
       timeoutId = setTimeout(async () => {
         try {
           const results = await this.searchService.search(query);
           this.items.set(results);
         } catch (error) {
-          console.error('Search error:', error);
+          console.error("Search error:", error);
           this.items.set([]);
         } finally {
           this.isSearching.set(false);
@@ -570,6 +551,7 @@ export class SearchListComponent implements OnInit {
 ## 📝 Fuente
 
 Esta skill ha sido adaptada del proyecto open-source de Boise State University:
+
 - **Repositorio**: [agentcore-public-stack](https://github.com/Boise-State-Development/agentcore-public-stack)
 - **Licencia**: MIT
 - **Créditos**: Boise State Development Team

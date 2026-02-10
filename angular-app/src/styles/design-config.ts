@@ -2,10 +2,10 @@
  * ============================================================================
  * DESIGN CONFIG - Configuración del tema activo
  * ============================================================================
- * 
+ *
  * 🎨 CAMBIAR TEMA:
  * Simplemente modifica DEFAULT_THEME con cualquiera de los 22 temas disponibles:
- * 
+ *
  * COLORES CÁLIDOS:     'red' | 'orange' | 'amber' | 'yellow'
  * VERDES:              'lime' | 'green' | 'emerald' | 'teal'
  * AZULES:              'cyan' | 'sky' | 'blue' | 'indigo'
@@ -16,7 +16,16 @@
  */
 
 import { THEMES, THEME_INFO, THEME_CATEGORIES, ALL_THEMES } from './themes.config';
-import type { ThemeName, ThemeConfig, ThemeColors, ThemeSurfaces, ThemeNeutrals, ThemeSemantic, ThemeMode, ThemeInfo } from './themes.config';
+import type {
+  ThemeName,
+  ThemeConfig,
+  ThemeColors,
+  ThemeSurfaces,
+  ThemeNeutrals,
+  ThemeSemantic,
+  ThemeMode,
+  ThemeInfo,
+} from './themes.config';
 
 // ============================================================================
 // ⭐ TEMA POR DEFECTO - CAMBIAR AQUÍ
@@ -33,8 +42,16 @@ export const DEFAULT_THEME: ThemeName = 'blue';
 // ============================================================================
 
 export { THEMES, THEME_INFO, THEME_CATEGORIES, ALL_THEMES };
-export type { ThemeName, ThemeConfig, ThemeColors, ThemeSurfaces, ThemeNeutrals, ThemeSemantic, ThemeMode, ThemeInfo };
-
+export type {
+  ThemeName,
+  ThemeConfig,
+  ThemeColors,
+  ThemeSurfaces,
+  ThemeNeutrals,
+  ThemeSemantic,
+  ThemeMode,
+  ThemeInfo,
+};
 
 // ============================================================================
 // HELPERS

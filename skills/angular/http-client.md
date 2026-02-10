@@ -4,8 +4,7 @@
 
 - **Skill ID**: `angular/http-client`
 - **Versión**: 1.0.0
-- **Categoría**: Angular
--**Prioridad**: Crítica
+- **Categoría**: Angular -**Prioridad**: Crítica
 - **Angular Version**: 18+
 
 ## 🎯 Objetivo
@@ -20,9 +19,13 @@ Dominar HTTP Client para consumir APIs REST, manejar errores, implementar interc
 
 ```typescript
 // main.ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
-import { AppComponent } from './app/app.component';
+import { bootstrapApplication } from "@angular/platform-browser";
+import {
+  provideHttpClient,
+  withInterceptors,
+  withFetch,
+} from "@angular/common/http";
+import { AppComponent } from "./app/app.component";
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -31,7 +34,7 @@ bootstrapApplication(AppComponent, {
       withInterceptors([authInterceptor, errorInterceptor]),
     ),
   ],
-}).catch(err => console.error(err));
+}).catch((err) => console.error(err));
 ```
 
 ---
@@ -41,10 +44,10 @@ bootstrapApplication(AppComponent, {
 ### GET Requests
 
 ```typescript
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Injectable, inject, signal } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 interface User {
   id: number;
@@ -52,10 +55,10 @@ interface User {
   email: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = '/api/users';
+  private apiUrl = "/api/users";
 
   // Opción 1: Observable (tradicional)
   getUsers(): Observable<User[]> {
@@ -77,7 +80,7 @@ export class UserService {
       params: {
         search: query,
         page: page.toString(),
-        limit: '10',
+        limit: "10",
       },
     });
   }
@@ -86,7 +89,7 @@ export class UserService {
   getUsersWithAuth(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, {
       headers: {
-        'X-Custom-Header': 'value',
+        "X-Custom-Header": "value",
       },
     });
   }
@@ -154,23 +157,23 @@ deleteUserWithResponse(id: number): Observable<HttpResponse<void>> {
 
 ```typescript
 // interceptors/auth.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { AuthService } from "../services/auth.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
 
   // No agregar token a ciertas URLs
-  if (req.url.includes('/auth/login') || req.url.includes('/public/')) {
+  if (req.url.includes("/auth/login") || req.url.includes("/public/")) {
     return next(req);
   }
 
   // Clonar request y agregar token
   if (token) {
     const authReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`),
+      headers: req.headers.set("Authorization", `Bearer ${token}`),
     });
     return next(authReq);
   }
@@ -183,11 +186,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ```typescript
 // interceptors/error.interceptor.ts
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-import { ToastService } from '../services/toast.service';
+import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { catchError, throwError } from "rxjs";
+import { Router } from "@angular/router";
+import { ToastService } from "../services/toast.service";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -195,7 +198,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'An error occurred';
+      let errorMessage = "An error occurred";
 
       if (error.error instanceof ErrorEvent) {
         // Client-side error
@@ -204,20 +207,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Server-side error
         switch (error.status) {
           case 400:
-            errorMessage = 'Bad Request';
+            errorMessage = "Bad Request";
             break;
           case 401:
-            errorMessage = 'Unauthorized';
-            router.navigate(['/login']);
+            errorMessage = "Unauthorized";
+            router.navigate(["/login"]);
             break;
           case 403:
-            errorMessage = 'Forbidden';
+            errorMessage = "Forbidden";
             break;
           case 404:
-            errorMessage = 'Resource not found';
+            errorMessage = "Resource not found";
             break;
           case 500:
-            errorMessage = 'Internal Server Error';
+            errorMessage = "Internal Server Error";
             break;
           default:
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
@@ -226,7 +229,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       toast.error(errorMessage);
       return throwError(() => error);
-    })
+    }),
   );
 };
 ```
@@ -235,24 +238,22 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
 ```typescript
 // interceptors/loading.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { LoadingService } from '../services/loading.service';
+import { HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { finalize } from "rxjs/operators";
+import { LoadingService } from "../services/loading.service";
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
 
   // No mostrar loading para ciertas URLs
-  if (req.url.includes('/silent')) {
+  if (req.url.includes("/silent")) {
     return next(req);
   }
 
   loadingService.show();
 
-  return next(req).pipe(
-    finalize(() => loadingService.hide())
-  );
+  return next(req).pipe(finalize(() => loadingService.hide()));
 };
 ```
 
@@ -260,16 +261,16 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
 
 ```typescript
 // interceptors/cache.interceptor.ts
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpInterceptorFn, HttpResponse } from "@angular/common/http";
+import { of } from "rxjs";
+import { tap } from "rxjs/operators";
 
 const cache = new Map<string, HttpResponse<any>>();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   // Solo cachear GET requests
-  if (req.method !== 'GET') {
+  if (req.method !== "GET") {
     return next(req);
   }
 
@@ -281,14 +282,14 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Si no está en caché, hacer request y guardar
   return next(req).pipe(
-    tap(event => {
+    tap((event) => {
       if (event instanceof HttpResponse) {
         cache.set(req.url, event.clone());
 
         // Limpiar caché después del tiempo configurado
         setTimeout(() => cache.delete(req.url), CACHE_DURATION);
       }
-    })
+    }),
   );
 };
 ```
@@ -300,22 +301,22 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
 ### 1. En el Servicio
 
 ```typescript
-import { catchError, retry, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, retry, throwError } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private http = inject(HttpClient);
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('/api/users').pipe(
+    return this.http.get<User[]>("/api/users").pipe(
       retry(3), // Reintentar 3 veces
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Unknown error occurred';
+    let errorMessage = "Unknown error occurred";
 
     if (error.error instanceof ErrorEvent) {
       // Client-side error
@@ -370,17 +371,17 @@ export class UserListComponent {
 ### Upload de Archivos
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class FileService {
   private http = inject(HttpClient);
 
   uploadFile(file: File): Observable<HttpEvent<any>> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
-    return this.http.post('/api/upload', formData, {
+    return this.http.post("/api/upload", formData, {
       reportProgress: true,
-      observe: 'events',
+      observe: "events",
     });
   }
 
@@ -391,9 +392,9 @@ export class FileService {
       formData.append(`file${index}`, file);
     });
 
-    return this.http.post('/api/upload/multiple', formData, {
+    return this.http.post("/api/upload/multiple", formData, {
       reportProgress: true,
-      observe: 'events',
+      observe: "events",
     });
   }
 }
@@ -417,15 +418,17 @@ export class UploadComponent {
     this.fileService.uploadFile(file).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
-          const progress = Math.round((100 * event.loaded) / (event.total || 1));
+          const progress = Math.round(
+            (100 * event.loaded) / (event.total || 1),
+          );
           this.uploadProgress.set(progress);
         } else if (event.type === HttpEventType.Response) {
-          console.log('Upload complete!', event.body);
+          console.log("Upload complete!", event.body);
           this.uploadProgress.set(0);
         }
       },
       error: (err) => {
-        console.error('Upload error:', err);
+        console.error("Upload error:", err);
         this.uploadProgress.set(0);
       },
     });
@@ -436,32 +439,34 @@ export class UploadComponent {
 ### Download de Archivos
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class FileService {
   private http = inject(HttpClient);
 
   downloadFile(fileId: string, filename: string): void {
-    this.http.get(`/api/files/${fileId}`, {
-      responseType: 'blob',
-    }).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err) => console.error('Download error:', err),
-    });
+    this.http
+      .get(`/api/files/${fileId}`, {
+        responseType: "blob",
+      })
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filename;
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => console.error("Download error:", err),
+      });
   }
 
   // Con progreso
   downloadFileWithProgress(fileId: string): Observable<HttpEvent<Blob>> {
     return this.http.get(`/api/files/${fileId}`, {
-      responseType: 'blob',
+      responseType: "blob",
       reportProgress: true,
-      observe: 'events',
+      observe: "events",
     });
   }
 }
@@ -477,13 +482,13 @@ import { resource } from '@angular/core';
 @Component({})
 export class UserDetailPage {
   private userService = inject(UserService);
-  
+
   userId = input.required<number>();
 
   // Resource gestiona loading, error, y data automáticamente
   userResource = resource({
     request: () => ({ id: this.userId() }),
-    loader: ({ request, abortSignal }) => 
+    loader: ({ request, abortSignal }) =>
       this.userService.getUserById(request.id).pipe(
         takeUntilDestroyed(),
       ),
@@ -513,7 +518,7 @@ export class UserDetailPage {
 ## 💾 Caching Service
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CacheService {
   private cache = new Map<string, { data: any; timestamp: number }>();
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
@@ -548,22 +553,22 @@ export class CacheService {
 }
 
 // Usar en servicio
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
 
   getUsers(): Observable<User[]> {
-    const cacheKey = 'users';
+    const cacheKey = "users";
     const cached = this.cacheService.get<User[]>(cacheKey);
 
     if (cached) {
       return of(cached);
     }
 
-    return this.http.get<User[]>('/api/users').pipe(
-      tap(users => this.cacheService.set(cacheKey, users))
-    );
+    return this.http
+      .get<User[]>("/api/users")
+      .pipe(tap((users) => this.cacheService.set(cacheKey, users)));
   }
 }
 ```

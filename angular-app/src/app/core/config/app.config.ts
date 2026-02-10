@@ -1,6 +1,6 @@
 /**
  * Application Configuration Constants
- * 
+ *
  * Centralized configuration for the application
  */
 

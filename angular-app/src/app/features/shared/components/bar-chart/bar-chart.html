@@ -1,13 +1,15 @@
 <div class="bg-[var(--surface)] rounded-2xl p-8 shadow-2xl">
   @if (title()) {
-    <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-8 flex items-center gap-3">{{ title() }}</h3>
+    <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-8 flex items-center gap-3">
+      {{ title() }}
+    </h3>
   }
   <div class="bg-[var(--background)] rounded-xl p-8 shadow-inner">
-    <p-chart 
-      [type]="type()" 
-      [data]="data()" 
+    <p-chart
+      [type]="type()"
+      [data]="data()"
       [options]="options()"
-      [style]="{'height': height()}"
+      [style]="{ height: height() }"
       (onDataSelect)="selectDataPoint($event)"
     />
   </div>

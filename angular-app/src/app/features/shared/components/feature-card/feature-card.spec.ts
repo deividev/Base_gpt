@@ -7,12 +7,12 @@ describe('FeatureCard', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FeatureCard]
+      imports: [FeatureCard],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureCard);
     component = fixture.componentInstance;
-    
+
     // Set required inputs
     fixture.componentRef.setInput('icon', '🚀');
     fixture.componentRef.setInput('title', 'Test Title');

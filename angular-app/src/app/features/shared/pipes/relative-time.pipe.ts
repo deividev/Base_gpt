@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 /**
  * Relative Time Pipe
- * 
+ *
  * Converts dates to relative time strings like "hace 5 minutos"
- * 
+ *
  * @example
  * ```html
  * {{ createdAt | relativeTime }}
@@ -13,7 +13,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  */
 @Pipe({
   name: 'relativeTime',
-  standalone: true
+  standalone: true,
 })
 export class RelativeTimePipe implements PipeTransform {
   private readonly translations = {
@@ -32,7 +32,7 @@ export class RelativeTimePipe implements PipeTransform {
       months: 'hace {n} meses',
       year: 'hace 1 año',
       years: 'hace {n} años',
-      future: 'en el futuro'
+      future: 'en el futuro',
     },
     en: {
       now: 'just now',
@@ -49,14 +49,11 @@ export class RelativeTimePipe implements PipeTransform {
       months: '{n} months ago',
       year: '1 year ago',
       years: '{n} years ago',
-      future: 'in the future'
-    }
+      future: 'in the future',
+    },
   };
 
-  transform(
-    value: Date | string | number | null | undefined,
-    lang: 'es' | 'en' = 'es'
-  ): string {
+  transform(value: Date | string | number | null | undefined, lang: 'es' | 'en' = 'es'): string {
     if (!value) {
       return '';
     }

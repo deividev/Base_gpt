@@ -3,24 +3,24 @@ import { LoggerService } from './logger';
 
 /**
  * Storage Service
- * 
+ *
  * Typed wrapper for localStorage and sessionStorage with:
  * - JSON serialization/deserialization
  * - Type safety
  * - Error handling
  * - Optional expiration
- * 
+ *
  * @example
  * ```typescript
  * // Save data
  * storage.set('user', { id: 1, name: 'John' });
- * 
+ *
  * // Get data with type
  * const user = storage.get<User>('user');
- * 
+ *
  * // Remove data
  * storage.remove('user');
- * 
+ *
  * // Set with expiration (1 hour)
  * storage.set('token', 'abc123', { expiresIn: 3600000 });
  * ```
@@ -106,7 +106,7 @@ export class StorageService {
     try {
       const prefixedKey = this.prefix + key;
       const item = storage.getItem(prefixedKey);
-      
+
       if (!item) {
         return null;
       }
@@ -128,16 +128,16 @@ export class StorageService {
   }
 
   private setInStorage<T>(
-    storage: Storage, 
-    key: string, 
-    value: T, 
-    options?: { expiresIn?: number }
+    storage: Storage,
+    key: string,
+    value: T,
+    options?: { expiresIn?: number },
   ): void {
     try {
       const prefixedKey = this.prefix + key;
-      
+
       const data: { _value: T; _expires?: number } = { _value: value };
-      
+
       if (options?.expiresIn) {
         data._expires = Date.now() + options.expiresIn;
       }
@@ -163,7 +163,7 @@ export class StorageService {
     try {
       // Only clear items with our prefix
       const keysToRemove: string[] = [];
-      
+
       for (let i = 0; i < storage.length; i++) {
         const key = storage.key(i);
         if (key?.startsWith(this.prefix)) {
@@ -171,7 +171,7 @@ export class StorageService {
         }
       }
 
-      keysToRemove.forEach(key => storage.removeItem(key));
+      keysToRemove.forEach((key) => storage.removeItem(key));
       this.logger.debug(`[Storage] Cleared ${keysToRemove.length} items`);
     } catch (error) {
       this.logger.error('[Storage] Error clearing storage:', error);

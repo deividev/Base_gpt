@@ -20,8 +20,8 @@ Dominar Reactive Forms para crear formularios robustos, validados, dinámicos y 
 
 ```typescript
 // main.ts (para standalone apps)
-import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideHttpClient } from "@angular/common/http";
+import { provideRouter } from "@angular/router";
 
 // Reactive Forms Module no necesita provider - se importa directamente
 ```
@@ -29,11 +29,11 @@ import { provideRouter } from '@angular/router';
 ### 2. Importar en Componente
 
 ```typescript
-import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Component, inject } from "@angular/core";
+import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'app-user-form',
+  selector: "app-user-form",
   standalone: true,
   imports: [ReactiveFormsModule],
   template: `<!-- your form -->`,
@@ -48,29 +48,34 @@ export class UserFormComponent {}
 ### Creación Manual
 
 ```typescript
-import { Component, signal } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [ReactiveFormsModule],
   template: `
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">Email</label>
-        <input 
+        <input
           id="email"
-          type="email" 
+          type="email"
           formControlName="email"
           [class.invalid]="emailControl.invalid && emailControl.touched"
         />
         @if (emailControl.invalid && emailControl.touched) {
           <span class="error">
-            @if (emailControl.hasError('required')) {
+            @if (emailControl.hasError("required")) {
               Email is required
             }
-            @if (emailControl.hasError('email')) {
+            @if (emailControl.hasError("email")) {
               Invalid email format
             }
           </span>
@@ -79,27 +84,20 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input 
-          id="password"
-          type="password" 
-          formControlName="password"
-        />
+        <input id="password" type="password" formControlName="password" />
         @if (passwordControl.invalid && passwordControl.touched) {
           <span class="error">
-            @if (passwordControl.hasError('required')) {
+            @if (passwordControl.hasError("required")) {
               Password is required
             }
-            @if (passwordControl.hasError('minlength')) {
+            @if (passwordControl.hasError("minlength")) {
               Password must be at least 6 characters
             }
           </span>
         }
       </div>
 
-      <button 
-        type="submit" 
-        [disabled]="loginForm.invalid || isSubmitting()"
-      >
+      <button type="submit" [disabled]="loginForm.invalid || isSubmitting()">
         @if (isSubmitting()) {
           Logging in...
         } @else {
@@ -113,24 +111,27 @@ export class LoginComponent {
   isSubmitting = signal(false);
 
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minlength(6)]),
+    email: new FormControl("", [Validators.required, Validators.email]),
+    password: new FormControl("", [
+      Validators.required,
+      Validators.minlength(6),
+    ]),
   });
 
   // Acceso directo a controles
   get emailControl() {
-    return this.loginForm.get('email')!;
+    return this.loginForm.get("email")!;
   }
 
   get passwordControl() {
-    return this.loginForm.get('password')!;
+    return this.loginForm.get("password")!;
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       this.isSubmitting.set(true);
       console.log(this.loginForm.value);
-      
+
       // Simular API call
       setTimeout(() => {
         this.isSubmitting.set(false);
@@ -144,7 +145,7 @@ export class LoginComponent {
 ### Con FormBuilder (Recomendado)
 
 ```typescript
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({})
 export class UserFormComponent {
@@ -152,13 +153,13 @@ export class UserFormComponent {
 
   // Typed form
   userForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
+    name: ["", [Validators.required, Validators.minLength(3)]],
+    email: ["", [Validators.required, Validators.email]],
     age: [null as number | null, [Validators.required, Validators.min(18)]],
     address: this.fb.group({
-      street: [''],
-      city: ['', Validators.required],
-      zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}$/)]],
+      street: [""],
+      city: ["", Validators.required],
+      zipCode: ["", [Validators.required, Validators.pattern(/^\d{5}$/)]],
     }),
   });
 
@@ -176,7 +177,7 @@ export class UserFormComponent {
 ## ✨ Typed Forms (Angular 14+)
 
 ```typescript
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from "@angular/forms";
 
 interface UserForm {
   name: FormControl<string>;
@@ -187,8 +188,8 @@ interface UserForm {
 @Component({})
 export class TypedFormComponent {
   userForm = new FormGroup<UserForm>({
-    name: new FormControl('', { nonNullable: true }),
-    email: new FormControl('', { nonNullable: true }),
+    name: new FormControl("", { nonNullable: true }),
+    email: new FormControl("", { nonNullable: true }),
     age: new FormControl<number | null>(null),
   });
 
@@ -196,7 +197,7 @@ export class TypedFormComponent {
     // value es type-safe
     const value = this.userForm.value;
     console.log(value.name); // string
-    console.log(value.age);  // number | null
+    console.log(value.age); // number | null
   }
 }
 ```
@@ -206,7 +207,7 @@ export class TypedFormComponent {
 ## 🔢 FormArray (Listas Dinámicas)
 
 ```typescript
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 
 interface PhoneNumber {
   type: string;
@@ -224,15 +225,15 @@ interface PhoneNumber {
               <option value="home">Home</option>
               <option value="work">Work</option>
             </select>
-            
-            <input 
-              type="tel" 
-              formControlName="number" 
+
+            <input
+              type="tel"
+              formControlName="number"
               placeholder="Phone number"
             />
-            
-            <button 
-              type="button" 
+
+            <button
+              type="button"
               (click)="removePhone($index)"
               [disabled]="phoneNumbers.length === 1"
             >
@@ -242,13 +243,9 @@ interface PhoneNumber {
         }
       </div>
 
-      <button type="button" (click)="addPhone()">
-        Add Phone Number
-      </button>
+      <button type="button" (click)="addPhone()">Add Phone Number</button>
 
-      <button type="submit" [disabled]="contactForm.invalid">
-        Submit
-      </button>
+      <button type="submit" [disabled]="contactForm.invalid">Submit</button>
     </form>
   `,
 })
@@ -256,20 +253,18 @@ export class ContactFormComponent {
   private fb = inject(FormBuilder);
 
   contactForm = this.fb.group({
-    name: ['', Validators.required],
-    phoneNumbers: this.fb.array([
-      this.createPhone(),
-    ]),
+    name: ["", Validators.required],
+    phoneNumbers: this.fb.array([this.createPhone()]),
   });
 
   get phoneNumbers(): FormArray {
-    return this.contactForm.get('phoneNumbers') as FormArray;
+    return this.contactForm.get("phoneNumbers") as FormArray;
   }
 
   createPhone(): FormGroup {
     return this.fb.group({
-      type: ['mobile', Validators.required],
-      number: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      type: ["mobile", Validators.required],
+      number: ["", [Validators.required, Validators.pattern(/^\d{10}$/)]],
     });
   }
 
@@ -296,20 +291,20 @@ export class ContactFormComponent {
 ### Validator Síncrono
 
 ```typescript
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 // Password match validator
 export function passwordMatchValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
+    const password = control.get("password");
+    const confirmPassword = control.get("confirmPassword");
 
     if (!password || !confirmPassword) {
       return null;
     }
 
-    return password.value === confirmPassword.value 
-      ? null 
+    return password.value === confirmPassword.value
+      ? null
       : { passwordMismatch: true };
   };
 }
@@ -319,18 +314,23 @@ export function passwordMatchValidator(): ValidatorFn {
 export class RegisterComponent {
   private fb = inject(FormBuilder);
 
-  registerForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', Validators.required],
-  }, {
-    validators: [passwordMatchValidator()],
-  });
+  registerForm = this.fb.group(
+    {
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ["", Validators.required],
+    },
+    {
+      validators: [passwordMatchValidator()],
+    },
+  );
 
   // En template
   get passwordMismatch() {
-    return this.registerForm.hasError('passwordMismatch') && 
-           this.registerForm.get('confirmPassword')?.touched;
+    return (
+      this.registerForm.hasError("passwordMismatch") &&
+      this.registerForm.get("confirmPassword")?.touched
+    );
   }
 }
 ```
@@ -348,26 +348,36 @@ export function minAgeValidator(minAge: number): ValidatorFn {
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
 
-    return age >= minAge 
-      ? null 
-      : { minAge: { required: minAge, actual: age } };
+    return age >= minAge ? null : { minAge: { required: minAge, actual: age } };
   };
 }
 
 // Uso
 this.fb.group({
-  birthDate: ['', [Validators.required, minAgeValidator(18)]],
+  birthDate: ["", [Validators.required, minAgeValidator(18)]],
 });
 ```
 
 ### Validador Async (para verificación en servidor)
 
 ```typescript
-import { AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, catchError, debounceTime, switchMap, first } from 'rxjs/operators';
+import {
+  AsyncValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from "@angular/forms";
+import { Observable, of } from "rxjs";
+import {
+  map,
+  catchError,
+  debounceTime,
+  switchMap,
+  first,
+} from "rxjs/operators";
 
-export function uniqueEmailValidator(userService: UserService): AsyncValidatorFn {
+export function uniqueEmailValidator(
+  userService: UserService,
+): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
     if (!control.value) {
       return of(null);
@@ -375,13 +385,13 @@ export function uniqueEmailValidator(userService: UserService): AsyncValidatorFn
 
     return of(control.value).pipe(
       debounceTime(500), // Esperar 500ms después de que el usuario deje de escribir
-      switchMap(email => 
+      switchMap((email) =>
         userService.checkEmailExists(email).pipe(
-          map(exists => exists ? { emailTaken: true } : null),
-          catchError(() => of(null))
-        )
+          map((exists) => (exists ? { emailTaken: true } : null)),
+          catchError(() => of(null)),
+        ),
       ),
-      first()
+      first(),
     );
   };
 }
@@ -394,22 +404,22 @@ export class RegisterComponent {
 
   registerForm = this.fb.group({
     email: [
-      '',
+      "",
       [Validators.required, Validators.email],
       [uniqueEmailValidator(this.userService)], // Async validator
     ],
   });
 
   get emailControl() {
-    return this.registerForm.get('email')!;
+    return this.registerForm.get("email")!;
   }
 
   get emailPending() {
-    return this.emailControl.status === 'PENDING';
+    return this.emailControl.status === "PENDING";
   }
 
   get emailTaken() {
-    return this.emailControl.hasError('emailTaken');
+    return this.emailControl.hasError("emailTaken");
   }
 }
 ```
@@ -422,7 +432,7 @@ export class RegisterComponent {
 interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'number' | 'select';
+  type: "text" | "email" | "number" | "select";
   required: boolean;
   options?: string[]; // Para selects
 }
@@ -440,7 +450,7 @@ interface FormField {
           </label>
 
           @switch (field.type) {
-            @case ('select') {
+            @case ("select") {
               <select [id]="field.name" [formControlName]="field.name">
                 @for (option of field.options; track option) {
                   <option [value]="option">{{ option }}</option>
@@ -448,7 +458,7 @@ interface FormField {
               </select>
             }
             @default {
-              <input 
+              <input
                 [id]="field.name"
                 [type]="field.type"
                 [formControlName]="field.name"
@@ -456,18 +466,16 @@ interface FormField {
             }
           }
 
-          @if (dynamicForm.get(field.name)?.invalid && 
-               dynamicForm.get(field.name)?.touched) {
-            <span class="error">
-              {{ field.label }} is required
-            </span>
+          @if (
+            dynamicForm.get(field.name)?.invalid &&
+            dynamicForm.get(field.name)?.touched
+          ) {
+            <span class="error"> {{ field.label }} is required </span>
           }
         </div>
       }
 
-      <button type="submit" [disabled]="dynamicForm.invalid">
-        Submit
-      </button>
+      <button type="submit" [disabled]="dynamicForm.invalid">Submit</button>
     </form>
   `,
 })
@@ -475,15 +483,15 @@ export class DynamicFormComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   fields: FormField[] = [
-    { name: 'firstName', label: 'First Name', type: 'text', required: true },
-    { name: 'email', label: 'Email', type: 'email', required: true },
-    { name: 'age', label: 'Age', type: 'number', required: false },
-    { 
-      name: 'country', 
-      label: 'Country', 
-      type: 'select', 
+    { name: "firstName", label: "First Name", type: "text", required: true },
+    { name: "email", label: "Email", type: "email", required: true },
+    { name: "age", label: "Age", type: "number", required: false },
+    {
+      name: "country",
+      label: "Country",
+      type: "select",
       required: true,
-      options: ['USA', 'Canada', 'Mexico', 'Spain'],
+      options: ["USA", "Canada", "Mexico", "Spain"],
     },
   ];
 
@@ -496,16 +504,16 @@ export class DynamicFormComponent implements OnInit {
   createFormFromFields(fields: FormField[]): FormGroup {
     const group: any = {};
 
-    fields.forEach(field => {
+    fields.forEach((field) => {
       const validators = [];
       if (field.required) {
         validators.push(Validators.required);
       }
-      if (field.type === 'email') {
+      if (field.type === "email") {
         validators.push(Validators.email);
       }
 
-      group[field.name] = ['', validators];
+      group[field.name] = ["", validators];
     });
 
     return this.fb.group(group);
@@ -528,35 +536,36 @@ export class FormObservablesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   searchForm = this.fb.group({
-    query: [''],
-    category: ['all'],
+    query: [""],
+    category: ["all"],
   });
 
   ngOnInit() {
     // Escuchar cambios en un control específico
-    this.searchForm.get('query')!.valueChanges
-      .pipe(
+    this.searchForm
+      .get("query")!
+      .valueChanges.pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(query => {
-        console.log('Search query:', query);
+      .subscribe((query) => {
+        console.log("Search query:", query);
         this.performSearch(query);
       });
 
     // Escuchar cambios en todo el formulario
     this.searchForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        console.log('Form value:', value);
+      .subscribe((value) => {
+        console.log("Form value:", value);
       });
 
     // Escuchar cambios de estado
     this.searchForm.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(status => {
-        console.log('Form status:', status); // 'VALID', 'INVALID', 'PENDING'
+      .subscribe((status) => {
+        console.log("Form status:", status); // 'VALID', 'INVALID', 'PENDING'
       });
   }
 
@@ -576,8 +585,8 @@ export class FormWithSignalsComponent {
   private fb = inject(FormBuilder);
 
   userForm = this.fb.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    name: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
   });
 
   // Estado con signals
@@ -586,9 +595,7 @@ export class FormWithSignalsComponent {
   submitSuccess = signal(false);
 
   // Computed para habilitar submit
-  canSubmit = computed(() => 
-    this.userForm.valid && !this.isSubmitting()
-  );
+  canSubmit = computed(() => this.userForm.valid && !this.isSubmitting());
 
   async onSubmit() {
     if (!this.canSubmit()) return;
@@ -603,7 +610,7 @@ export class FormWithSignalsComponent {
       this.userForm.reset();
     } catch (error) {
       this.submitError.set(
-        error instanceof Error ? error.message : 'An error occurred'
+        error instanceof Error ? error.message : "An error occurred",
       );
     } finally {
       this.isSubmitting.set(false);

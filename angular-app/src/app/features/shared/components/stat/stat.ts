@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'app-stat',
   imports: [],
   templateUrl: './stat.html',
-  styleUrl: './stat.scss'
+  styleUrl: './stat.scss',
 })
 export class Stat {
   // Inputs

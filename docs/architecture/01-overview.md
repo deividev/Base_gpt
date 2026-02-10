@@ -45,6 +45,7 @@ src/
 **Propósito**: Contiene código singleton que se usa en TODA la aplicación.
 
 **Reglas**:
+
 - ✅ Solo servicios con `providedIn: 'root'`
 - ✅ Interceptors y guards globales
 - ✅ Modelos/interfaces usados en múltiples features
@@ -53,10 +54,10 @@ src/
 
 ```typescript
 // Importación desde core
-import { ApiService, StorageService } from '@core/services';
-import { authGuard } from '@core/guards';
-import { User, ApiResponse } from '@core/models';
-import { APP_CONFIG, API_ENDPOINTS } from '@core/config';
+import { ApiService, StorageService } from "@core/services";
+import { authGuard } from "@core/guards";
+import { User, ApiResponse } from "@core/models";
+import { APP_CONFIG, API_ENDPOINTS } from "@core/config";
 ```
 
 ### 📦 Features Layer (`/features`)
@@ -64,6 +65,7 @@ import { APP_CONFIG, API_ENDPOINTS } from '@core/config';
 **Propósito**: Cada feature es un módulo autónomo con su propia lógica de negocio.
 
 **Reglas**:
+
 - ✅ Componentes, servicios y modelos específicos de la feature
 - ✅ Puede importar de `core/` y `shared/`
 - ❌ NO importar de otras features directamente
@@ -96,6 +98,7 @@ features/
 **Propósito**: Código reutilizable entre 2+ features.
 
 **Reglas**:
+
 - ✅ Componentes de UI genéricos (Button, Input, Modal)
 - ✅ Pipes y directivas comunes
 - ✅ Servicios compartidos entre features
@@ -103,8 +106,8 @@ features/
 
 ```typescript
 // Importación desde shared
-import { Button, Input, DataTable } from '@shared/components';
-import { TruncatePipe, RelativeTimePipe } from '@shared/pipes';
+import { Button, Input, DataTable } from "@shared/components";
+import { TruncatePipe, RelativeTimePipe } from "@shared/pipes";
 ```
 
 ## Flujo de Dependencias
@@ -149,13 +152,14 @@ Configurados en `tsconfig.json`:
 ```
 
 **Uso**:
+
 ```typescript
 // ✅ Correcto - usar aliases
-import { ApiService } from '@core/services';
-import { Button } from '@shared/components';
+import { ApiService } from "@core/services";
+import { Button } from "@shared/components";
 
 // ❌ Evitar - rutas relativas largas
-import { ApiService } from '../../../core/services';
+import { ApiService } from "../../../core/services";
 ```
 
 ## Barrel Exports (index.ts)
@@ -164,18 +168,18 @@ Cada carpeta expone su API pública a través de `index.ts`:
 
 ```typescript
 // src/app/core/services/index.ts
-export { ApiService } from './api';
-export { StorageService } from './storage';
-export { LoggerService } from './logger';
-export { LoadingService } from './loading';
-export { ThemeService } from './theme';
+export { ApiService } from "./api";
+export { StorageService } from "./storage";
+export { LoggerService } from "./logger";
+export { LoadingService } from "./loading";
+export { ThemeService } from "./theme";
 
 // src/app/core/index.ts
-export * from './services';
-export * from './guards';
-export * from './interceptors';
-export * from './models';
-export * from './config';
+export * from "./services";
+export * from "./guards";
+export * from "./interceptors";
+export * from "./models";
+export * from "./config";
 ```
 
 ## Standalone Components
@@ -184,10 +188,10 @@ Todos los componentes son **standalone** (sin NgModules):
 
 ```typescript
 @Component({
-  selector: 'app-button',
-  standalone: true,  // Implícito en Angular 17+
+  selector: "app-button",
+  standalone: true, // Implícito en Angular 17+
   imports: [NgClass, CommonModule],
-  templateUrl: './button.html',
+  templateUrl: "./button.html",
 })
 export class Button {
   // ...
@@ -204,12 +208,12 @@ export class Dashboard {
   // Estado local con signals
   private readonly users = signal<User[]>([]);
   private readonly loading = signal(false);
-  
+
   // Computed para derivar estado
-  readonly activeUsers = computed(() => 
+  readonly activeUsers = computed(() =>
     this.users().filter(u => u.status === 'active')
   );
-  
+
   // Input/Output con signals
   readonly title = input.required<string>();
   readonly onSelect = output<User>();
@@ -229,6 +233,7 @@ button/
 ```
 
 Ejecutar tests:
+
 ```bash
 npm test              # Ejecutar todos los tests
 npm test -- --watch   # Modo watch

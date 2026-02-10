@@ -8,7 +8,7 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
   selector: 'app-input',
   imports: [FormsModule, NgClass],
   templateUrl: './input.html',
-  styleUrl: './input.scss'
+  styleUrl: './input.scss',
 })
 export class Input {
   // Inputs
@@ -19,12 +19,12 @@ export class Input {
   readonly required = input<boolean>(false);
   readonly label = input<string>();
   readonly error = input<string>();
-  
+
   // Outputs
   readonly valueChange = output<string>();
   readonly inputBlur = output<void>();
   readonly inputFocus = output<void>();
-  
+
   // Internal state
   protected readonly isFocused = signal(false);
 

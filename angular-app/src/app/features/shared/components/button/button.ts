@@ -10,8 +10,8 @@ export type ButtonSize = 'small' | 'medium' | 'large';
   templateUrl: './button.html',
   styleUrl: './button.scss',
   host: {
-    '[attr.aria-disabled]': 'disabled() ? "true" : null'
-  }
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
+  },
 })
 export class Button {
   // Inputs using Angular signals
@@ -20,7 +20,7 @@ export class Button {
   readonly disabled = input<boolean>(false);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   readonly ariaLabel = input<string>();
-  
+
   // Output event
   readonly clicked = output<MouseEvent>();
 

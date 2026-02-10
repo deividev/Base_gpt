@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  APP_INITIALIZER,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -24,19 +28,17 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([errorInterceptor, loadingInterceptor])
-    ),
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({
       ripple: true,
-      theme: 'none' // Using our own styles
+      theme: 'none', // Using our own styles
     }),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeThemeSystem,
       deps: [ThemeService],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 };

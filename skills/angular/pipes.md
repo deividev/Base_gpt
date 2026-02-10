@@ -39,60 +39,60 @@ Dominar el uso y creación de pipes en Angular para transformar datos en templat
 
 ```typescript
 @Component({
-  selector: 'app-demo',
+  selector: "app-demo",
   template: `
     <h2>String Pipes</h2>
     <p>{{ text | uppercase }}</p>
     <p>{{ text | lowercase }}</p>
     <p>{{ text | titlecase }}</p>
-    
+
     <h2>Number Pipes</h2>
     <p>{{ price | currency }}</p>
-    <p>{{ price | currency:'EUR':'symbol':'1.2-2' }}</p>
+    <p>{{ price | currency: "EUR" : "symbol" : "1.2-2" }}</p>
     <p>{{ percent | percent }}</p>
-    <p>{{ percent | percent:'1.2-2' }}</p>
-    <p>{{ number | number:'1.3-5' }}</p>
-    
+    <p>{{ percent | percent: "1.2-2" }}</p>
+    <p>{{ number | number: "1.3-5" }}</p>
+
     <h2>Date Pipes</h2>
     <p>{{ today | date }}</p>
-    <p>{{ today | date:'short' }}</p>
-    <p>{{ today | date:'dd/MM/yyyy' }}</p>
-    <p>{{ today | date:'fullDate' }}</p>
-    
+    <p>{{ today | date: "short" }}</p>
+    <p>{{ today | date: "dd/MM/yyyy" }}</p>
+    <p>{{ today | date: "fullDate" }}</p>
+
     <h2>Other Pipes</h2>
     <p>{{ data | json }}</p>
-    <p>{{ items | slice:1:3 }}</p>
+    <p>{{ items | slice: 1 : 3 }}</p>
     <p>{{ asyncData | async }}</p>
   `,
 })
 export class DemoComponent {
-  text = 'hello world';
+  text = "hello world";
   price = 1234.56;
   percent = 0.259;
   number = 1234.56789;
   today = new Date();
-  data = { name: 'John', age: 30 };
+  data = { name: "John", age: 30 };
   items = [1, 2, 3, 4, 5];
-  asyncData = of('Hello from Observable');
+  asyncData = of("Hello from Observable");
 }
 ```
 
 ### Async Pipe (Fundamental)
 
 ```typescript
-import { Component } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
-import { Observable, interval, map } from 'rxjs';
+import { Component } from "@angular/core";
+import { AsyncPipe } from "@angular/common";
+import { Observable, interval, map } from "rxjs";
 
 @Component({
-  selector: 'app-async-demo',
+  selector: "app-async-demo",
   imports: [AsyncPipe],
   template: `
     <h2>Async Pipe Demo</h2>
-    
+
     <!-- Se suscribe y desuscribe automáticamente -->
     <p>Time: {{ time$ | async }}</p>
-    
+
     <!-- Con observables de HTTP -->
     @if (user$ | async; as user) {
       <div class="user">
@@ -102,7 +102,7 @@ import { Observable, interval, map } from 'rxjs';
     } @else {
       <p>Loading user...</p>
     }
-    
+
     <!-- Con múltiples referencias -->
     @let currentUser = user$ | async;
     @if (currentUser) {
@@ -112,12 +112,10 @@ import { Observable, interval, map } from 'rxjs';
   `,
 })
 export class AsyncDemoComponent {
-  time$ = interval(1000).pipe(
-    map(() => new Date())
-  );
-  
+  time$ = interval(1000).pipe(map(() => new Date()));
+
   user$ = this.userService.getCurrentUser();
-  
+
   constructor(private userService: UserService) {}
 }
 ```
@@ -166,9 +164,9 @@ export class FilterPipe implements PipeTransform {
     if (!items || !searchText) {
       return items;
     }
-    
+
     searchText = searchText.toLowerCase();
-    
+
     return items.filter(item =>
       item.name.toLowerCase().includes(searchText)
     );
@@ -178,7 +176,7 @@ export class FilterPipe implements PipeTransform {
 // Uso
 <div class="search">
   <input [(ngModel)]="searchText" placeholder="Search...">
-  
+
   @for (item of items | filter:searchText; track item.id) {
     <div>{{ item.name }}</div>
   }
@@ -188,33 +186,29 @@ export class FilterPipe implements PipeTransform {
 ### Pipe de Ordenamiento
 
 ```typescript
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
-type SortOrder = 'asc' | 'desc';
+type SortOrder = "asc" | "desc";
 
 @Pipe({
-  name: 'sort',
+  name: "sort",
   standalone: true,
 })
 export class SortPipe implements PipeTransform {
-  transform<T>(
-    array: T[],
-    field: keyof T,
-    order: SortOrder = 'asc'
-  ): T[] {
+  transform<T>(array: T[], field: keyof T, order: SortOrder = "asc"): T[] {
     if (!array || !field) {
       return array;
     }
-    
+
     return [...array].sort((a, b) => {
       const aValue = a[field];
       const bValue = b[field];
-      
+
       if (aValue < bValue) {
-        return order === 'asc' ? -1 : 1;
+        return order === "asc" ? -1 : 1;
       }
       if (aValue > bValue) {
-        return order === 'asc' ? 1 : -1;
+        return order === "asc" ? 1 : -1;
       }
       return 0;
     });
@@ -223,24 +217,24 @@ export class SortPipe implements PipeTransform {
 
 // Uso en componente
 @Component({
-  selector: 'app-users',
+  selector: "app-users",
   imports: [SortPipe],
   template: `
     <button (click)="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'">
       Toggle Sort
     </button>
-    
-    @for (user of users | sort:'name':sortOrder; track user.id) {
+
+    @for (user of users | sort: "name" : sortOrder; track user.id) {
       <div>{{ user.name }} - {{ user.age }}</div>
     }
   `,
 })
 export class UsersComponent {
-  sortOrder: SortOrder = 'asc';
+  sortOrder: SortOrder = "asc";
   users = [
-    { id: 1, name: 'John', age: 30 },
-    { id: 2, name: 'Alice', age: 25 },
-    { id: 3, name: 'Bob', age: 35 },
+    { id: 1, name: "John", age: 30 },
+    { id: 2, name: "Alice", age: 25 },
+    { id: 3, name: "Bob", age: 35 },
   ];
 }
 ```
@@ -257,11 +251,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TimeAgoPipe implements PipeTransform {
   transform(value: Date | string | number): string {
     if (!value) return '';
-    
+
     const date = new Date(value);
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
+
     const intervals: { [key: string]: number } = {
       year: 31536000,
       month: 2592000,
@@ -271,17 +265,17 @@ export class TimeAgoPipe implements PipeTransform {
       minute: 60,
       second: 1,
     };
-    
+
     for (const [name, secondsInInterval] of Object.entries(intervals)) {
       const interval = Math.floor(seconds / secondsInInterval);
-      
+
       if (interval >= 1) {
         return interval === 1
           ? `1 ${name} ago`
           : `${interval} ${name}s ago`;
       }
     }
-    
+
     return 'just now';
   }
 }
@@ -310,11 +304,11 @@ export class TruncatePipe implements PipeTransform {
     if (!value || value.length <= limit) {
       return value;
     }
-    
+
     if (completeWords) {
       limit = value.substring(0, limit).lastIndexOf(' ');
     }
-    
+
     return value.substring(0, limit) + ellipsis;
   }
 }
@@ -336,7 +330,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class SafeHtmlPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
-  
+
   transform(value: string): SafeHtml {
     return this.sanitizer.sanitize(SecurityContext.HTML, value) ?? '';
   }
@@ -358,18 +352,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class HighlightPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
-  
+
   transform(value: string, search: string): SafeHtml {
     if (!search || !value) {
       return value;
     }
-    
+
     const regex = new RegExp(search, 'gi');
     const highlighted = value.replace(
       regex,
       match => `<mark>${match}</mark>`
     );
-    
+
     return this.sanitizer.bypassSecurityTrustHtml(highlighted);
   }
 }
@@ -456,14 +450,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class MemoizePipe implements PipeTransform {
   private cache = new Map<string, any>();
-  
+
   transform(value: any, fn: (val: any) => any): any {
     const key = JSON.stringify(value);
-    
+
     if (this.cache.has(key)) {
       return this.cache.get(key);
     }
-    
+
     const result = fn(value);
     this.cache.set(key, result);
     return result;
@@ -486,13 +480,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FileSizePipe implements PipeTransform {
   transform(bytes: number, decimals: number = 2): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    
+
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 }
@@ -533,17 +527,14 @@ export class PluralizePipe implements PipeTransform {
 ### Pipe de Callback
 
 ```typescript
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: 'callback',
+  name: "callback",
   standalone: true,
 })
 export class CallbackPipe implements PipeTransform {
-  transform<T, R>(
-    items: T[],
-    callback: (item: T) => R
-  ): R[] {
+  transform<T, R>(items: T[], callback: (item: T) => R): R[] {
     if (!items || !callback) {
       return [];
     }
@@ -553,20 +544,20 @@ export class CallbackPipe implements PipeTransform {
 
 // Uso en componente
 @Component({
-  selector: 'app-demo',
+  selector: "app-demo",
   imports: [CallbackPipe],
   template: `
-    @for (name of users | callback:getUserName; track $index) {
+    @for (name of users | callback: getUserName; track $index) {
       <p>{{ name }}</p>
     }
   `,
 })
 export class DemoComponent {
   users = [
-    { firstName: 'John', lastName: 'Doe' },
-    { firstName: 'Jane', lastName: 'Smith' },
+    { firstName: "John", lastName: "Doe" },
+    { firstName: "Jane", lastName: "Smith" },
   ];
-  
+
   getUserName = (user: any) => `${user.firstName} ${user.lastName}`;
 }
 ```
@@ -582,15 +573,15 @@ export class DemoComponent {
   template: `
     <!-- Pipes encadenados -->
     <p>{{ text | lowercase | titlecase }}</p>
-    
+
     <!-- Múltiples transformaciones -->
     <p>{{ price | currency:'USD' | uppercase }}</p>
-    
+
     <!-- Con arrays -->
     @for (item of items | filter:search | sort:'name':'asc' | slice:0:5; track item.id) {
       <div>{{ item.name }}</div>
     }
-    
+
     <!-- Con async pipe al final -->
     <p>{{ data$ | async | json }}</p>
   `,
@@ -622,8 +613,8 @@ export class ChainedPipesComponent {
 export class BadComponent {
   // Se ejecuta en cada change detection
   getFilteredItems() {
-    console.log('Called every time!');
-    return this.items.filter(item => item.active);
+    console.log("Called every time!");
+    return this.items.filter((item) => item.active);
   }
 }
 ```
@@ -651,8 +642,8 @@ export class GoodComponent {
 ```typescript
 // NO HACER ESTO
 @Pipe({
-  name: 'unnecessary',
-  pure: false,  // Innecesario si inputs son inmutables
+  name: "unnecessary",
+  pure: false, // Innecesario si inputs son inmutables
 })
 export class UnnecessaryPipe implements PipeTransform {
   transform(value: string): string {
@@ -666,7 +657,7 @@ export class UnnecessaryPipe implements PipeTransform {
 ```typescript
 // HACER ESTO
 @Pipe({
-  name: 'efficient',
+  name: "efficient",
   // pure: true es el default
 })
 export class EfficientPipe implements PipeTransform {
@@ -681,6 +672,7 @@ export class EfficientPipe implements PipeTransform {
 ## 📋 Checklist
 
 ### Development
+
 - [ ] Usar `standalone: true` para pipes
 - [ ] Mantener pipes pure por defecto
 - [ ] Implementar solo el método `transform`
@@ -689,6 +681,7 @@ export class EfficientPipe implements PipeTransform {
 - [ ] Documentar parámetros y uso
 
 ### Performance
+
 - [ ] Evitar lógica compleja en impure pipes
 - [ ] Usar memoization para operaciones costosas
 - [ ] No modificar inputs (mantener inmutabilidad)
@@ -696,12 +689,14 @@ export class EfficientPipe implements PipeTransform {
 - [ ] Evitar funciones en templates
 
 ### Testing
+
 - [ ] Crear tests para cada pipe
 - [ ] Probar con diferentes inputs
 - [ ] Probar casos edge (null, undefined, empty)
 - [ ] Verificar transformaciones correctas
 
 ### Best Practices
+
 - [ ] Nombre descriptivo en camelCase
 - [ ] Un pipe, una responsabilidad
 - [ ] Reutilizar pipes existentes cuando sea posible

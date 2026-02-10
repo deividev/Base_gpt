@@ -7,12 +7,12 @@ describe('SectionHeader', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SectionHeader]
+      imports: [SectionHeader],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SectionHeader);
     component = fixture.componentInstance;
-    
+
     // Set required input
     fixture.componentRef.setInput('title', 'Test Title');
     fixture.detectChanges();

@@ -4,14 +4,14 @@ Este documento describe la arquitectura base del proyecto Angular siguiendo buen
 
 ## Índice de Documentación
 
-| Documento | Descripción |
-|-----------|-------------|
-| [Arquitectura General](./architecture/01-overview.md) | Estructura de carpetas y principios |
-| [Crear Features](./architecture/02-features.md) | Guía para crear nuevas features |
-| [API y Peticiones HTTP](./architecture/03-api-guide.md) | Cliente HTTP, payloads, respuestas |
+| Documento                                                         | Descripción                           |
+| ----------------------------------------------------------------- | ------------------------------------- |
+| [Arquitectura General](./architecture/01-overview.md)             | Estructura de carpetas y principios   |
+| [Crear Features](./architecture/02-features.md)                   | Guía para crear nuevas features       |
+| [API y Peticiones HTTP](./architecture/03-api-guide.md)           | Cliente HTTP, payloads, respuestas    |
 | [Guards e Interceptors](./architecture/04-guards-interceptors.md) | Protección de rutas y middleware HTTP |
-| [Modelos y Tipos](./architecture/05-models-types.md) | Interfaces, tipos y DTOs |
-| [Servicios Core](./architecture/06-core-services.md) | Storage, Logger, Loading, Theme |
+| [Modelos y Tipos](./architecture/05-models-types.md)              | Interfaces, tipos y DTOs              |
+| [Servicios Core](./architecture/06-core-services.md)              | Storage, Logger, Loading, Theme       |
 
 ## Estructura del Proyecto
 
@@ -39,20 +39,25 @@ src/app/
 ## Principios de Arquitectura
 
 ### 1. **Separación de Responsabilidades**
+
 - `core/` → Lógica de infraestructura (singleton)
 - `features/` → Lógica de negocio (por dominio)
 - `shared/` → Código reutilizable entre features
 
 ### 2. **Standalone Components**
+
 Todos los componentes son standalone (Angular 17+), sin necesidad de NgModules.
 
 ### 3. **Signals**
+
 Uso de Angular Signals para estado reactivo en lugar de BehaviorSubject.
 
 ### 4. **Functional Guards/Interceptors**
+
 Uso de funciones en lugar de clases para guards e interceptors.
 
 ### 5. **Barrel Exports**
+
 Cada carpeta tiene un `index.ts` que exporta su contenido público.
 
 ## Quick Start
@@ -72,15 +77,15 @@ src/app/features/mi-feature/
 ### Usar el API Service
 
 ```typescript
-import { inject } from '@angular/core';
-import { ApiService } from '@core/services';
+import { inject } from "@angular/core";
+import { ApiService } from "@core/services";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private api = inject(ApiService);
-  
+
   getUsers() {
-    return this.api.get<User[]>('/users');
+    return this.api.get<User[]>("/users");
   }
 }
 ```
@@ -88,14 +93,14 @@ export class UserService {
 ### Proteger una ruta
 
 ```typescript
-import { authGuard } from '@core/guards';
+import { authGuard } from "@core/guards";
 
 export const routes: Routes = [
   {
-    path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard'),
-    canActivate: [authGuard]
-  }
+    path: "dashboard",
+    loadComponent: () => import("./features/dashboard/dashboard"),
+    canActivate: [authGuard],
+  },
 ];
 ```
 
@@ -105,29 +110,29 @@ export const routes: Routes = [
 // src/environments/environment.ts (desarrollo)
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: "http://localhost:3000/api",
   // ...
 };
 
 // src/environments/environment.prod.ts (producción)
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tudominio.com/api',
+  apiUrl: "https://api.tudominio.com/api",
   // ...
 };
 ```
 
 ## Convenciones de Nombres
 
-| Tipo | Convención | Ejemplo |
-|------|------------|---------|
-| Componentes | PascalCase, sin sufijo | `Button`, `DataTable` |
-| Servicios | PascalCase + Service | `ApiService`, `UserService` |
-| Guards | camelCase + Guard | `authGuard`, `roleGuard` |
-| Interceptors | camelCase + Interceptor | `errorInterceptor` |
-| Pipes | PascalCase + Pipe | `TruncatePipe` |
-| Modelos | PascalCase | `User`, `ApiResponse` |
-| Archivos | kebab-case | `user-profile.ts` |
+| Tipo         | Convención              | Ejemplo                     |
+| ------------ | ----------------------- | --------------------------- |
+| Componentes  | PascalCase, sin sufijo  | `Button`, `DataTable`       |
+| Servicios    | PascalCase + Service    | `ApiService`, `UserService` |
+| Guards       | camelCase + Guard       | `authGuard`, `roleGuard`    |
+| Interceptors | camelCase + Interceptor | `errorInterceptor`          |
+| Pipes        | PascalCase + Pipe       | `TruncatePipe`              |
+| Modelos      | PascalCase              | `User`, `ApiResponse`       |
+| Archivos     | kebab-case              | `user-profile.ts`           |
 
 ## Próximos Pasos
 

@@ -14,10 +14,14 @@ Dominar características avanzadas de TypeScript para escribir código type-safe
 ## ✅ Utility Types
 
 ### 1. Tipos Genéricos
+
 ```typescript
 // Generic function
-function getById<T extends { id: number }>(items: T[], id: number): T | undefined {
-  return items.find(item => item.id === id);
+function getById<T extends { id: number }>(
+  items: T[],
+  id: number,
+): T | undefined {
+  return items.find((item) => item.id === id);
 }
 
 // Generic interface
@@ -36,19 +40,20 @@ class Repository<T extends { id: number }> {
   }
 
   findById(id: number): T | undefined {
-    return this.items.find(item => item.id === id);
+    return this.items.find((item) => item.id === id);
   }
 }
 ```
 
 ### 2. Utility Types Nativos
+
 ```typescript
 interface User {
   id: number;
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
 }
 
 // Partial - Todos los campos opcionales
@@ -59,15 +64,15 @@ type PartialUser = Partial<User>;
 type RequiredUser = Required<Partial<User>>;
 
 // Pick - Seleccionar campos específicos
-type UserCredentials = Pick<User, 'email' | 'password'>;
+type UserCredentials = Pick<User, "email" | "password">;
 // { email: string; password: string; }
 
 // Omit - Excluir campos específicos
-type PublicUser = Omit<User, 'password'>;
+type PublicUser = Omit<User, "password">;
 // { id: number; name: string; email: string; role: ... }
 
 // Record - Objeto con claves específicas
-type UserRoles = Record<'admin' | 'user' | 'guest', string[]>;
+type UserRoles = Record<"admin" | "user" | "guest", string[]>;
 // { admin: string[]; user: string[]; guest: string[]; }
 
 // Readonly - Inmutable
@@ -75,6 +80,7 @@ type ReadonlyUser = Readonly<User>;
 ```
 
 ### 3. Mapped Types
+
 ```typescript
 // Make all properties nullable
 type Nullable<T> = {
@@ -91,10 +97,11 @@ type ReadonlyByKey<T, K extends keyof T> = {
   [P in Exclude<keyof T, K>]: T[P];
 };
 
-type UserWithReadonlyId = ReadonlyByKey<User, 'id'>;
+type UserWithReadonlyId = ReadonlyByKey<User, "id">;
 ```
 
 ### 4. Conditional Types
+
 ```typescript
 // Basic conditional type
 type IsString<T> = T extends string ? true : false;
@@ -112,7 +119,13 @@ type D = NonNullable<number | undefined>; // number
 type ReturnTypeOf<T> = T extends (...args: any[]) => infer R ? R : never;
 
 function getUser(): User {
-  return { id: 1, name: 'John', email: 'john@example.com', password: '', role: 'user' };
+  return {
+    id: 1,
+    name: "John",
+    email: "john@example.com",
+    password: "",
+    role: "user",
+  };
 }
 
 type UserType = ReturnTypeOf<typeof getUser>; // User
@@ -121,15 +134,16 @@ type UserType = ReturnTypeOf<typeof getUser>; // User
 ## 📝 Type Guards
 
 ### 1. Type Predicates
+
 ```typescript
 // Custom type guard
 function isUser(obj: any): obj is User {
   return (
-    typeof obj === 'object' &&
+    typeof obj === "object" &&
     obj !== null &&
-    typeof obj.id === 'number' &&
-    typeof obj.name === 'string' &&
-    typeof obj.email === 'string'
+    typeof obj.id === "number" &&
+    typeof obj.name === "string" &&
+    typeof obj.email === "string"
   );
 }
 
@@ -143,18 +157,19 @@ function processData(data: unknown): void {
 ```
 
 ### 2. Discriminated Unions
+
 ```typescript
 interface LoadingState {
-  status: 'loading';
+  status: "loading";
 }
 
 interface SuccessState<T> {
-  status: 'success';
+  status: "success";
   data: T;
 }
 
 interface ErrorState {
-  status: 'error';
+  status: "error";
   error: string;
 }
 
@@ -163,14 +178,14 @@ type AsyncState<T> = LoadingState | SuccessState<T> | ErrorState;
 // Type-safe handling
 function handleState<T>(state: AsyncState<T>): void {
   switch (state.status) {
-    case 'loading':
-      console.log('Loading...');
+    case "loading":
+      console.log("Loading...");
       break;
-    case 'success':
-      console.log('Data:', state.data); // TypeScript knows state.data exists
+    case "success":
+      console.log("Data:", state.data); // TypeScript knows state.data exists
       break;
-    case 'error':
-      console.log('Error:', state.error); // TypeScript knows state.error exists
+    case "error":
+      console.log("Error:", state.error); // TypeScript knows state.error exists
       break;
   }
 }
@@ -179,9 +194,10 @@ function handleState<T>(state: AsyncState<T>): void {
 ## ✨ Características Avanzadas
 
 ### 1. Template Literal Types
+
 ```typescript
-type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-type Endpoint = 'users' | 'posts' | 'comments';
+type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
+type Endpoint = "users" | "posts" | "comments";
 
 type APIRoute = `/${Endpoint}`;
 // type APIRoute = "/users" | "/posts" | "/comments"
@@ -191,11 +207,12 @@ type APIAction = `${HTTPMethod} ${APIRoute}`;
 
 // Practical example
 type EventName<T extends string> = `on${Capitalize<T>}`;
-type ClickEvent = EventName<'click'>; // "onClick"
-type ChangeEvent = EventName<'change'>; // "onChange"
+type ClickEvent = EventName<"click">; // "onClick"
+type ChangeEvent = EventName<"change">; // "onChange"
 ```
 
 ### 2. Indexed Access Types
+
 ```typescript
 interface UserProfile {
   personal: {
@@ -208,10 +225,10 @@ interface UserProfile {
   };
 }
 
-type PersonalInfo = UserProfile['personal'];
+type PersonalInfo = UserProfile["personal"];
 // { name: string; age: number; }
 
-type EmailType = UserProfile['contact']['email'];
+type EmailType = UserProfile["contact"]["email"];
 // string
 
 // With arrays
@@ -220,13 +237,14 @@ type SingleUser = Users[number]; // User
 ```
 
 ### 3. Decorators con Tipos
+
 ```typescript
 // Method decorator
 function Log() {
   return function (
     target: any,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ): PropertyDescriptor {
     const originalMethod = descriptor.value;
 
@@ -252,6 +270,7 @@ class Calculator {
 ## 🚫 Anti-Patrones
 
 ### ❌ Usar `any`
+
 ```typescript
 // ❌ INCORRECTO
 function process(data: any): any {
@@ -259,12 +278,13 @@ function process(data: any): any {
 }
 
 // ✅ CORRECTO
-function process<T extends { value: unknown }>(data: T): T['value'] {
+function process<T extends { value: unknown }>(data: T): T["value"] {
   return data.value;
 }
 ```
 
 ### ❌ Type Assertions Innecesarios
+
 ```typescript
 // ❌ INCORRECTO
 const user = getUserData() as User;

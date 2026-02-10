@@ -7,12 +7,12 @@ describe('Stat', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Stat]
+      imports: [Stat],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Stat);
     component = fixture.componentInstance;
-    
+
     // Set required inputs
     fixture.componentRef.setInput('value', '100');
     fixture.componentRef.setInput('label', 'Test Label');

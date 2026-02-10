@@ -10,7 +10,7 @@ describe('ThemeSwitcher', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ThemeSwitcher],
-      providers: [ThemeService]
+      providers: [ThemeService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ThemeSwitcher);

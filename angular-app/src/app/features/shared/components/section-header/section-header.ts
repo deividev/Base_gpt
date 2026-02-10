@@ -5,7 +5,7 @@ import { NgClass } from '@angular/common';
   selector: 'app-section-header',
   imports: [NgClass],
   templateUrl: './section-header.html',
-  styleUrl: './section-header.scss'
+  styleUrl: './section-header.scss',
 })
 export class SectionHeader {
   // Inputs

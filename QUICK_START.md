@@ -14,6 +14,7 @@ Base_Skills/
 ## Paso 2: Revisar Agents Disponibles
 
 Abre `config/agent-config.json` para ver los agents:
+
 - **Angular Developer**: Desarrollo de componentes y features
 - **Architecture**: Diseño de estructura y patrones
 - **Testing**: Creación de tests
@@ -22,6 +23,7 @@ Abre `config/agent-config.json` para ver los agents:
 ## Paso 3: Explorar Skills
 
 Revisa las skills disponibles en:
+
 - `skills/angular/` - Skills de Angular
 - `skills/architecture/` - Arquitectura
 - `skills/core/` - TypeScript y fundamentales
@@ -47,21 +49,24 @@ npm install
 ## Paso 5: Usar el Sistema
 
 ### Ejemplo 1: Crear un Componente
+
 ```
-"Como Angular Developer Agent, crea un componente 
+"Como Angular Developer Agent, crea un componente
 de dashboard usando la skill de component-creation"
 ```
 
 ### Ejemplo 2: Diseñar Feature
+
 ```
-"Como Architecture Agent, diseña la estructura 
-para un módulo de gestión de usuarios usando 
+"Como Architecture Agent, diseña la estructura
+para un módulo de gestión de usuarios usando
 Clean Architecture"
 ```
 
 ### Ejemplo 3: Crear Tests
+
 ```
-"Como Testing Agent, crea tests unitarios para 
+"Como Testing Agent, crea tests unitarios para
 el componente UserProfile"
 ```
 
@@ -103,6 +108,7 @@ Lee `docs/usage-guide.md` para guía detallada de uso.
 ## 🆘 Ayuda
 
 Si tienes dudas:
+
 1. Consulta `docs/usage-guide.md`
 2. Revisa ejemplos en las skills
 3. Pregunta específicamente: "¿Cómo uso la skill X para Y?"

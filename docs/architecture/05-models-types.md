@@ -54,7 +54,7 @@ export interface ApiError {
   status: number;
   message: string;
   code?: string;
-  details?: Record<string, string[]>;  // Errores de validación
+  details?: Record<string, string[]>; // Errores de validación
   timestamp?: string;
 }
 
@@ -73,7 +73,7 @@ export interface SelectOption<T = string> {
  */
 export interface SortConfig {
   field: string;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 /**
@@ -81,7 +81,15 @@ export interface SortConfig {
  */
 export interface FilterConfig {
   field: string;
-  operator: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'startsWith';
+  operator:
+    | "eq"
+    | "neq"
+    | "gt"
+    | "gte"
+    | "lt"
+    | "lte"
+    | "contains"
+    | "startsWith";
   value: unknown;
 }
 
@@ -117,14 +125,14 @@ export interface User {
   lastLoginAt?: Date | string;
 }
 
-export type UserRole = 'user' | 'admin' | 'superadmin' | 'moderator';
-export type UserStatus = 'active' | 'inactive' | 'pending' | 'suspended';
+export type UserRole = "user" | "admin" | "superadmin" | "moderator";
+export type UserStatus = "active" | "inactive" | "pending" | "suspended";
 
 export interface AuthTokens {
   accessToken: string;
   refreshToken?: string;
   expiresIn: number;
-  tokenType: 'Bearer';
+  tokenType: "Bearer";
 }
 
 export interface LoginCredentials {
@@ -145,13 +153,13 @@ export interface RegisterData {
 
 ### Convención de Nombres
 
-| Tipo | Sufijo | Descripción |
-|------|--------|-------------|
-| Entidad | (sin sufijo) | Modelo completo del servidor |
-| Crear | CreateDto | Datos para crear |
-| Actualizar | UpdateDto | Datos para actualizar |
-| Filtros | Filters | Parámetros de filtrado |
-| Form | FormData | Datos del formulario |
+| Tipo       | Sufijo       | Descripción                  |
+| ---------- | ------------ | ---------------------------- |
+| Entidad    | (sin sufijo) | Modelo completo del servidor |
+| Crear      | CreateDto    | Datos para crear             |
+| Actualizar | UpdateDto    | Datos para actualizar        |
+| Filtros    | Filters      | Parámetros de filtrado       |
+| Form       | FormData     | Datos del formulario         |
 
 ### Ejemplo: Product DTOs
 
@@ -254,38 +262,40 @@ export interface ProductFormData {
  * Verifica si un valor es un objeto
  */
 export function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 /**
  * Verifica si es un error de API
  */
 export function isApiError(error: unknown): error is ApiError {
-  return isObject(error) && 
-    'status' in error && 
-    'message' in error;
+  return isObject(error) && "status" in error && "message" in error;
 }
 
 /**
  * Verifica si es una respuesta paginada
  */
 export function isPaginatedResponse<T>(
-  response: unknown
+  response: unknown,
 ): response is PaginatedResponse<T> {
-  return isObject(response) && 
-    'data' in response && 
-    'pagination' in response &&
-    Array.isArray(response.data);
+  return (
+    isObject(response) &&
+    "data" in response &&
+    "pagination" in response &&
+    Array.isArray(response.data)
+  );
 }
 
 /**
  * Type guard para discriminated unions
  */
-type ApiResult<T> = 
+type ApiResult<T> =
   | { success: true; data: T }
   | { success: false; error: ApiError };
 
-export function isSuccess<T>(result: ApiResult<T>): result is { success: true; data: T } {
+export function isSuccess<T>(
+  result: ApiResult<T>,
+): result is { success: true; data: T } {
   return result.success === true;
 }
 ```
@@ -298,12 +308,14 @@ export function isSuccess<T>(result: ApiResult<T>): result is { success: true; d
 /**
  * Hace todas las propiedades opcionales excepto las especificadas
  */
-export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>;
+export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> &
+  Pick<T, K>;
 
 /**
  * Hace solo las propiedades especificadas opcionales
  */
-export type PartialPick<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type PartialPick<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 /**
  * Excluye propiedades que son undefined
@@ -342,32 +354,32 @@ Preferimos **Union Types** sobre Enums:
 ```typescript
 // ❌ Evitar enums
 enum UserStatus {
-  Active = 'active',
-  Inactive = 'inactive',
-  Pending = 'pending'
+  Active = "active",
+  Inactive = "inactive",
+  Pending = "pending",
 }
 
 // ✅ Preferir union types
-type UserStatus = 'active' | 'inactive' | 'pending';
+type UserStatus = "active" | "inactive" | "pending";
 
 // ✅ Con constante para iterar
-const USER_STATUSES = ['active', 'inactive', 'pending'] as const;
-type UserStatus = typeof USER_STATUSES[number];
+const USER_STATUSES = ["active", "inactive", "pending"] as const;
+type UserStatus = (typeof USER_STATUSES)[number];
 ```
 
 ## Barrel Exports
 
 ```typescript
 // src/app/core/models/index.ts
-export * from './api.model';
-export * from './user.model';
+export * from "./api.model";
+export * from "./user.model";
 
 // src/app/features/products/models/index.ts
-export * from './product.dto';
+export * from "./product.dto";
 
 // Uso
-import { User, ApiResponse } from '@core/models';
-import { Product, CreateProductDto } from './models';
+import { User, ApiResponse } from "@core/models";
+import { Product, CreateProductDto } from "./models";
 ```
 
 ## Validación con Zod (Opcional)
@@ -375,7 +387,7 @@ import { Product, CreateProductDto } from './models';
 Para validación en runtime, puedes usar Zod:
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 // Schema de validación
 export const createProductSchema = z.object({

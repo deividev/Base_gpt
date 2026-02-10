@@ -7,7 +7,7 @@ describe('Button', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Button]
+      imports: [Button],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Button);
@@ -53,23 +53,23 @@ describe('Button', () => {
     it('should emit clicked event when clicked and not disabled', () => {
       const clickSpy = vi.fn();
       component.clicked.subscribe(clickSpy);
-      
+
       const button = fixture.nativeElement.querySelector('button');
       button.click();
-      
+
       expect(clickSpy).toHaveBeenCalled();
     });
 
     it('should not emit clicked event when disabled', () => {
       fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      
+
       const clickSpy = vi.fn();
       component.clicked.subscribe(clickSpy);
-      
+
       const button = fixture.nativeElement.querySelector('button');
       button.click();
-      
+
       expect(clickSpy).not.toHaveBeenCalled();
     });
   });
@@ -78,7 +78,7 @@ describe('Button', () => {
     it('should set aria-disabled when disabled', () => {
       fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
-      
+
       const host = fixture.nativeElement;
       expect(host.getAttribute('aria-disabled')).toBe('true');
     });

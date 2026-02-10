@@ -5,10 +5,10 @@ export const routes: Routes = [
   {
     path: '',
     component: Landing,
-    title: 'Home - AgentGames'
+    title: 'Home - AgentGames',
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];

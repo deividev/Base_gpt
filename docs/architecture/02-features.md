@@ -58,49 +58,49 @@ mkdir -p src/app/features/users/{components,services,models}
 
 ```typescript
 // src/app/features/users/users.ts
-import { Component, signal, computed, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UserService } from './services/user.service';
-import { UserCard } from './components/user-card/user-card';
-import { SectionHeader, Button } from '@shared/components';
-import type { User } from './models/user.dto';
+import { Component, signal, computed, inject, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { UserService } from "./services/user.service";
+import { UserCard } from "./components/user-card/user-card";
+import { SectionHeader, Button } from "@shared/components";
+import type { User } from "./models/user.dto";
 
 @Component({
-  selector: 'app-users',
+  selector: "app-users",
   imports: [CommonModule, UserCard, SectionHeader, Button],
-  templateUrl: './users.html',
-  styleUrl: './users.scss',
+  templateUrl: "./users.html",
+  styleUrl: "./users.scss",
 })
 export class Users implements OnInit {
   // Services
   private readonly userService = inject(UserService);
-  
+
   // State
   protected readonly users = signal<User[]>([]);
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
-  protected readonly searchTerm = signal('');
-  
+  protected readonly searchTerm = signal("");
+
   // Computed
   protected readonly filteredUsers = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    return this.users().filter(user => 
-      user.name.toLowerCase().includes(term)
+    return this.users().filter((user) =>
+      user.name.toLowerCase().includes(term),
     );
   });
-  
+
   protected readonly totalUsers = computed(() => this.users().length);
-  
+
   // Lifecycle
   ngOnInit(): void {
     this.loadUsers();
   }
-  
+
   // Methods
   protected loadUsers(): void {
     this.loading.set(true);
     this.error.set(null);
-    
+
     this.userService.getUsers().subscribe({
       next: (users) => {
         this.users.set(users);
@@ -109,16 +109,16 @@ export class Users implements OnInit {
       error: (err) => {
         this.error.set(err.message);
         this.loading.set(false);
-      }
+      },
     });
   }
-  
+
   protected onSearch(term: string): void {
     this.searchTerm.set(term);
   }
-  
+
   protected onUserSelect(user: User): void {
-    console.log('User selected:', user);
+    console.log("User selected:", user);
   }
 }
 ```
@@ -128,48 +128,45 @@ export class Users implements OnInit {
 ```html
 <!-- src/app/features/users/users.html -->
 <div class="users-page">
-  <app-section-header 
+  <app-section-header
     [title]="'Usuarios'"
     [subtitle]="'Gestión de usuarios del sistema'"
   />
-  
+
   <!-- Search -->
   <div class="search-container">
-    <app-input 
+    <app-input
       [placeholder]="'Buscar usuarios...'"
       (valueChange)="onSearch($event)"
     />
   </div>
-  
+
   <!-- Loading state -->
   @if (loading()) {
-    <div class="loading">
-      <span>Cargando usuarios...</span>
-    </div>
+  <div class="loading">
+    <span>Cargando usuarios...</span>
+  </div>
   }
-  
+
   <!-- Error state -->
   @if (error()) {
-    <div class="error">
-      <p>{{ error() }}</p>
-      <app-button (clicked)="loadUsers()">Reintentar</app-button>
-    </div>
+  <div class="error">
+    <p>{{ error() }}</p>
+    <app-button (clicked)="loadUsers()">Reintentar</app-button>
+  </div>
   }
-  
+
   <!-- Content -->
   @if (!loading() && !error()) {
-    <div class="users-grid">
-      @for (user of filteredUsers(); track user.id) {
-        <app-user-card 
-          [user]="user"
-          (select)="onUserSelect($event)"
-        />
-      } @empty {
-        <p class="no-results">No se encontraron usuarios</p>
-      }
-    </div>
-    
-    <p class="total">Total: {{ totalUsers() }} usuarios</p>
+  <div class="users-grid">
+    @for (user of filteredUsers(); track user.id) {
+    <app-user-card [user]="user" (select)="onUserSelect($event)" />
+    } @empty {
+    <p class="no-results">No se encontraron usuarios</p>
+    }
+  </div>
+
+  <p class="total">Total: {{ totalUsers() }} usuarios</p>
   }
 </div>
 ```
@@ -178,44 +175,44 @@ export class Users implements OnInit {
 
 ```typescript
 // src/app/features/users/services/user.service.ts
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from '@core/services';
-import { API_ENDPOINTS } from '@core/config';
-import type { User, CreateUserDto, UpdateUserDto } from '../models/user.dto';
+import { Injectable, inject } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "@core/services";
+import { API_ENDPOINTS } from "@core/config";
+import type { User, CreateUserDto, UpdateUserDto } from "../models/user.dto";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private readonly api = inject(ApiService);
-  
+
   /**
    * Obtener todos los usuarios
    */
   getUsers(): Observable<User[]> {
     return this.api.get<User[]>(API_ENDPOINTS.users.base);
   }
-  
+
   /**
    * Obtener usuario por ID
    */
   getUserById(id: string): Observable<User> {
     return this.api.get<User>(`${API_ENDPOINTS.users.base}/${id}`);
   }
-  
+
   /**
    * Crear nuevo usuario
    */
   createUser(data: CreateUserDto): Observable<User> {
     return this.api.post<User>(API_ENDPOINTS.users.base, data);
   }
-  
+
   /**
    * Actualizar usuario
    */
   updateUser(id: string, data: UpdateUserDto): Observable<User> {
     return this.api.patch<User>(`${API_ENDPOINTS.users.base}/${id}`, data);
   }
-  
+
   /**
    * Eliminar usuario
    */
@@ -238,8 +235,8 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
-  role: 'user' | 'admin';
-  status: 'active' | 'inactive';
+  role: "user" | "admin";
+  status: "active" | "inactive";
   createdAt: string;
 }
 
@@ -250,7 +247,7 @@ export interface CreateUserDto {
   email: string;
   name: string;
   password: string;
-  role?: 'user' | 'admin';
+  role?: "user" | "admin";
 }
 
 /**
@@ -260,27 +257,30 @@ export interface UpdateUserDto {
   email?: string;
   name?: string;
   avatar?: string;
-  status?: 'active' | 'inactive';
+  status?: "active" | "inactive";
 }
 
 // src/app/features/users/models/index.ts
-export * from './user.dto';
+export * from "./user.dto";
 ```
 
 ### Paso 6: Crear componentes internos
 
 ```typescript
 // src/app/features/users/components/user-card/user-card.ts
-import { Component, input, output } from '@angular/core';
-import { NgClass } from '@angular/common';
-import type { User } from '../../models/user.dto';
+import { Component, input, output } from "@angular/core";
+import { NgClass } from "@angular/common";
+import type { User } from "../../models/user.dto";
 
 @Component({
-  selector: 'app-user-card',
+  selector: "app-user-card",
   imports: [NgClass],
   template: `
-    <div class="user-card" [ngClass]="{ 'inactive': user().status === 'inactive' }">
-      <img [src]="user().avatar || 'assets/default-avatar.png'" alt="Avatar">
+    <div
+      class="user-card"
+      [ngClass]="{ inactive: user().status === 'inactive' }"
+    >
+      <img [src]="user().avatar || 'assets/default-avatar.png'" alt="Avatar" />
       <div class="info">
         <h3>{{ user().name }}</h3>
         <p>{{ user().email }}</p>
@@ -289,7 +289,7 @@ import type { User } from '../../models/user.dto';
       <button (click)="select.emit(user())">Ver detalles</button>
     </div>
   `,
-  styleUrl: './user-card.scss'
+  styleUrl: "./user-card.scss",
 })
 export class UserCard {
   readonly user = input.required<User>();
@@ -301,34 +301,35 @@ export class UserCard {
 
 ```typescript
 // src/app/features/users/index.ts
-export { Users } from './users';
-export { UserService } from './services/user.service';
-export type { User, CreateUserDto, UpdateUserDto } from './models';
+export { Users } from "./users";
+export { UserService } from "./services/user.service";
+export type { User, CreateUserDto, UpdateUserDto } from "./models";
 ```
 
 ### Paso 8: Agregar la ruta
 
 ```typescript
 // src/app/app.routes.ts
-import { Routes } from '@angular/router';
-import { authGuard } from '@core/guards';
+import { Routes } from "@angular/router";
+import { authGuard } from "@core/guards";
 
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./features/landing/landing').then(m => m.Landing),
-    title: 'Home'
+    path: "",
+    loadComponent: () =>
+      import("./features/landing/landing").then((m) => m.Landing),
+    title: "Home",
   },
   {
-    path: 'users',
-    loadComponent: () => import('./features/users/users').then(m => m.Users),
+    path: "users",
+    loadComponent: () => import("./features/users/users").then((m) => m.Users),
     canActivate: [authGuard],
-    title: 'Users'
+    title: "Users",
   },
   {
-    path: '**',
-    redirectTo: ''
-  }
+    path: "**",
+    redirectTo: "",
+  },
 ];
 ```
 
@@ -336,28 +337,36 @@ export const routes: Routes = [
 
 ```typescript
 // src/app/features/users/users.spec.ts
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Users } from './users';
-import { UserService } from './services/user.service';
-import { of } from 'rxjs';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { Users } from "./users";
+import { UserService } from "./services/user.service";
+import { of } from "rxjs";
 
-describe('Users', () => {
+describe("Users", () => {
   let component: Users;
   let fixture: ComponentFixture<Users>;
   let userServiceSpy: { getUsers: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     userServiceSpy = {
-      getUsers: vi.fn().mockReturnValue(of([
-        { id: '1', name: 'John', email: 'john@test.com', role: 'user', status: 'active' }
-      ]))
+      getUsers: vi
+        .fn()
+        .mockReturnValue(
+          of([
+            {
+              id: "1",
+              name: "John",
+              email: "john@test.com",
+              role: "user",
+              status: "active",
+            },
+          ]),
+        ),
     };
 
     await TestBed.configureTestingModule({
       imports: [Users],
-      providers: [
-        { provide: UserService, useValue: userServiceSpy }
-      ]
+      providers: [{ provide: UserService, useValue: userServiceSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Users);
@@ -365,11 +374,11 @@ describe('Users', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load users on init', () => {
+  it("should load users on init", () => {
     expect(userServiceSpy.getUsers).toHaveBeenCalled();
   });
 });

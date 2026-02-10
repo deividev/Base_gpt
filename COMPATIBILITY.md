@@ -5,11 +5,13 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 📋 Requisitos del Sistema
 
 ### Node.js
+
 - **Versión Mínima**: 18.19.0 o 20.11.0+
 - **Recomendado**: 20.17.0+ (LTS)
 - **Verificar versión**: `node --version`
 
 ### npm
+
 - **Versión Mínima**: 9.x+
 - **Recomendado**: 10.x+
 - **Verificar versión**: `npm --version`
@@ -19,6 +21,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🎯 Core Framework
 
 ### Angular 21
+
 ```json
 {
   "@angular/core": "^21.0.0",
@@ -30,8 +33,10 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### TypeScript
+
 - **Versión Requerida**: 5.8+
 - **Compatibilidad**: Angular 21 requiere TypeScript 5.8.0 o superior
+
 ```json
 {
   "typescript": "~5.8.0"
@@ -39,8 +44,10 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### RxJS
+
 - **Versión Mínima**: 7.8.0+
 - **Compatible con**: RxJS 8.x
+
 ```json
 {
   "rxjs": "^7.8.0"
@@ -48,6 +55,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### Zone.js
+
 ```json
 {
   "zone.js": "~0.15.0"
@@ -59,6 +67,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🧪 Testing
 
 ### Jest
+
 - **Versión**: 29.7.0+
 - **Preset Angular**: jest-preset-angular 14.x+
 - **Builder**: @angular-builders/jest 18.x+
@@ -75,11 +84,14 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 **Notas**:
+
 - ✅ Jest es el framework recomendado para Angular 21
 - ⚠️ Jasmine/Karma están deprecated desde Angular 18
 
 ### Cypress
+
 - **Versión**: 13.16.0+
+
 ```json
 {
   "cypress": "^13.16.0",
@@ -88,7 +100,9 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### Playwright
+
 - **Versión**: 1.48.0+
+
 ```json
 {
   "@playwright/test": "^1.48.0"
@@ -100,6 +114,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🏗️ UI & Components
 
 ### Angular CDK
+
 ```json
 {
   "@angular/cdk": "^21.0.0"
@@ -107,6 +122,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### Angular Material (opcional)
+
 ```json
 {
   "@angular/material": "^21.0.0"
@@ -118,7 +134,9 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 📊 State Management
 
 ### NgRx
+
 - **Versión**: 18.x+ (compatible con Angular 21)
+
 ```json
 {
   "@ngrx/store": "^18.0.0",
@@ -130,6 +148,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 **Alternativas**:
+
 - Signals (built-in en Angular 21) - ✅ Recomendado para apps nuevas
 - Akita
 - NGXS
@@ -139,6 +158,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🌍 Internacionalización
 
 ### Transloco
+
 ```json
 {
   "@jsverse/transloco": "^7.0.0"
@@ -146,6 +166,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 **Alternativa**:
+
 - `@angular/localize` (built-in) para compile-time i18n
 
 ---
@@ -153,6 +174,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🔐 Security & Authentication
 
 ### DOMPurify
+
 ```json
 {
   "dompurify": "^3.1.0",
@@ -161,6 +183,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### OAuth 2.0 / OIDC
+
 ```json
 {
   "angular-oauth2-oidc": "^18.0.0"
@@ -172,6 +195,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 📱 PWA
 
 ### Angular Service Worker
+
 ```json
 {
   "@angular/service-worker": "^21.0.0"
@@ -183,6 +207,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🛠️ Development Tools
 
 ### Angular CLI
+
 ```json
 {
   "@angular/cli": "^21.0.0"
@@ -190,6 +215,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### ESLint (recomendado sobre TSLint)
+
 ```json
 {
   "@angular-eslint/builder": "^18.0.0",
@@ -204,6 +230,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ```
 
 ### Prettier
+
 ```json
 {
   "prettier": "^3.3.0",
@@ -216,6 +243,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## ⚡ Performance & Build
 
 ### Build Tools
+
 - **esbuild**: Built-in en Angular 21 (default)
 - **Vite**: Experimental pero soportado
 
@@ -224,6 +252,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🌐 HTTP & APIs
 
 ### HTTP Client
+
 - `@angular/common/http` (built-in)
 - Compatible con fetch API
 
@@ -232,9 +261,11 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 📦 Package Managers
 
 ### npm (recomendado)
+
 - Versión: 9.x o 10.x+
 
 ### Alternativas Compatibles
+
 - **pnpm**: 8.x+ ✅
 - **yarn**: 4.x+ ✅
 - **bun**: 1.x+ ⚠️ (experimental)
@@ -244,6 +275,7 @@ Esta guía detalla las versiones exactas de todas las tecnologías y bibliotecas
 ## 🔄 Migración desde Versiones Anteriores
 
 ### Angular 18/19/20 → 21
+
 ```bash
 # Actualizar Angular CLI globalmente
 npm install -g @angular/cli@21
@@ -260,6 +292,7 @@ ng update @ngrx/store@18
 ```
 
 ### Cambios Breaking (Angular 21)
+
 - TypeScript 5.8+ es obligatorio
 - Jasmine/Karma completamente removido
 - Algunas APIs deprecated en v18-20 fueron eliminadas
@@ -298,6 +331,7 @@ fi
 ```
 
 ### Ejecutar Verificación
+
 ```bash
 chmod +x check-versions.sh
 ./check-versions.sh
@@ -308,19 +342,25 @@ chmod +x check-versions.sh
 ## 🚨 Problemas Comunes
 
 ### Error: "This version of Angular requires TypeScript 5.8+"
+
 **Solución**:
+
 ```bash
 npm install typescript@~5.8.0 --save-dev
 ```
 
 ### Error: "Cannot find module 'jest-preset-angular'"
+
 **Solución**:
+
 ```bash
 npm install jest-preset-angular@^14.0.0 --save-dev
 ```
 
 ### Error: "@angular-builders/jest incompatible with Angular 21"
+
 **Solución**:
+
 ```bash
 npm install @angular-builders/jest@^18.0.0 --save-dev
 ```

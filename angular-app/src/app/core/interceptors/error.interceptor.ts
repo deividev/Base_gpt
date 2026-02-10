@@ -5,12 +5,12 @@ import { LoggerService } from '../services';
 
 /**
  * Error Interceptor
- * 
+ *
  * Global HTTP error handling:
  * - Logs all HTTP errors
  * - Transforms errors to consistent format
  * - Can trigger global error notifications
- * 
+ *
  * @example
  * ```typescript
  * // In app.config.ts
@@ -29,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         status: error.status,
         statusText: error.statusText,
         message: error.error?.message || error.message,
-        url: req.url
+        url: req.url,
       });
 
       // Handle specific error codes
@@ -38,23 +38,23 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           // Network error
           logger.error('Network error - check your internet connection');
           break;
-          
+
         case 401:
           // Unauthorized - could trigger logout or redirect to login
           logger.warn('Unauthorized - session may have expired');
           // You could inject AuthService and call logout() here
           break;
-          
+
         case 403:
           // Forbidden
           logger.warn('Access denied to this resource');
           break;
-          
+
         case 404:
           // Not found
           logger.warn('Resource not found');
           break;
-          
+
         case 500:
         case 502:
         case 503:
@@ -65,6 +65,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       // Re-throw the error for the caller to handle
       return throwError(() => error);
-    })
+    }),
   );
 };

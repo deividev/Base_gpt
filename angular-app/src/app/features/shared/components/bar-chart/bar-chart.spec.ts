@@ -10,26 +10,26 @@ describe('BarChart', () => {
     datasets: [
       {
         label: 'Sales',
-        data: [10, 20, 30]
-      }
-    ]
+        data: [10, 20, 30],
+      },
+    ],
   };
 
   const mockOptions = {
     responsive: true,
     plugins: {
-      legend: { display: true }
-    }
+      legend: { display: true },
+    },
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BarChart]
+      imports: [BarChart],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BarChart);
     component = fixture.componentInstance;
-    
+
     // Set required inputs
     fixture.componentRef.setInput('data', mockData);
     fixture.componentRef.setInput('options', mockOptions);
@@ -98,7 +98,7 @@ describe('BarChart', () => {
     it('should update data when input changes', () => {
       const newData = {
         labels: ['A', 'B'],
-        datasets: [{ label: 'New', data: [1, 2] }]
+        datasets: [{ label: 'New', data: [1, 2] }],
       };
       fixture.componentRef.setInput('data', newData);
       fixture.detectChanges();

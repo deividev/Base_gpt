@@ -1,6 +1,7 @@
 # Security in Angular
 
 ## 📋 Metadata
+
 - **Difficulty**: Advanced
 - **Prerequisites**: http-client.md, routing.md, forms.md
 - **Estimated Time**: 5-7 hours
@@ -8,6 +9,7 @@
 - **Category**: Core
 
 ## 🎯 Learning Objectives
+
 - Prevent XSS attacks
 - Implement CSRF protection
 - Configure Content Security Policy
@@ -44,21 +46,21 @@ Angular automatically escapes values when using interpolation:
 
 ```typescript
 @Component({
-  selector: 'app-user-profile',
+  selector: "app-user-profile",
   template: `
     <!-- ✅ SAFE: Angular escapes HTML -->
     <p>Username: {{ username }}</p>
-    
+
     <!-- ✅ SAFE: Property binding is escaped -->
-    <img [src]="avatarUrl" [alt]="username">
-    
+    <img [src]="avatarUrl" [alt]="username" />
+
     <!-- ❌ DANGEROUS: innerHTML bypasses sanitization -->
     <div [innerHTML]="userBio"></div>
-  `
+  `,
 })
 export class UserProfileComponent {
   username = '<script>alert("XSS")</script>'; // Rendered as text, not executed
-  avatarUrl = 'https://example.com/avatar.jpg';
+  avatarUrl = "https://example.com/avatar.jpg";
   userBio = '<script>alert("XSS")</script>'; // Would be sanitized, but still risky
 }
 ```
@@ -67,16 +69,21 @@ export class UserProfileComponent {
 
 ```typescript
 // core/services/sanitizer.service.ts
-import { Injectable } from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
+import { Injectable } from "@angular/core";
+import {
+  DomSanitizer,
+  SafeHtml,
+  SafeUrl,
+  SafeResourceUrl,
+} from "@angular/platform-browser";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class SanitizerService {
   constructor(private sanitizer: DomSanitizer) {}
 
   sanitizeHtml(html: string): SafeHtml {
     // Only use this when you trust the source!
-    return this.sanitizer.sanitize(SecurityContext.HTML, html) || '';
+    return this.sanitizer.sanitize(SecurityContext.HTML, html) || "";
   }
 
   bypassSecurityTrustHtml(html: string): SafeHtml {
@@ -86,7 +93,7 @@ export class SanitizerService {
   }
 
   sanitizeUrl(url: string): SafeUrl {
-    return this.sanitizer.sanitize(SecurityContext.URL, url) || '';
+    return this.sanitizer.sanitize(SecurityContext.URL, url) || "";
   }
 
   bypassSecurityTrustUrl(url: string): SafeUrl {
@@ -102,26 +109,24 @@ export class SanitizerService {
 
 // Usage in component
 @Component({
-  selector: 'app-article',
+  selector: "app-article",
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div [innerHTML]="safeContent"></div>
-  `
+  template: ` <div [innerHTML]="safeContent"></div> `,
 })
 export class ArticleComponent {
   private sanitizer = inject(SanitizerService);
-  
+
   rawContent = '<p>Safe content</p><script>alert("XSS")</script>';
-  
+
   // Angular sanitizer removes <script> tags
   safeContent = this.sanitizer.bypassSecurityTrustHtml(
-    this.sanitizeUserContent(this.rawContent)
+    this.sanitizeUserContent(this.rawContent),
   );
 
   private sanitizeUserContent(html: string): string {
     // Use a library like DOMPurify for robust sanitization
-    const temp = document.createElement('div');
+    const temp = document.createElement("div");
     temp.textContent = html; // Escapes all HTML
     return temp.innerHTML;
   }
@@ -134,17 +139,17 @@ export class ArticleComponent {
 // Install: npm install dompurify@^3.1.0
 // Install types: npm install --save-dev @types/dompurify
 
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class HtmlSanitizerService {
   constructor(private domSanitizer: DomSanitizer) {}
 
   sanitize(html: string): SafeHtml {
     // DOMPurify removes dangerous elements while preserving safe HTML
     const clean = DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li'],
-      ALLOWED_ATTR: ['href', 'target']
+      ALLOWED_TAGS: ["p", "br", "strong", "em", "u", "a", "ul", "ol", "li"],
+      ALLOWED_ATTR: ["href", "target"],
     });
 
     return this.domSanitizer.bypassSecurityTrustHtml(clean);
@@ -153,11 +158,11 @@ export class HtmlSanitizerService {
 
 // Usage
 @Component({
-  template: `<div [innerHTML]="safeHtml"></div>`
+  template: `<div [innerHTML]="safeHtml"></div>`,
 })
 export class RichTextComponent {
   private sanitizerService = inject(HtmlSanitizerService);
-  
+
   rawHtml = '<p>Hello</p><script>alert("XSS")</script>';
   safeHtml = this.sanitizerService.sanitize(this.rawHtml);
 }
@@ -180,31 +185,33 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
       withXsrfConfiguration({
-        cookieName: 'XSRF-TOKEN', // Default
-        headerName: 'X-XSRF-TOKEN' // Default
-      })
-    )
-  ]
+        cookieName: "XSRF-TOKEN", // Default
+        headerName: "X-XSRF-TOKEN", // Default
+      }),
+    ),
+  ],
 };
 
 // Custom CSRF interceptor if needed
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
   // Get CSRF token from cookie
-  const csrfToken = getCookie('XSRF-TOKEN');
-  
+  const csrfToken = getCookie("XSRF-TOKEN");
+
   // Add token to header for state-changing requests
-  if (csrfToken && (req.method !== 'GET' && req.method !== 'HEAD')) {
+  if (csrfToken && req.method !== "GET" && req.method !== "HEAD") {
     req = req.clone({
-      headers: req.headers.set('X-XSRF-TOKEN', csrfToken)
+      headers: req.headers.set("X-XSRF-TOKEN", csrfToken),
     });
   }
-  
+
   return next(req);
 };
 
 function getCookie(name: string): string | null {
   const matches = document.cookie.match(
-    new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)')
+    new RegExp(
+      "(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)",
+    ),
   );
   return matches ? decodeURIComponent(matches[1]) : null;
 }
@@ -219,7 +226,9 @@ function getCookie(name: string): string | null {
 ```html
 <!-- index.html -->
 <head>
-  <meta http-equiv="Content-Security-Policy" content="
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
     default-src 'self';
     script-src 'self' 'nonce-{random}';
     style-src 'self' 'unsafe-inline';
@@ -229,7 +238,8 @@ function getCookie(name: string): string | null {
     frame-ancestors 'none';
     base-uri 'self';
     form-action 'self';
-  ">
+  "
+  />
 </head>
 ```
 
@@ -237,10 +247,10 @@ function getCookie(name: string): string | null {
 
 ```typescript
 // ❌ BAD: Inline event handlers (blocked by CSP)
-template: `<button onclick="doSomething()">Click</button>`
+template: `<button onclick="doSomething()">Click</button>`;
 
 // ✅ GOOD: Use Angular event binding
-template: `<button (click)="doSomething()">Click</button>`
+template: `<button (click)="doSomething()">Click</button>`;
 
 // ❌ BAD: eval() (blocked by CSP)
 const code = 'alert("hello")';
@@ -248,12 +258,12 @@ eval(code);
 
 // ✅ GOOD: Use proper function calls
 const functions = {
-  showAlert: () => alert('hello')
+  showAlert: () => alert("hello"),
 };
-functions['showAlert']();
+functions["showAlert"]();
 
 // ❌ BAD: new Function() (blocked by CSP)
-const fn = new Function('a', 'b', 'return a + b');
+const fn = new Function("a", "b", "return a + b");
 
 // ✅ GOOD: Regular functions
 const fn = (a: number, b: number) => a + b;
@@ -281,17 +291,17 @@ export interface User {
 }
 
 // core/services/auth.service.ts
-import { Injectable, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Observable, tap, BehaviorSubject } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
+import { Injectable, signal, computed } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { Observable, tap, BehaviorSubject } from "rxjs";
+import { jwtDecode } from "jwt-decode";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class AuthService {
-  private readonly TOKEN_KEY = 'access_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
-  private readonly API_URL = '/api/auth';
+  private readonly TOKEN_KEY = "access_token";
+  private readonly REFRESH_TOKEN_KEY = "refresh_token";
+  private readonly API_URL = "/api/auth";
 
   private userSignal = signal<User | null>(null);
   user = this.userSignal.asReadonly();
@@ -299,7 +309,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {
     this.initializeAuth();
   }
@@ -315,46 +325,54 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<AuthTokens> {
-    return this.http.post<AuthTokens>(`${this.API_URL}/login`, { email, password })
+    return this.http
+      .post<AuthTokens>(`${this.API_URL}/login`, { email, password })
       .pipe(
-        tap(tokens => {
+        tap((tokens) => {
           this.setTokens(tokens);
           const user = this.getUserFromToken(tokens.accessToken);
           this.userSignal.set(user);
-        })
+        }),
       );
   }
 
-  register(email: string, password: string, name: string): Observable<AuthTokens> {
-    return this.http.post<AuthTokens>(`${this.API_URL}/register`, {
-      email,
-      password,
-      name
-    }).pipe(
-      tap(tokens => {
-        this.setTokens(tokens);
-        const user = this.getUserFromToken(tokens.accessToken);
-        this.userSignal.set(user);
+  register(
+    email: string,
+    password: string,
+    name: string,
+  ): Observable<AuthTokens> {
+    return this.http
+      .post<AuthTokens>(`${this.API_URL}/register`, {
+        email,
+        password,
+        name,
       })
-    );
+      .pipe(
+        tap((tokens) => {
+          this.setTokens(tokens);
+          const user = this.getUserFromToken(tokens.accessToken);
+          this.userSignal.set(user);
+        }),
+      );
   }
 
   logout(): void {
     this.clearTokens();
     this.userSignal.set(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
 
   refreshToken(): Observable<AuthTokens> {
     const refreshToken = this.getRefreshToken();
-    
-    return this.http.post<AuthTokens>(`${this.API_URL}/refresh`, { refreshToken })
+
+    return this.http
+      .post<AuthTokens>(`${this.API_URL}/refresh`, { refreshToken })
       .pipe(
-        tap(tokens => {
+        tap((tokens) => {
           this.setTokens(tokens);
           const user = this.getUserFromToken(tokens.accessToken);
           this.userSignal.set(user);
-        })
+        }),
       );
   }
 
@@ -369,7 +387,7 @@ export class AuthService {
   private setTokens(tokens: AuthTokens): void {
     localStorage.setItem(this.TOKEN_KEY, tokens.accessToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
-    
+
     // Schedule token refresh before expiration
     this.scheduleTokenRefresh(tokens.expiresIn);
   }
@@ -385,7 +403,7 @@ export class AuthService {
       id: decoded.sub,
       email: decoded.email,
       name: decoded.name,
-      roles: decoded.roles || []
+      roles: decoded.roles || [],
     };
   }
 
@@ -402,10 +420,10 @@ export class AuthService {
   private scheduleTokenRefresh(expiresIn: number): void {
     // Refresh 5 minutes before expiration
     const refreshTime = (expiresIn - 300) * 1000;
-    
+
     setTimeout(() => {
       this.refreshToken().subscribe({
-        error: () => this.logout()
+        error: () => this.logout(),
       });
     }, refreshTime);
   }
@@ -416,49 +434,49 @@ export class AuthService {
 
 ```typescript
 // core/interceptors/auth.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { HttpInterceptorFn } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { AuthService } from "../services/auth.service";
+import { catchError, switchMap, throwError } from "rxjs";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getAccessToken();
 
   // Clone request and add Authorization header
-  if (token && !req.url.includes('/auth/')) {
+  if (token && !req.url.includes("/auth/")) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
   return next(req).pipe(
-    catchError(error => {
+    catchError((error) => {
       // Handle 401 Unauthorized
-      if (error.status === 401 && !req.url.includes('/auth/login')) {
+      if (error.status === 401 && !req.url.includes("/auth/login")) {
         // Try to refresh token
         return authService.refreshToken().pipe(
-          switchMap(tokens => {
+          switchMap((tokens) => {
             // Retry original request with new token
             const newReq = req.clone({
               setHeaders: {
-                Authorization: `Bearer ${tokens.accessToken}`
-              }
+                Authorization: `Bearer ${tokens.accessToken}`,
+              },
             });
             return next(newReq);
           }),
-          catchError(refreshError => {
+          catchError((refreshError) => {
             // Refresh failed, logout
             authService.logout();
             return throwError(() => refreshError);
-          })
+          }),
         );
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 ```
@@ -468,35 +486,33 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 ```typescript
 // Install: npm install angular-oauth2-oidc@^18.0.0
 
-import { provideOAuthClient } from 'angular-oauth2-oidc';
+import { provideOAuthClient } from "angular-oauth2-oidc";
 
 // app.config.ts
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideOAuthClient()
-  ]
+  providers: [provideOAuthClient()],
 };
 
 // core/services/oauth.service.ts
-import { Injectable } from '@angular/core';
-import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { OAuthService, AuthConfig } from "angular-oauth2-oidc";
+import { Router } from "@angular/router";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class OAuthAuthService {
   private authConfig: AuthConfig = {
-    issuer: 'https://accounts.google.com',
+    issuer: "https://accounts.google.com",
     redirectUri: window.location.origin,
-    clientId: 'YOUR_CLIENT_ID',
-    scope: 'openid profile email',
-    responseType: 'code',
+    clientId: "YOUR_CLIENT_ID",
+    scope: "openid profile email",
+    responseType: "code",
     showDebugInformation: true,
-    strictDiscoveryDocumentValidation: false
+    strictDiscoveryDocumentValidation: false,
   };
 
   constructor(
     private oauthService: OAuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.configure();
   }
@@ -505,7 +521,7 @@ export class OAuthAuthService {
     this.oauthService.configure(this.authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
       if (this.oauthService.hasValidAccessToken()) {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(["/dashboard"]);
       }
     });
   }
@@ -541,9 +557,9 @@ export class OAuthAuthService {
 
 ```typescript
 // core/guards/auth.guard.ts
-import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { inject } from "@angular/core";
+import { Router, CanActivateFn } from "@angular/router";
+import { AuthService } from "../services/auth.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -554,8 +570,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   // Redirect to login with return URL
-  router.navigate(['/login'], {
-    queryParams: { returnUrl: state.url }
+  router.navigate(["/login"], {
+    queryParams: { returnUrl: state.url },
   });
   return false;
 };
@@ -567,16 +583,16 @@ export function roleGuard(allowedRoles: string[]): CanActivateFn {
     const router = inject(Router);
 
     const user = authService.user();
-    
+
     if (!user) {
-      router.navigate(['/login']);
+      router.navigate(["/login"]);
       return false;
     }
 
-    const hasRole = user.roles.some(role => allowedRoles.includes(role));
-    
+    const hasRole = user.roles.some((role) => allowedRoles.includes(role));
+
     if (!hasRole) {
-      router.navigate(['/forbidden']);
+      router.navigate(["/forbidden"]);
       return false;
     }
 
@@ -586,22 +602,22 @@ export function roleGuard(allowedRoles: string[]): CanActivateFn {
 
 // Usage in routes
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: "login", component: LoginComponent },
   {
-    path: 'dashboard',
+    path: "dashboard",
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
-    path: 'admin',
+    path: "admin",
     component: AdminComponent,
-    canActivate: [authGuard, roleGuard(['admin'])]
+    canActivate: [authGuard, roleGuard(["admin"])],
   },
   {
-    path: 'editor',
+    path: "editor",
     component: EditorComponent,
-    canActivate: [authGuard, roleGuard(['editor', 'admin'])]
-  }
+    canActivate: [authGuard, roleGuard(["editor", "admin"])],
+  },
 ];
 ```
 
@@ -624,7 +640,7 @@ export class HasPermissionDirective {
   @Input() set appHasPermission(requiredRoles: string[]) {
     effect(() => {
       const user = this.authService.user();
-      const hasPermission = user?.roles.some(role => 
+      const hasPermission = user?.roles.some(role =>
         requiredRoles.includes(role)
       );
 
@@ -641,7 +657,7 @@ export class HasPermissionDirective {
 @Component({
   template: `
     <button *appHasPermission="['admin']">Delete User</button>
-    
+
     <div *appHasPermission="['editor', 'admin']">
       <p>Edit content here</p>
     </div>
@@ -659,12 +675,12 @@ export class HasPermissionDirective {
 // core/interceptors/https.interceptor.ts
 export const httpsInterceptor: HttpInterceptorFn = (req, next) => {
   // Force HTTPS in production
-  if (environment.production && req.url.startsWith('http://')) {
+  if (environment.production && req.url.startsWith("http://")) {
     req = req.clone({
-      url: req.url.replace('http://', 'https://')
+      url: req.url.replace("http://", "https://"),
     });
   }
-  
+
   return next(req);
 };
 ```
@@ -677,13 +693,13 @@ export const securityHeadersInterceptor: HttpInterceptorFn = (req, next) => {
   // Add security headers
   req = req.clone({
     setHeaders: {
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
-      'Referrer-Policy': 'strict-origin-when-cross-origin'
-    }
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
   });
-  
+
   return next(req);
 };
 ```
@@ -698,7 +714,7 @@ export const securityHeadersInterceptor: HttpInterceptorFn = (req, next) => {
 // environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: "http://localhost:3000/api",
   // ❌ NEVER commit sensitive keys
   // googleClientId: 'real-client-id'
 };
@@ -706,14 +722,12 @@ export const environment = {
 // environments/environment.prod.ts
 export const environment = {
   production: true,
-  apiUrl: 'https://api.production.com',
+  apiUrl: "https://api.production.com",
   // Use environment variables injected at build time
 };
 
 // .gitignore
-environment.local.ts
-.env
-.env.local
+environment.local.ts.env.env.local;
 ```
 
 ### Build-time Injection
@@ -798,53 +812,53 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 // auth.guard.spec.ts
-import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { authGuard } from './auth.guard';
-import { AuthService } from '../services/auth.service';
+import { TestBed } from "@angular/core/testing";
+import { Router } from "@angular/router";
+import { authGuard } from "./auth.guard";
+import { AuthService } from "../services/auth.service";
 
-describe('authGuard', () => {
+describe("authGuard", () => {
   let authService: jest.Mocked<AuthService>;
   let router: jest.Mocked<Router>;
 
   beforeEach(() => {
     authService = {
-      isAuthenticated: jest.fn()
+      isAuthenticated: jest.fn(),
     } as any;
 
     router = {
-      navigate: jest.fn()
+      navigate: jest.fn(),
     } as any;
 
     TestBed.configureTestingModule({
       providers: [
         { provide: AuthService, useValue: authService },
-        { provide: Router, useValue: router }
-      ]
+        { provide: Router, useValue: router },
+      ],
     });
   });
 
-  it('should allow access when authenticated', () => {
+  it("should allow access when authenticated", () => {
     authService.isAuthenticated.mockReturnValue(true);
 
-    const result = TestBed.runInInjectionContext(() => 
-      authGuard(null as any, { url: '/dashboard' } as any)
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(null as any, { url: "/dashboard" } as any),
     );
 
     expect(result).toBe(true);
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('should redirect to login when not authenticated', () => {
+  it("should redirect to login when not authenticated", () => {
     authService.isAuthenticated.mockReturnValue(false);
 
     const result = TestBed.runInInjectionContext(() =>
-      authGuard(null as any, { url: '/dashboard' } as any)
+      authGuard(null as any, { url: "/dashboard" } as any),
     );
 
     expect(result).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/login'], {
-      queryParams: { returnUrl: '/dashboard' }
+    expect(router.navigate).toHaveBeenCalledWith(["/login"], {
+      queryParams: { returnUrl: "/dashboard" },
     });
   });
 });
@@ -855,12 +869,14 @@ describe('authGuard', () => {
 ## ✅ Security Checklist
 
 ### Input Validation
+
 - [ ] Sanitize user input
 - [ ] Validate data on client AND server
 - [ ] Use DOMPurify for rich text
 - [ ] Avoid `innerHTML` with user data
 
 ### Authentication
+
 - [ ] Use HTTPS for login
 - [ ] Implement JWT with refresh tokens
 - [ ] Store tokens securely (httpOnly cookies ideal)
@@ -869,12 +885,14 @@ describe('authGuard', () => {
 - [ ] Add logout functionality
 
 ### Authorization
+
 - [ ] Implement route guards
 - [ ] Check permissions on backend
 - [ ] Use role-based access control
 - [ ] Hide unauthorized UI elements
 
 ### Data Protection
+
 - [ ] Use HTTPS in production
 - [ ] Implement CSRF protection
 - [ ] Configure CSP headers
@@ -882,12 +900,14 @@ describe('authGuard', () => {
 - [ ] Encrypt sensitive data at rest
 
 ### Dependencies
+
 - [ ] Keep Angular and dependencies updated
 - [ ] Run `npm audit` regularly
 - [ ] Review security advisories
 - [ ] Use lock files (package-lock.json)
 
 ### Configuration
+
 - [ ] Never commit secrets to Git
 - [ ] Use environment variables
 - [ ] Separate dev/prod configs
@@ -907,7 +927,7 @@ submitForm(data: FormData) {
   if (!this.isValid(data)) {
     return;
   }
-  
+
   // Server will also validate
   this.api.submit(data).subscribe();
 }
@@ -918,8 +938,8 @@ submitForm(data: FormData) {
 ```typescript
 // ✅ GOOD: Only grant necessary permissions
 const user = {
-  id: '123',
-  roles: ['viewer'] // Not 'admin' unless needed
+  id: "123",
+  roles: ["viewer"], // Not 'admin' unless needed
 };
 ```
 
@@ -931,7 +951,7 @@ hasPermission(user: User, resource: string): boolean {
   if (!user || !resource) {
     return false; // Deny if anything is missing
   }
-  
+
   return user.permissions.includes(resource);
 }
 ```
@@ -941,6 +961,7 @@ hasPermission(user: User, resource: string): boolean {
 ## 🎓 Conclusión
 
 La seguridad es fundamental en aplicaciones modernas:
+
 - **XSS**: Angular protege por defecto, usa DomSanitizer con cuidado
 - **Authentication**: JWT o OAuth con refresh tokens
 - **Authorization**: Guards + directivas de permisos

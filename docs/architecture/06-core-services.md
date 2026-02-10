@@ -21,6 +21,7 @@ src/app/core/services/
 Cliente HTTP tipado con manejo de errores y logging.
 
 ### Características
+
 - Métodos tipados (GET, POST, PUT, PATCH, DELETE)
 - Timeout configurable
 - Base URL desde environment
@@ -30,19 +31,19 @@ Cliente HTTP tipado con manejo de errores y logging.
 ### Uso
 
 ```typescript
-import { inject } from '@angular/core';
-import { ApiService } from '@core/services';
+import { inject } from "@angular/core";
+import { ApiService } from "@core/services";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserService {
   private readonly api = inject(ApiService);
 
   getUsers(): Observable<User[]> {
-    return this.api.get<User[]>('/users');
+    return this.api.get<User[]>("/users");
   }
 
   createUser(data: CreateUserDto): Observable<User> {
-    return this.api.post<User>('/users', data);
+    return this.api.post<User>("/users", data);
   }
 
   updateUser(id: string, data: UpdateUserDto): Observable<User> {
@@ -60,7 +61,7 @@ export class UserService {
 ```typescript
 // src/environments/environment.ts
 export const environment = {
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: "http://localhost:3000/api",
   apiTimeout: 30000, // 30 segundos
 };
 ```
@@ -72,6 +73,7 @@ export const environment = {
 Wrapper tipado para localStorage y sessionStorage.
 
 ### Características
+
 - Serialización JSON automática
 - Soporte para expiración de datos
 - Prefix para evitar colisiones
@@ -148,12 +150,12 @@ Logging centralizado con niveles y control por environment.
 
 ### Niveles de Log
 
-| Nivel | Uso | Color |
-|-------|-----|-------|
-| `debug` | Información detallada para debugging | 🔍 |
-| `info` | Información general del flujo | ℹ️ |
-| `warn` | Advertencias que no bloquean | ⚠️ |
-| `error` | Errores que necesitan atención | ❌ |
+| Nivel   | Uso                                  | Color |
+| ------- | ------------------------------------ | ----- |
+| `debug` | Información detallada para debugging | 🔍    |
+| `info`  | Información general del flujo        | ℹ️    |
+| `warn`  | Advertencias que no bloquean         | ⚠️    |
+| `error` | Errores que necesitan atención       | ❌    |
 
 ### Configuración por Environment
 
@@ -174,40 +176,40 @@ logging: {
 ### Uso
 
 ```typescript
-import { LoggerService } from '@core/services';
+import { LoggerService } from "@core/services";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DataService {
   private readonly logger = inject(LoggerService);
 
   loadData(): void {
-    this.logger.debug('Iniciando carga de datos');
-    
-    this.api.get('/data').subscribe({
+    this.logger.debug("Iniciando carga de datos");
+
+    this.api.get("/data").subscribe({
       next: (data) => {
-        this.logger.info('Datos cargados', { count: data.length });
+        this.logger.info("Datos cargados", { count: data.length });
       },
       error: (err) => {
-        this.logger.error('Error al cargar datos', err);
-      }
+        this.logger.error("Error al cargar datos", err);
+      },
     });
   }
 
   processItem(item: Item): void {
-    this.logger.group('Procesando item');
-    this.logger.debug('Item:', item);
-    
+    this.logger.group("Procesando item");
+    this.logger.debug("Item:", item);
+
     if (item.deprecated) {
-      this.logger.warn('Item deprecado', { id: item.id });
+      this.logger.warn("Item deprecado", { id: item.id });
     }
-    
+
     this.logger.groupEnd();
   }
 
   measurePerformance(): void {
-    this.logger.time('operacion-pesada');
+    this.logger.time("operacion-pesada");
     // ... operación
-    this.logger.timeEnd('operacion-pesada');
+    this.logger.timeEnd("operacion-pesada");
   }
 }
 ```
@@ -233,6 +235,7 @@ logger.table(data: unknown): void
 Gestiona el estado de carga global con soporte para múltiples peticiones concurrentes.
 
 ### Características
+
 - Contador de peticiones activas
 - Signals reactivos
 - Usado automáticamente por el LoadingInterceptor
@@ -250,7 +253,7 @@ import { LoadingService } from '@core/services';
         <app-spinner />
       </div>
     }
-    
+
     <router-outlet />
   `
 })
@@ -291,6 +294,7 @@ loading.reset(): void                   // resetea a 0
 Sistema de temas dinámico con soporte para light/dark mode.
 
 ### Características
+
 - 28 temas predefinidos (Tailwind colors)
 - Persistencia en localStorage
 - Detección de preferencia del sistema
@@ -299,31 +303,37 @@ Sistema de temas dinámico con soporte para light/dark mode.
 ### Uso
 
 ```typescript
-import { ThemeService } from '@core/services';
+import { ThemeService } from "@core/services";
 
 @Component({
   template: `
     <button (click)="toggleTheme()">
-      {{ isDark() ? '☀️' : '🌙' }}
+      {{ isDark() ? "☀️" : "🌙" }}
     </button>
-    
+
     <select (change)="changeTheme($event)">
       @for (theme of themes; track theme) {
         <option [value]="theme">{{ theme }}</option>
       }
     </select>
-  `
+  `,
 })
 export class ThemeSwitcher {
   protected readonly themeService = inject(ThemeService);
-  
-  protected readonly isDark = computed(() => 
-    this.themeService.currentConfig().mode === 'dark'
+
+  protected readonly isDark = computed(
+    () => this.themeService.currentConfig().mode === "dark",
   );
-  
+
   protected readonly themes = [
-    'blue', 'green', 'purple', 'red', 'orange', 
-    'dark', 'dark-blue', 'dark-purple'
+    "blue",
+    "green",
+    "purple",
+    "red",
+    "orange",
+    "dark",
+    "dark-blue",
+    "dark-purple",
   ];
 
   toggleTheme(): void {
@@ -352,50 +362,50 @@ themeService.toggleDarkMode(): void               // alternar light/dark
 
 ```typescript
 // src/app/core/services/notification.ts
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal } from "@angular/core";
 
 export interface Notification {
   id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   message: string;
   duration?: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NotificationService {
   private readonly _notifications = signal<Notification[]>([]);
-  
+
   readonly notifications = this._notifications.asReadonly();
 
   success(message: string, duration = 3000): void {
-    this.add({ type: 'success', message, duration });
+    this.add({ type: "success", message, duration });
   }
 
   error(message: string, duration = 5000): void {
-    this.add({ type: 'error', message, duration });
+    this.add({ type: "error", message, duration });
   }
 
   warning(message: string, duration = 4000): void {
-    this.add({ type: 'warning', message, duration });
+    this.add({ type: "warning", message, duration });
   }
 
   info(message: string, duration = 3000): void {
-    this.add({ type: 'info', message, duration });
+    this.add({ type: "info", message, duration });
   }
 
-  private add(notification: Omit<Notification, 'id'>): void {
+  private add(notification: Omit<Notification, "id">): void {
     const id = crypto.randomUUID();
     const newNotification = { ...notification, id };
-    
-    this._notifications.update(list => [...list, newNotification]);
-    
+
+    this._notifications.update((list) => [...list, newNotification]);
+
     if (notification.duration) {
       setTimeout(() => this.remove(id), notification.duration);
     }
   }
 
   remove(id: string): void {
-    this._notifications.update(list => list.filter(n => n.id !== id));
+    this._notifications.update((list) => list.filter((n) => n.id !== id));
   }
 
   clear(): void {
@@ -408,17 +418,17 @@ Agregar al barrel export:
 
 ```typescript
 // src/app/core/services/index.ts
-export { NotificationService } from './notification';
+export { NotificationService } from "./notification";
 ```
 
 ---
 
 ## Resumen de Servicios
 
-| Servicio | Propósito | Singleton |
-|----------|-----------|-----------|
-| `ApiService` | Cliente HTTP | ✅ |
-| `StorageService` | Persistencia local | ✅ |
-| `LoggerService` | Logging | ✅ |
-| `LoadingService` | Estado de carga | ✅ |
-| `ThemeService` | Temas de la app | ✅ |
+| Servicio         | Propósito          | Singleton |
+| ---------------- | ------------------ | --------- |
+| `ApiService`     | Cliente HTTP       | ✅        |
+| `StorageService` | Persistencia local | ✅        |
+| `LoggerService`  | Logging            | ✅        |
+| `LoadingService` | Estado de carga    | ✅        |
+| `ThemeService`   | Temas de la app    | ✅        |

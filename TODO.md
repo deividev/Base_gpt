@@ -13,6 +13,7 @@
 ## 📝 Fase 2: Skills de Angular (En Progreso)
 
 ### Alta Prioridad
+
 - [x] component-creation.md
 - [x] services.md
 - [ ] routing.md - Configuración de rutas, guards y resolvers
@@ -21,6 +22,7 @@
 - [ ] best-practices.md - Mejores prácticas generales
 
 ### Media Prioridad
+
 - [ ] forms.md - Reactive forms y validaciones
 - [ ] directives.md - Directivas personalizadas
 - [ ] pipes.md - Pipes personalizados
@@ -30,42 +32,51 @@
 ## 🏗️ Fase 3: Skills de Arquitectura
 
 ### Alta Prioridad
+
 - [x] clean-architecture.md
 - [ ] solid-principles.md - SOLID en TypeScript/Angular
 - [ ] modular-design.md - Diseño modular y feature-based
 
 ### Media Prioridad
+
 - [ ] design-patterns.md - Patrones de diseño
 - [ ] ddd.md - Domain-Driven Design
 
 ### Baja Prioridad
+
 - [ ] micro-frontends.md - Arquitectura de micro-frontends
 
 ## 🧪 Fase 4: Skills de Testing
 
 ### Alta Prioridad
+
 - [ ] unit-testing.md - Unit testing con Jasmine/Jest
 - [ ] integration-testing.md - Tests de integración
 
 ### Media Prioridad
+
 - [ ] e2e-testing.md - E2E con Cypress/Playwright
 
 ### Baja Prioridad
+
 - [ ] tdd.md - Test-Driven Development workflow
 - [ ] test-coverage.md - Configuración y análisis de coverage
 
 ## 🔧 Fase 5: Skills Core
 
 ### Alta Prioridad
+
 - [x] typescript-advanced.md
 - [ ] error-handling.md - Manejo robusto de errores
 - [ ] security.md - Mejores prácticas de seguridad
 
 ### Media Prioridad
+
 - [ ] performance.md - Optimización general
 - [ ] code-review.md - Checklist de code review
 
 ### Baja Prioridad
+
 - [ ] documentation.md - Documentación de código
 - [ ] logging.md - Logging y debugging
 - [ ] git-workflow.md - Flujos de trabajo con Git
@@ -83,6 +94,7 @@
 ## 📖 Fase 7: Documentación Adicional
 
 ### Guías
+
 - [ ] angular-setup.md - Setup detallado de Angular
 - [ ] creating-new-agents.md - Crear agents personalizados
 - [ ] creating-new-skills.md - Crear skills personalizadas
@@ -90,6 +102,7 @@
 - [ ] troubleshooting.md - Solución de problemas
 
 ### Tutoriales
+
 - [ ] Tutorial: Crear primer componente con agents
 - [ ] Tutorial: Implementar feature completo
 - [ ] Tutorial: Testing con agents
@@ -130,9 +143,10 @@
 4. Comenzar a usar el sistema con su proyecto
 
 **Comando sugerido al usuario:**
+
 ```
-"Pásame tu archivo de mejores prácticas de Angular 
-para que complete las skills faltantes y personalice 
+"Pásame tu archivo de mejores prácticas de Angular
+para que complete las skills faltantes y personalice
 el sistema según tus necesidades"
 ```
 

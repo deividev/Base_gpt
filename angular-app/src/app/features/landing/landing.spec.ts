@@ -10,7 +10,7 @@ describe('Landing', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Landing],
-      providers: [ThemeService]
+      providers: [ThemeService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Landing);
@@ -73,22 +73,22 @@ describe('Landing', () => {
     it('should scroll to section when scrollToSection is called', () => {
       const scrollIntoViewMock = vi.fn();
       const mockElement = { scrollIntoView: scrollIntoViewMock };
-      
+
       vi.spyOn(document, 'getElementById').mockReturnValue(mockElement as any);
-      
+
       (component as any).scrollToSection('features');
-      
+
       expect(document.getElementById).toHaveBeenCalledWith('features');
       expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
-      
+
       vi.restoreAllMocks();
     });
 
     it('should not throw if section not found', () => {
       vi.spyOn(document, 'getElementById').mockReturnValue(null);
-      
+
       expect(() => (component as any).scrollToSection('nonexistent')).not.toThrow();
-      
+
       vi.restoreAllMocks();
     });
   });

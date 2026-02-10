@@ -13,7 +13,7 @@ export interface TableColumn {
   selector: 'app-data-table',
   imports: [CommonModule, TableModule],
   templateUrl: './data-table.html',
-  styleUrl: './data-table.scss'
+  styleUrl: './data-table.scss',
 })
 export class DataTable {
   // Inputs
@@ -21,6 +21,8 @@ export class DataTable {
   readonly columns = input.required<TableColumn[]>();
   readonly paginator = input<boolean>(true);
   readonly rows = input<number>(5);
-  readonly currentPageReportTemplate = input<string>('Showing {first} to {last} of {totalRecords} entries');
+  readonly currentPageReportTemplate = input<string>(
+    'Showing {first} to {last} of {totalRecords} entries',
+  );
   readonly tableStyle = input<any>({ 'min-width': '50rem' });
 }

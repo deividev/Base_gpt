@@ -7,22 +7,22 @@ describe('DataTable', () => {
 
   const mockColumns: TableColumn[] = [
     { field: 'name', header: 'Name', sortable: true },
-    { field: 'status', header: 'Status', sortable: true }
+    { field: 'status', header: 'Status', sortable: true },
   ];
 
   const mockData = [
     { name: 'Item 1', status: 'Active' },
-    { name: 'Item 2', status: 'Inactive' }
+    { name: 'Item 2', status: 'Inactive' },
   ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataTable]
+      imports: [DataTable],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DataTable);
     component = fixture.componentInstance;
-    
+
     // Set required inputs
     fixture.componentRef.setInput('data', mockData);
     fixture.componentRef.setInput('columns', mockColumns);

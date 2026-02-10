@@ -26,6 +26,7 @@ Base_Skills/
 ## 🎯 Objetivo
 
 Crear un sistema donde Claude pueda:
+
 - Asumir diferentes roles (agents) según la tarea
 - Utilizar skills específicas y bien definidas
 - Mantener consistencia en el código
@@ -42,6 +43,7 @@ Crear un sistema donde Claude pueda:
 ## 📝 Uso
 
 Los archivos de agents y skills guían a Claude en cómo debe:
+
 - Estructurar componentes
 - Implementar patrones
 - Realizar testing
@@ -50,6 +52,7 @@ Los archivos de agents y skills guían a Claude en cómo debe:
 ## 🔧 Requisitos y Compatibilidad
 
 **Angular 21** con tecnologías actualizadas:
+
 - 📌 **Node.js**: 18.19+ o 20.11+ (recomendado: 20.17.0 LTS)
 - 📌 **TypeScript**: 5.8+ (requerido por Angular 21)
 - 📌 **Jest**: 29.7+ (reemplaza Jasmine/Karma deprecated)
@@ -63,6 +66,7 @@ Los archivos de agents y skills guían a Claude en cómo debe:
 Se han importado skills profesionales de **Angular 21 Best Practices** desde el proyecto open-source de Boise State University. Ver [INSTALLATION_REPORT.md](INSTALLATION_REPORT.md) para detalles completos.
 
 **Skills añadidas**:
+
 - ✅ `angular-best-practices.md` - Guía completa de Angular 21
 - ✅ `signal-patterns.md` - Patrones avanzados con signals
 

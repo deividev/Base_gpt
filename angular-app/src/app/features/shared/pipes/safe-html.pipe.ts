@@ -3,10 +3,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 /**
  * Safe HTML Pipe
- * 
+ *
  * Sanitizes and trusts HTML content for safe rendering
  * Use with caution - only for trusted content!
- * 
+ *
  * @example
  * ```html
  * <div [innerHTML]="htmlContent | safeHtml"></div>
@@ -14,7 +14,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
  */
 @Pipe({
   name: 'safeHtml',
-  standalone: true
+  standalone: true,
 })
 export class SafeHtmlPipe implements PipeTransform {
   private readonly sanitizer = inject(DomSanitizer);

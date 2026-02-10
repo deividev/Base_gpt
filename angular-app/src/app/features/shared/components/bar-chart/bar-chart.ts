@@ -5,7 +5,7 @@ import { ChartModule } from 'primeng/chart';
   selector: 'app-bar-chart',
   imports: [ChartModule],
   templateUrl: './bar-chart.html',
-  styleUrl: './bar-chart.scss'
+  styleUrl: './bar-chart.scss',
 })
 export class BarChart {
   // Inputs
@@ -13,11 +13,13 @@ export class BarChart {
   readonly options = input.required<any>();
   readonly title = input<string>('');
   readonly height = input<string>('400px');
-  readonly type = input<'bar' | 'line' | 'pie' | 'doughnut' | 'radar' | 'polarArea' | 'bubble' | 'scatter'>('bar');
-  
+  readonly type = input<
+    'bar' | 'line' | 'pie' | 'doughnut' | 'radar' | 'polarArea' | 'bubble' | 'scatter'
+  >('bar');
+
   // Outputs
   readonly chartClick = output<any>();
-  
+
   // Methods
   selectDataPoint(event: any): void {
     this.chartClick.emit(event);

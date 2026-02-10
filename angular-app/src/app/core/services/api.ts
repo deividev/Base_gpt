@@ -25,22 +25,22 @@ export interface RequestOptions {
 
 /**
  * Base API Service
- * 
+ *
  * Provides a typed HTTP client wrapper with:
  * - Automatic error handling
  * - Request timeout
  * - Base URL configuration
  * - Logging
- * 
+ *
  * @example
  * ```typescript
  * // In a feature service
  * private api = inject(ApiService);
- * 
+ *
  * getUsers() {
  *   return this.api.get<User[]>('/users');
  * }
- * 
+ *
  * createUser(user: CreateUserDto) {
  *   return this.api.post<User>('/users', user);
  * }
@@ -50,7 +50,7 @@ export interface RequestOptions {
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly logger = inject(LoggerService);
-  
+
   private readonly baseUrl = environment.apiUrl;
   private readonly timeoutMs = environment.apiTimeout;
 
@@ -60,10 +60,10 @@ export class ApiService {
   get<T>(endpoint: string, options?: RequestOptions): Observable<T> {
     const url = this.buildUrl(endpoint);
     this.logger.debug(`[API] GET ${url}`);
-    
+
     return this.http.get<T>(url, options).pipe(
       timeout(this.timeoutMs),
-      catchError(error => this.handleError(error, 'GET', url))
+      catchError((error) => this.handleError(error, 'GET', url)),
     );
   }
 
@@ -73,10 +73,10 @@ export class ApiService {
   post<T>(endpoint: string, body: unknown, options?: RequestOptions): Observable<T> {
     const url = this.buildUrl(endpoint);
     this.logger.debug(`[API] POST ${url}`, body);
-    
+
     return this.http.post<T>(url, body, options).pipe(
       timeout(this.timeoutMs),
-      catchError(error => this.handleError(error, 'POST', url))
+      catchError((error) => this.handleError(error, 'POST', url)),
     );
   }
 
@@ -86,10 +86,10 @@ export class ApiService {
   put<T>(endpoint: string, body: unknown, options?: RequestOptions): Observable<T> {
     const url = this.buildUrl(endpoint);
     this.logger.debug(`[API] PUT ${url}`, body);
-    
+
     return this.http.put<T>(url, body, options).pipe(
       timeout(this.timeoutMs),
-      catchError(error => this.handleError(error, 'PUT', url))
+      catchError((error) => this.handleError(error, 'PUT', url)),
     );
   }
 
@@ -99,10 +99,10 @@ export class ApiService {
   patch<T>(endpoint: string, body: unknown, options?: RequestOptions): Observable<T> {
     const url = this.buildUrl(endpoint);
     this.logger.debug(`[API] PATCH ${url}`, body);
-    
+
     return this.http.patch<T>(url, body, options).pipe(
       timeout(this.timeoutMs),
-      catchError(error => this.handleError(error, 'PATCH', url))
+      catchError((error) => this.handleError(error, 'PATCH', url)),
     );
   }
 
@@ -112,10 +112,10 @@ export class ApiService {
   delete<T>(endpoint: string, options?: RequestOptions): Observable<T> {
     const url = this.buildUrl(endpoint);
     this.logger.debug(`[API] DELETE ${url}`);
-    
+
     return this.http.delete<T>(url, options).pipe(
       timeout(this.timeoutMs),
-      catchError(error => this.handleError(error, 'DELETE', url))
+      catchError((error) => this.handleError(error, 'DELETE', url)),
     );
   }
 
@@ -152,13 +152,13 @@ export class ApiService {
     this.logger.error(`[API] ${method} ${url} failed:`, {
       status: error.status,
       message,
-      error: error.error
+      error: error.error,
     });
 
     return throwError(() => ({
       status: error.status,
       message,
-      originalError: error
+      originalError: error,
     }));
   }
 }

@@ -1,6 +1,7 @@
 # End-to-End Testing in Angular
 
 ## 📋 Metadata
+
 - **Difficulty**: Advanced
 - **Prerequisites**: unit-testing.md, integration-testing.md, routing.md
 - **Estimated Time**: 6-8 hours
@@ -8,6 +9,7 @@
 - **Category**: Testing
 
 ## 🎯 Learning Objectives
+
 - Set up E2E testing with Cypress and Playwright
 - Write user journey tests from end to end
 - Test complex interactions and workflows
@@ -21,16 +23,17 @@
 
 **End-to-End Testing** simula comportamiento real del usuario en un navegador real.
 
-| Aspect | Unit | Integration | E2E |
-|--------|------|-------------|-----|
-| **Scope** | Single unit | Multiple units | Complete app |
-| **Execution** | In-memory | In-memory | Real browser |
-| **Speed** | ⚡ Very fast | 🏃 Fast | 🐢 Slow |
-| **Reliability** | High | High | Medium (flaky) |
-| **Cost** | Low | Medium | High |
-| **Confidence** | Low | Medium | **Very High** |
+| Aspect          | Unit         | Integration    | E2E            |
+| --------------- | ------------ | -------------- | -------------- |
+| **Scope**       | Single unit  | Multiple units | Complete app   |
+| **Execution**   | In-memory    | In-memory      | Real browser   |
+| **Speed**       | ⚡ Very fast | 🏃 Fast        | 🐢 Slow        |
+| **Reliability** | High         | High           | Medium (flaky) |
+| **Cost**        | Low          | Medium         | High           |
+| **Confidence**  | Low          | Medium         | **Very High**  |
 
 **Testing Pyramid**:
+
 ```
     /\
    /E2E\      ← Few, critical flows
@@ -62,11 +65,11 @@ npx cypress open
 #### cypress.config.ts
 
 ```typescript
-import { defineConfig } from 'cypress';
+import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4200',
+    baseUrl: "http://localhost:4200",
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,
@@ -74,16 +77,16 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    specPattern: 'cypress/e2e/**/*.cy.ts',
-    supportFile: 'cypress/support/e2e.ts'
+    specPattern: "cypress/e2e/**/*.cy.ts",
+    supportFile: "cypress/support/e2e.ts",
   },
   component: {
     devServer: {
-      framework: 'angular',
-      bundler: 'webpack'
+      framework: "angular",
+      bundler: "webpack",
     },
-    specPattern: '**/*.cy.ts'
-  }
+    specPattern: "**/*.cy.ts",
+  },
 });
 ```
 
@@ -101,22 +104,22 @@ declare global {
   }
 }
 
-Cypress.Commands.add('login', (email: string, password: string) => {
+Cypress.Commands.add("login", (email: string, password: string) => {
   cy.session([email, password], () => {
-    cy.visit('/login');
+    cy.visit("/login");
     cy.get('[data-testid="email-input"]').type(email);
     cy.get('[data-testid="password-input"]').type(password);
     cy.get('[data-testid="login-button"]').click();
-    cy.url().should('not.include', '/login');
+    cy.url().should("not.include", "/login");
   });
 });
 
-Cypress.Commands.add('logout', () => {
+Cypress.Commands.add("logout", () => {
   cy.get('[data-testid="logout-button"]').click();
-  cy.url().should('include', '/login');
+  cy.url().should("include", "/login");
 });
 
-Cypress.Commands.add('getByTestId', (testId: string) => {
+Cypress.Commands.add("getByTestId", (testId: string) => {
   return cy.get(`[data-testid="${testId}"]`);
 });
 ```
@@ -142,27 +145,27 @@ Cypress.Commands.add('getByTestId', (testId: string) => {
 
 ```typescript
 // cypress/e2e/navigation.cy.ts
-describe('Navigation', () => {
+describe("Navigation", () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit("/");
   });
 
-  it('should navigate to home page', () => {
-    cy.url().should('include', '/');
-    cy.get('h1').should('contain', 'Welcome');
+  it("should navigate to home page", () => {
+    cy.url().should("include", "/");
+    cy.get("h1").should("contain", "Welcome");
   });
 
-  it('should navigate to products page', () => {
-    cy.getByTestId('products-link').click();
-    cy.url().should('include', '/products');
-    cy.get('h1').should('contain', 'Products');
+  it("should navigate to products page", () => {
+    cy.getByTestId("products-link").click();
+    cy.url().should("include", "/products");
+    cy.get("h1").should("contain", "Products");
   });
 
-  it('should navigate to product detail', () => {
-    cy.visit('/products');
-    cy.getByTestId('product-card').first().click();
-    cy.url().should('match', /\/products\/\d+/);
-    cy.getByTestId('product-title').should('be.visible');
+  it("should navigate to product detail", () => {
+    cy.visit("/products");
+    cy.getByTestId("product-card").first().click();
+    cy.url().should("match", /\/products\/\d+/);
+    cy.getByTestId("product-title").should("be.visible");
   });
 });
 ```
@@ -173,71 +176,71 @@ describe('Navigation', () => {
 
 ```typescript
 // cypress/e2e/contact-form.cy.ts
-describe('Contact Form', () => {
+describe("Contact Form", () => {
   beforeEach(() => {
-    cy.visit('/contact');
+    cy.visit("/contact");
   });
 
-  it('should show validation errors for empty form', () => {
-    cy.getByTestId('submit-button').click();
-    
-    cy.getByTestId('name-error').should('be.visible');
-    cy.getByTestId('email-error').should('be.visible');
-    cy.getByTestId('message-error').should('be.visible');
+  it("should show validation errors for empty form", () => {
+    cy.getByTestId("submit-button").click();
+
+    cy.getByTestId("name-error").should("be.visible");
+    cy.getByTestId("email-error").should("be.visible");
+    cy.getByTestId("message-error").should("be.visible");
   });
 
-  it('should show error for invalid email', () => {
-    cy.getByTestId('email-input').type('invalid-email');
-    cy.getByTestId('email-input').blur();
-    
-    cy.getByTestId('email-error')
-      .should('be.visible')
-      .and('contain', 'valid email');
+  it("should show error for invalid email", () => {
+    cy.getByTestId("email-input").type("invalid-email");
+    cy.getByTestId("email-input").blur();
+
+    cy.getByTestId("email-error")
+      .should("be.visible")
+      .and("contain", "valid email");
   });
 
-  it('should submit form successfully', () => {
+  it("should submit form successfully", () => {
     // Intercept API call
-    cy.intercept('POST', '/api/contact', {
+    cy.intercept("POST", "/api/contact", {
       statusCode: 200,
-      body: { success: true, message: 'Message sent' }
-    }).as('submitContact');
+      body: { success: true, message: "Message sent" },
+    }).as("submitContact");
 
     // Fill form
-    cy.getByTestId('name-input').type('John Doe');
-    cy.getByTestId('email-input').type('john@example.com');
-    cy.getByTestId('message-input').type('This is a test message');
-    
+    cy.getByTestId("name-input").type("John Doe");
+    cy.getByTestId("email-input").type("john@example.com");
+    cy.getByTestId("message-input").type("This is a test message");
+
     // Submit
-    cy.getByTestId('submit-button').click();
+    cy.getByTestId("submit-button").click();
 
     // Wait for API call
-    cy.wait('@submitContact');
+    cy.wait("@submitContact");
 
     // Verify success message
-    cy.getByTestId('success-message')
-      .should('be.visible')
-      .and('contain', 'Message sent');
+    cy.getByTestId("success-message")
+      .should("be.visible")
+      .and("contain", "Message sent");
 
     // Form should be reset
-    cy.getByTestId('name-input').should('have.value', '');
+    cy.getByTestId("name-input").should("have.value", "");
   });
 
-  it('should handle submission error', () => {
-    cy.intercept('POST', '/api/contact', {
+  it("should handle submission error", () => {
+    cy.intercept("POST", "/api/contact", {
       statusCode: 500,
-      body: { error: 'Server error' }
-    }).as('submitContactError');
+      body: { error: "Server error" },
+    }).as("submitContactError");
 
-    cy.getByTestId('name-input').type('John Doe');
-    cy.getByTestId('email-input').type('john@example.com');
-    cy.getByTestId('message-input').type('This is a test message');
-    cy.getByTestId('submit-button').click();
+    cy.getByTestId("name-input").type("John Doe");
+    cy.getByTestId("email-input").type("john@example.com");
+    cy.getByTestId("message-input").type("This is a test message");
+    cy.getByTestId("submit-button").click();
 
-    cy.wait('@submitContactError');
+    cy.wait("@submitContactError");
 
-    cy.getByTestId('error-message')
-      .should('be.visible')
-      .and('contain', 'error');
+    cy.getByTestId("error-message")
+      .should("be.visible")
+      .and("contain", "error");
   });
 });
 ```
@@ -248,89 +251,89 @@ describe('Contact Form', () => {
 
 ```typescript
 // cypress/e2e/auth.cy.ts
-describe('Authentication', () => {
+describe("Authentication", () => {
   beforeEach(() => {
     // Clear session storage
     cy.clearAllSessionStorage();
     cy.clearAllLocalStorage();
   });
 
-  it('should login successfully', () => {
-    cy.intercept('POST', '/api/auth/login', {
+  it("should login successfully", () => {
+    cy.intercept("POST", "/api/auth/login", {
       statusCode: 200,
       body: {
-        token: 'fake-jwt-token',
-        user: { id: '1', email: 'test@example.com', name: 'Test User' }
-      }
-    }).as('login');
+        token: "fake-jwt-token",
+        user: { id: "1", email: "test@example.com", name: "Test User" },
+      },
+    }).as("login");
 
-    cy.visit('/login');
+    cy.visit("/login");
 
-    cy.getByTestId('email-input').type('test@example.com');
-    cy.getByTestId('password-input').type('Password123');
-    cy.getByTestId('login-button').click();
+    cy.getByTestId("email-input").type("test@example.com");
+    cy.getByTestId("password-input").type("Password123");
+    cy.getByTestId("login-button").click();
 
-    cy.wait('@login');
+    cy.wait("@login");
 
     // Should redirect to dashboard
-    cy.url().should('include', '/dashboard');
-    
+    cy.url().should("include", "/dashboard");
+
     // Should show user name
-    cy.getByTestId('user-name').should('contain', 'Test User');
+    cy.getByTestId("user-name").should("contain", "Test User");
   });
 
-  it('should show error for invalid credentials', () => {
-    cy.intercept('POST', '/api/auth/login', {
+  it("should show error for invalid credentials", () => {
+    cy.intercept("POST", "/api/auth/login", {
       statusCode: 401,
-      body: { message: 'Invalid credentials' }
-    }).as('loginError');
+      body: { message: "Invalid credentials" },
+    }).as("loginError");
 
-    cy.visit('/login');
+    cy.visit("/login");
 
-    cy.getByTestId('email-input').type('test@example.com');
-    cy.getByTestId('password-input').type('WrongPassword');
-    cy.getByTestId('login-button').click();
+    cy.getByTestId("email-input").type("test@example.com");
+    cy.getByTestId("password-input").type("WrongPassword");
+    cy.getByTestId("login-button").click();
 
-    cy.wait('@loginError');
+    cy.wait("@loginError");
 
-    cy.getByTestId('error-message')
-      .should('be.visible')
-      .and('contain', 'Invalid credentials');
+    cy.getByTestId("error-message")
+      .should("be.visible")
+      .and("contain", "Invalid credentials");
 
     // Should stay on login page
-    cy.url().should('include', '/login');
+    cy.url().should("include", "/login");
   });
 
-  it('should logout successfully', () => {
+  it("should logout successfully", () => {
     // Login first
-    cy.login('test@example.com', 'Password123');
+    cy.login("test@example.com", "Password123");
 
-    cy.visit('/dashboard');
+    cy.visit("/dashboard");
 
-    cy.getByTestId('logout-button').click();
+    cy.getByTestId("logout-button").click();
 
     // Should redirect to login
-    cy.url().should('include', '/login');
+    cy.url().should("include", "/login");
 
     // Try to access protected page
-    cy.visit('/dashboard');
+    cy.visit("/dashboard");
 
     // Should redirect to login (guard)
-    cy.url().should('include', '/login');
+    cy.url().should("include", "/login");
   });
 
-  it('should persist session after page refresh', () => {
-    cy.login('test@example.com', 'Password123');
+  it("should persist session after page refresh", () => {
+    cy.login("test@example.com", "Password123");
 
-    cy.visit('/dashboard');
-    cy.getByTestId('user-name').should('be.visible');
+    cy.visit("/dashboard");
+    cy.getByTestId("user-name").should("be.visible");
 
     // Refresh page
     cy.reload();
 
     // Should still be logged in
-    cy.url().should('include', '/dashboard');
-    cy.getByTestId('user-name').should('be.visible');
+    cy.url().should("include", "/dashboard");
+    cy.getByTestId("user-name").should("be.visible");
   });
 });
 ```
@@ -345,23 +348,23 @@ describe('Authentication', () => {
 // cypress/support/page-objects/login.page.ts
 export class LoginPage {
   visit() {
-    cy.visit('/login');
+    cy.visit("/login");
   }
 
   getEmailInput() {
-    return cy.getByTestId('email-input');
+    return cy.getByTestId("email-input");
   }
 
   getPasswordInput() {
-    return cy.getByTestId('password-input');
+    return cy.getByTestId("password-input");
   }
 
   getLoginButton() {
-    return cy.getByTestId('login-button');
+    return cy.getByTestId("login-button");
   }
 
   getErrorMessage() {
-    return cy.getByTestId('error-message');
+    return cy.getByTestId("error-message");
   }
 
   fillEmail(email: string) {
@@ -386,15 +389,15 @@ export class LoginPage {
 // cypress/support/page-objects/products.page.ts
 export class ProductsPage {
   visit() {
-    cy.visit('/products');
+    cy.visit("/products");
   }
 
   getSearchInput() {
-    return cy.getByTestId('search-input');
+    return cy.getByTestId("search-input");
   }
 
   getProductCards() {
-    return cy.getByTestId('product-card');
+    return cy.getByTestId("product-card");
   }
 
   getProductCard(index: number) {
@@ -421,12 +424,12 @@ export class ProductsPage {
 
 ```typescript
 // cypress/e2e/shopping-flow.cy.ts
-import { LoginPage } from '../support/page-objects/login.page';
-import { ProductsPage } from '../support/page-objects/products.page';
-import { CartPage } from '../support/page-objects/cart.page';
-import { CheckoutPage } from '../support/page-objects/checkout.page';
+import { LoginPage } from "../support/page-objects/login.page";
+import { ProductsPage } from "../support/page-objects/products.page";
+import { CartPage } from "../support/page-objects/cart.page";
+import { CheckoutPage } from "../support/page-objects/checkout.page";
 
-describe('Complete Shopping Flow', () => {
+describe("Complete Shopping Flow", () => {
   const loginPage = new LoginPage();
   const productsPage = new ProductsPage();
   const cartPage = new CartPage();
@@ -434,58 +437,58 @@ describe('Complete Shopping Flow', () => {
 
   beforeEach(() => {
     // Mock API responses
-    cy.intercept('GET', '/api/products', { fixture: 'products.json' });
-    cy.intercept('POST', '/api/cart/add', { statusCode: 200 });
-    cy.intercept('POST', '/api/checkout', { 
+    cy.intercept("GET", "/api/products", { fixture: "products.json" });
+    cy.intercept("POST", "/api/cart/add", { statusCode: 200 });
+    cy.intercept("POST", "/api/checkout", {
       statusCode: 200,
-      body: { orderId: '12345', status: 'success' }
+      body: { orderId: "12345", status: "success" },
     });
   });
 
-  it('should complete purchase from login to checkout', () => {
+  it("should complete purchase from login to checkout", () => {
     // Step 1: Login
     loginPage.visit();
-    loginPage.login('test@example.com', 'Password123');
+    loginPage.login("test@example.com", "Password123");
 
-    cy.url().should('not.include', '/login');
+    cy.url().should("not.include", "/login");
 
     // Step 2: Browse products
     productsPage.visit();
-    productsPage.searchProducts('laptop');
-    productsPage.getProductCards().should('have.length.greaterThan', 0);
+    productsPage.searchProducts("laptop");
+    productsPage.getProductCards().should("have.length.greaterThan", 0);
 
     // Step 3: Add to cart
     productsPage.addToCart(0);
-    cy.getByTestId('cart-badge').should('contain', '1');
+    cy.getByTestId("cart-badge").should("contain", "1");
 
     // Step 4: View cart
     cartPage.visit();
-    cartPage.getCartItems().should('have.length', 1);
-    cartPage.getTotalPrice().should('be.visible');
+    cartPage.getCartItems().should("have.length", 1);
+    cartPage.getTotalPrice().should("be.visible");
 
     // Step 5: Proceed to checkout
     cartPage.proceedToCheckout();
 
     // Step 6: Fill checkout form
     checkoutPage.fillShippingInfo({
-      name: 'John Doe',
-      address: '123 Main St',
-      city: 'New York',
-      zipCode: '10001'
+      name: "John Doe",
+      address: "123 Main St",
+      city: "New York",
+      zipCode: "10001",
     });
 
     checkoutPage.fillPaymentInfo({
-      cardNumber: '4242424242424242',
-      expiry: '12/25',
-      cvv: '123'
+      cardNumber: "4242424242424242",
+      expiry: "12/25",
+      cvv: "123",
     });
 
     // Step 7: Complete order
     checkoutPage.submitOrder();
 
     // Step 8: Verify success
-    cy.getByTestId('order-success').should('be.visible');
-    cy.getByTestId('order-id').should('contain', '12345');
+    cy.getByTestId("order-success").should("be.visible");
+    cy.getByTestId("order-id").should("contain", "12345");
   });
 });
 ```
@@ -512,51 +515,51 @@ npx playwright codegen localhost:4200
 #### playwright.config.ts
 
 ```typescript
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-  
+  reporter: "html",
+
   use: {
-    baseURL: 'http://localhost:4200',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    baseURL: "http://localhost:4200",
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
 
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] }
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
     {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] }
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
     },
     {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] }
-    }
+      name: "Mobile Safari",
+      use: { ...devices["iPhone 12"] },
+    },
   ],
 
   webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:4200',
-    reuseExistingServer: !process.env.CI
-  }
+    command: "npm run start",
+    url: "http://localhost:4200",
+    reuseExistingServer: !process.env.CI,
+  },
 });
 ```
 
@@ -568,24 +571,24 @@ export default defineConfig({
 
 ```typescript
 // e2e/navigation.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Navigation', () => {
-  test('should navigate to products page', async ({ page }) => {
-    await page.goto('/');
-    
-    await page.getByRole('link', { name: 'Products' }).click();
-    
+test.describe("Navigation", () => {
+  test("should navigate to products page", async ({ page }) => {
+    await page.goto("/");
+
+    await page.getByRole("link", { name: "Products" }).click();
+
     await expect(page).toHaveURL(/.*products/);
-    await expect(page.getByRole('heading', { name: 'Products' })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Products" })).toBeVisible();
   });
 
-  test('should navigate back to home', async ({ page }) => {
-    await page.goto('/products');
-    
-    await page.getByRole('link', { name: 'Home' }).click();
-    
-    await expect(page).toHaveURL('/');
+  test("should navigate back to home", async ({ page }) => {
+    await page.goto("/products");
+
+    await page.getByRole("link", { name: "Home" }).click();
+
+    await expect(page).toHaveURL("/");
   });
 });
 ```
@@ -594,41 +597,41 @@ test.describe('Navigation', () => {
 
 ```typescript
 // e2e/contact-form.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Contact Form', () => {
+test.describe("Contact Form", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/contact');
+    await page.goto("/contact");
   });
 
-  test('should submit form successfully', async ({ page }) => {
+  test("should submit form successfully", async ({ page }) => {
     // Mock API
-    await page.route('**/api/contact', async (route) => {
+    await page.route("**/api/contact", async (route) => {
       await route.fulfill({
         status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: true })
+        contentType: "application/json",
+        body: JSON.stringify({ success: true }),
       });
     });
 
     // Fill form
-    await page.getByLabel('Name').fill('John Doe');
-    await page.getByLabel('Email').fill('john@example.com');
-    await page.getByLabel('Message').fill('Test message');
+    await page.getByLabel("Name").fill("John Doe");
+    await page.getByLabel("Email").fill("john@example.com");
+    await page.getByLabel("Message").fill("Test message");
 
     // Submit
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByRole("button", { name: "Submit" }).click();
 
     // Verify success
-    await expect(page.getByText('Message sent successfully')).toBeVisible();
+    await expect(page.getByText("Message sent successfully")).toBeVisible();
   });
 
-  test('should show validation errors', async ({ page }) => {
-    await page.getByRole('button', { name: 'Submit' }).click();
+  test("should show validation errors", async ({ page }) => {
+    await page.getByRole("button", { name: "Submit" }).click();
 
-    await expect(page.getByText('Name is required')).toBeVisible();
-    await expect(page.getByText('Email is required')).toBeVisible();
-    await expect(page.getByText('Message is required')).toBeVisible();
+    await expect(page.getByText("Name is required")).toBeVisible();
+    await expect(page.getByText("Email is required")).toBeVisible();
+    await expect(page.getByText("Message is required")).toBeVisible();
   });
 });
 ```
@@ -637,42 +640,47 @@ test.describe('Contact Form', () => {
 
 ```typescript
 // e2e/auth.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Authentication', () => {
-  test('should login successfully', async ({ page }) => {
-    await page.route('**/api/auth/login', async (route) => {
+test.describe("Authentication", () => {
+  test("should login successfully", async ({ page }) => {
+    await page.route("**/api/auth/login", async (route) => {
       await route.fulfill({
         status: 200,
-        contentType: 'application/json',
+        contentType: "application/json",
         body: JSON.stringify({
-          token: 'fake-token',
-          user: { id: '1', email: 'test@example.com', name: 'Test User' }
-        })
+          token: "fake-token",
+          user: { id: "1", email: "test@example.com", name: "Test User" },
+        }),
       });
     });
 
-    await page.goto('/login');
+    await page.goto("/login");
 
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Password').fill('Password123');
-    await page.getByRole('button', { name: 'Login' }).click();
+    await page.getByLabel("Email").fill("test@example.com");
+    await page.getByLabel("Password").fill("Password123");
+    await page.getByRole("button", { name: "Login" }).click();
 
-    await expect(page).toHaveURL('/dashboard');
-    await expect(page.getByText('Test User')).toBeVisible();
+    await expect(page).toHaveURL("/dashboard");
+    await expect(page.getByText("Test User")).toBeVisible();
   });
 
-  test('should logout', async ({ page, context }) => {
+  test("should logout", async ({ page, context }) => {
     // Set auth state
     await context.addCookies([
-      { name: 'auth_token', value: 'fake-token', domain: 'localhost', path: '/' }
+      {
+        name: "auth_token",
+        value: "fake-token",
+        domain: "localhost",
+        path: "/",
+      },
     ]);
 
-    await page.goto('/dashboard');
+    await page.goto("/dashboard");
 
-    await page.getByRole('button', { name: 'Logout' }).click();
+    await page.getByRole("button", { name: "Logout" }).click();
 
-    await expect(page).toHaveURL('/login');
+    await expect(page).toHaveURL("/login");
   });
 });
 ```
@@ -685,7 +693,7 @@ test.describe('Authentication', () => {
 
 ```typescript
 // e2e/page-objects/login.page.ts
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
@@ -696,14 +704,14 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.loginButton = page.getByRole('button', { name: 'Login' });
-    this.errorMessage = page.getByRole('alert');
+    this.emailInput = page.getByLabel("Email");
+    this.passwordInput = page.getByLabel("Password");
+    this.loginButton = page.getByRole("button", { name: "Login" });
+    this.errorMessage = page.getByRole("alert");
   }
 
   async goto() {
-    await this.page.goto('/login');
+    await this.page.goto("/login");
   }
 
   async login(email: string, password: string) {
@@ -726,28 +734,29 @@ export class ProductsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.searchInput = page.getByPlaceholder('Search products');
-    this.productCards = page.getByTestId('product-card');
-    this.cartBadge = page.getByTestId('cart-badge');
+    this.searchInput = page.getByPlaceholder("Search products");
+    this.productCards = page.getByTestId("product-card");
+    this.cartBadge = page.getByTestId("cart-badge");
   }
 
   async goto() {
-    await this.page.goto('/products');
+    await this.page.goto("/products");
   }
 
   async search(query: string) {
     await this.searchInput.fill(query);
-    await this.page.keyboard.press('Enter');
+    await this.page.keyboard.press("Enter");
   }
 
   async addToCart(productIndex: number) {
-    await this.productCards.nth(productIndex)
-      .getByRole('button', { name: 'Add to Cart' })
+    await this.productCards
+      .nth(productIndex)
+      .getByRole("button", { name: "Add to Cart" })
       .click();
   }
 
   async getCartItemCount(): Promise<string> {
-    return await this.cartBadge.textContent() || '0';
+    return (await this.cartBadge.textContent()) || "0";
   }
 }
 ```
@@ -756,36 +765,36 @@ export class ProductsPage {
 
 ```typescript
 // e2e/shopping-flow.spec.ts
-import { test, expect } from '@playwright/test';
-import { LoginPage } from './page-objects/login.page';
-import { ProductsPage } from './page-objects/products.page';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "./page-objects/login.page";
+import { ProductsPage } from "./page-objects/products.page";
 
-test.describe('Shopping Flow', () => {
-  test('should add product to cart after login', async ({ page }) => {
+test.describe("Shopping Flow", () => {
+  test("should add product to cart after login", async ({ page }) => {
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
 
     // Mock APIs
-    await page.route('**/api/auth/login', async (route) => {
+    await page.route("**/api/auth/login", async (route) => {
       await route.fulfill({
         status: 200,
-        body: JSON.stringify({ token: 'token', user: { id: '1' } })
+        body: JSON.stringify({ token: "token", user: { id: "1" } }),
       });
     });
 
-    await page.route('**/api/products', async (route) => {
+    await page.route("**/api/products", async (route) => {
       await route.fulfill({
         status: 200,
         body: JSON.stringify([
-          { id: '1', name: 'Product 1', price: 99.99 },
-          { id: '2', name: 'Product 2', price: 49.99 }
-        ])
+          { id: "1", name: "Product 1", price: 99.99 },
+          { id: "2", name: "Product 2", price: 49.99 },
+        ]),
       });
     });
 
     // Login
     await loginPage.goto();
-    await loginPage.login('test@example.com', 'Password123');
+    await loginPage.login("test@example.com", "Password123");
 
     // Browse products
     await productsPage.goto();
@@ -796,7 +805,7 @@ test.describe('Shopping Flow', () => {
 
     // Verify cart badge
     const cartCount = await productsPage.getCartItemCount();
-    expect(cartCount).toBe('1');
+    expect(cartCount).toBe("1");
   });
 });
 ```
@@ -829,17 +838,19 @@ test.describe('Shopping Flow', () => {
 
 ```typescript
 // cypress/e2e/products.cy.ts
-describe('Products with fixtures', () => {
+describe("Products with fixtures", () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/products', { fixture: 'products.json' }).as('getProducts');
-    cy.visit('/products');
-    cy.wait('@getProducts');
+    cy.intercept("GET", "/api/products", { fixture: "products.json" }).as(
+      "getProducts",
+    );
+    cy.visit("/products");
+    cy.wait("@getProducts");
   });
 
-  it('should display products from fixture', () => {
-    cy.getByTestId('product-card').should('have.length', 2);
-    cy.contains('Laptop').should('be.visible');
-    cy.contains('Mouse').should('be.visible');
+  it("should display products from fixture", () => {
+    cy.getByTestId("product-card").should("have.length", 2);
+    cy.contains("Laptop").should("be.visible");
+    cy.contains("Mouse").should("be.visible");
   });
 });
 ```
@@ -848,26 +859,26 @@ describe('Products with fixtures', () => {
 
 ```typescript
 // e2e/helpers/mock-api.ts
-import { Page } from '@playwright/test';
+import { Page } from "@playwright/test";
 
 export class MockAPI {
   constructor(private page: Page) {}
 
   async mockProducts(products: Product[]) {
-    await this.page.route('**/api/products', async (route) => {
+    await this.page.route("**/api/products", async (route) => {
       await route.fulfill({
         status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(products)
+        contentType: "application/json",
+        body: JSON.stringify(products),
       });
     });
   }
 
   async mockLogin(user: User) {
-    await this.page.route('**/api/auth/login', async (route) => {
+    await this.page.route("**/api/auth/login", async (route) => {
       await route.fulfill({
         status: 200,
-        body: JSON.stringify({ token: 'fake-token', user })
+        body: JSON.stringify({ token: "fake-token", user }),
       });
     });
   }
@@ -876,21 +887,19 @@ export class MockAPI {
     await this.page.route(endpoint, async (route) => {
       await route.fulfill({
         status,
-        body: JSON.stringify({ error: message })
+        body: JSON.stringify({ error: message }),
       });
     });
   }
 }
 
 // Usage
-test('should handle products', async ({ page }) => {
+test("should handle products", async ({ page }) => {
   const mockAPI = new MockAPI(page);
-  
-  await mockAPI.mockProducts([
-    { id: '1', name: 'Product 1', price: 99.99 }
-  ]);
 
-  await page.goto('/products');
+  await mockAPI.mockProducts([{ id: "1", name: "Product 1", price: 99.99 }]);
+
+  await page.goto("/products");
   // Test continues...
 });
 ```
@@ -916,32 +925,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build app
         run: npm run build
-        
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           start: npm start
-          wait-on: 'http://localhost:4200'
+          wait-on: "http://localhost:4200"
           browser: chrome
-          
+
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-          
+
       - name: Upload videos
         uses: actions/upload-artifact@v3
         if: always()
@@ -953,21 +962,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        
+
       - name: Run Playwright tests
         run: npx playwright test
-        
+
       - name: Upload test report
         uses: actions/upload-artifact@v3
         if: always()
@@ -996,9 +1005,9 @@ cy.get('.btn.btn-primary.mt-3').click();
 
 ```typescript
 // ✅ GOOD: Wait for API
-cy.intercept('GET', '/api/users').as('getUsers');
-cy.visit('/users');
-cy.wait('@getUsers');
+cy.intercept("GET", "/api/users").as("getUsers");
+cy.visit("/users");
+cy.wait("@getUsers");
 
 // ❌ BAD: Hard-coded waits
 cy.wait(3000);
@@ -1008,16 +1017,16 @@ cy.wait(3000);
 
 ```typescript
 // ✅ GOOD: User perspective
-test('should complete checkout', async ({ page }) => {
-  await page.goto('/cart');
-  await page.getByRole('button', { name: 'Checkout' }).click();
-  await page.getByLabel('Card Number').fill('4242424242424242');
-  await page.getByRole('button', { name: 'Pay' }).click();
-  await expect(page.getByText('Order successful')).toBeVisible();
+test("should complete checkout", async ({ page }) => {
+  await page.goto("/cart");
+  await page.getByRole("button", { name: "Checkout" }).click();
+  await page.getByLabel("Card Number").fill("4242424242424242");
+  await page.getByRole("button", { name: "Pay" }).click();
+  await expect(page.getByText("Order successful")).toBeVisible();
 });
 
 // ❌ BAD: Testing internals
-test('should call checkout API', async ({ page }) => {
+test("should call checkout API", async ({ page }) => {
   // Don't test implementation details
 });
 ```
@@ -1032,8 +1041,8 @@ beforeEach(() => {
 });
 
 // ❌ BAD: Tests depend on each other
-test('add item'); // Test 1
-test('checkout'); // Test 2 depends on Test 1
+test("add item"); // Test 1
+test("checkout"); // Test 2 depends on Test 1
 ```
 
 ---
@@ -1041,24 +1050,28 @@ test('checkout'); // Test 2 depends on Test 1
 ## ✅ Checklist
 
 ### Setup
+
 - [ ] Cypress or Playwright configured
 - [ ] Custom commands/helpers created
 - [ ] Page objects implemented
 - [ ] API mocking configured
 
 ### Test Coverage
+
 - [ ] Critical user journeys tested
 - [ ] Authentication flows covered
 - [ ] Form submissions tested
 - [ ] Error scenarios handled
 
 ### Performance
+
 - [ ] Tests run in parallel
 - [ ] API responses mocked
 - [ ] Unnecessary waits removed
 - [ ] Flaky tests fixed
 
 ### CI/CD
+
 - [ ] E2E tests run on PRs
 - [ ] Screenshots on failure
 - [ ] Videos recorded
@@ -1069,6 +1082,7 @@ test('checkout'); // Test 2 depends on Test 1
 ## 🎓 Conclusión
 
 E2E testing brinda máxima confianza:
+
 - **Real user simulation**: Prueba en navegador real
 - **Critical flows**: Enfócate en journeys importantes
 - **Catch integration bugs**: Detecta problemas que unit tests no ven

@@ -7,18 +7,18 @@ const LOG_LEVELS: Record<LogLevel, number> = {
   debug: 0,
   info: 1,
   warn: 2,
-  error: 3
+  error: 3,
 };
 
 /**
  * Logger Service
- * 
+ *
  * Centralized logging with:
  * - Log levels (debug, info, warn, error)
  * - Environment-based filtering
  * - Structured logging support
  * - Production-safe (disables console in prod)
- * 
+ *
  * @example
  * ```typescript
  * logger.debug('Processing items', { count: 5 });
@@ -120,7 +120,7 @@ export class LoggerService {
 
     if (this.enableConsole) {
       const consoleFn = this.getConsoleFn(level);
-      
+
       if (data.length > 0) {
         consoleFn(formattedMessage, ...data);
       } else {
@@ -156,7 +156,7 @@ export class LoggerService {
       DEBUG: '🔍',
       INFO: 'ℹ️',
       WARN: '⚠️',
-      ERROR: '❌'
+      ERROR: '❌',
     };
     return `${colors[label] || '📝'} ${label}`;
   }

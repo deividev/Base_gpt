@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'app-feature-card',
   imports: [],
   templateUrl: './feature-card.html',
-  styleUrl: './feature-card.scss'
+  styleUrl: './feature-card.scss',
 })
 export class FeatureCard {
   // Inputs

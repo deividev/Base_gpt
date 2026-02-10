@@ -7,6 +7,7 @@ Skills relacionadas con diseño visual, sistemas de diseño y componentes de int
 ## Skills Disponibles
 
 ### 🎨 design-system.md
+
 **Sistema de Diseño Completo**
 
 Implementación profesional de un design system modular que incluye:
@@ -24,6 +25,7 @@ Implementación profesional de un design system modular que incluye:
 ## 🎯 Cuándo Usar Esta Skill
 
 **SIEMPRE** que estés trabajando en:
+
 - Creación de componentes visuales
 - Implementación de estilos SCSS/CSS
 - Definición de colores, tipografía, espaciado
@@ -120,9 +122,9 @@ Para cambiar la paleta de colores del proyecto:
 ```typescript
 export const PROJECT_DESIGN_CONFIG: DesignConfig = {
   colors: {
-    primary: '#3b82f6',     // Cambiar azul
-    secondary: '#f59e0b',   // Cambiar naranja
-    accent: '#10b981',      // Cambiar verde
+    primary: "#3b82f6", // Cambiar azul
+    secondary: "#f59e0b", // Cambiar naranja
+    accent: "#10b981", // Cambiar verde
   },
   // ... resto de configuración
 };

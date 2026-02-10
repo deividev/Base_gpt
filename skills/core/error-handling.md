@@ -1,6 +1,7 @@
 # Error Handling in Angular
 
 ## 📋 Metadata
+
 - **Difficulty**: Advanced
 - **Prerequisites**: http-client.md, rxjs.md, services.md
 - **Estimated Time**: 4-6 hours
@@ -8,6 +9,7 @@
 - **Category**: Core
 
 ## 🎯 Learning Objectives
+
 - Implement global error handling
 - Create HTTP error interceptors
 - Design user-friendly error messages
@@ -28,17 +30,21 @@ const user = null;
 console.log(user.name); // TypeError: Cannot read property 'name' of null
 
 // 2. HTTP errors (API failures)
-this.http.get('/api/users').subscribe(); // 404, 500, network error
+this.http.get("/api/users").subscribe(); // 404, 500, network error
 
 // 3. Async errors (Promise rejections, Observable errors)
-Promise.reject('Something went wrong');
-throwError(() => new Error('Observable error'));
+Promise.reject("Something went wrong");
+throwError(() => new Error("Observable error"));
 
 // 4. Template errors (binding errors)
-{{ nonExistentProperty.value }}
+{
+  {
+    nonExistentProperty.value;
+  }
+}
 
 // 5. Router errors
-this.router.navigate(['/invalid-route']);
+this.router.navigate(["/invalid-route"]);
 ```
 
 ---
@@ -49,9 +55,9 @@ this.router.navigate(['/invalid-route']);
 
 ```typescript
 // core/error-handling/global-error-handler.ts
-import { ErrorHandler, Injectable, inject, Injector } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ErrorHandler, Injectable, inject, Injector } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
@@ -73,29 +79,31 @@ export class GlobalErrorHandler implements ErrorHandler {
         message: errorMessage,
         status: error.status,
         url: error.url,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // Handle specific HTTP errors
       if (error.status === 401) {
-        router.navigate(['/login']);
-        notificationService.error('Session expired. Please login again.');
+        router.navigate(["/login"]);
+        notificationService.error("Session expired. Please login again.");
         return;
       }
 
       if (error.status === 403) {
-        router.navigate(['/forbidden']);
-        notificationService.error('You do not have permission to access this resource.');
+        router.navigate(["/forbidden"]);
+        notificationService.error(
+          "You do not have permission to access this resource.",
+        );
         return;
       }
 
       if (error.status === 404) {
-        notificationService.error('The requested resource was not found.');
+        notificationService.error("The requested resource was not found.");
         return;
       }
 
       if (error.status >= 500) {
-        notificationService.error('Server error. Please try again later.');
+        notificationService.error("Server error. Please try again later.");
       }
     } else {
       // Client-side error
@@ -107,16 +115,18 @@ export class GlobalErrorHandler implements ErrorHandler {
         stack: stackTrace,
         timestamp: new Date(),
         userAgent: navigator.userAgent,
-        url: window.location.href
+        url: window.location.href,
       });
 
       // Show user-friendly message
-      notificationService.error('An unexpected error occurred. Please refresh the page.');
+      notificationService.error(
+        "An unexpected error occurred. Please refresh the page.",
+      );
     }
 
     // Log to console in development
     if (!environment.production) {
-      console.error('Error caught by GlobalErrorHandler:', error);
+      console.error("Error caught by GlobalErrorHandler:", error);
     }
   }
 
@@ -128,7 +138,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   private getClientErrorMessage(error: Error): string {
-    return error.message || 'Unknown client error';
+    return error.message || "Unknown client error";
   }
 }
 
@@ -137,7 +147,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // ... other providers
-  ]
+  ],
 };
 ```
 
@@ -149,11 +159,11 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 // core/interceptors/error.interceptor.ts
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { catchError, retry, throwError, timer } from 'rxjs';
-import { NotificationService } from '../services/notification.service';
-import { Router } from '@angular/router';
+import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { catchError, retry, throwError, timer } from "rxjs";
+import { NotificationService } from "../services/notification.service";
+import { Router } from "@angular/router";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const notificationService = inject(NotificationService);
@@ -170,12 +180,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
         // Exponential backoff: 1s, 2s
         return timer(retryCount * 1000);
-      }
+      },
     }),
 
     // Handle errors
     catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'An error occurred';
+      let errorMessage = "An error occurred";
 
       if (error.error instanceof ErrorEvent) {
         // Client-side or network error
@@ -187,28 +197,28 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Handle specific errors
         switch (error.status) {
           case 0:
-            errorMessage = 'No internet connection. Please check your network.';
+            errorMessage = "No internet connection. Please check your network.";
             notificationService.error(errorMessage);
             break;
 
           case 401:
-            errorMessage = 'Unauthorized. Please login again.';
-            router.navigate(['/login']);
+            errorMessage = "Unauthorized. Please login again.";
+            router.navigate(["/login"]);
             break;
 
           case 403:
-            errorMessage = 'Access denied.';
+            errorMessage = "Access denied.";
             notificationService.error(errorMessage);
             break;
 
           case 404:
-            errorMessage = 'Resource not found.';
+            errorMessage = "Resource not found.";
             break;
 
           case 500:
           case 502:
           case 503:
-            errorMessage = 'Server error. Please try again later.';
+            errorMessage = "Server error. Please try again later.";
             notificationService.error(errorMessage);
             break;
 
@@ -219,24 +229,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      console.error('HTTP Error:', errorMessage, error);
+      console.error("HTTP Error:", errorMessage, error);
 
       return throwError(() => ({
         message: errorMessage,
         status: error.status,
-        originalError: error
+        originalError: error,
       }));
-    })
+    }),
   );
 };
 
 // app.config.ts
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(
-      withInterceptors([errorInterceptor])
-    )
-  ]
+  providers: [provideHttpClient(withInterceptors([errorInterceptor]))],
 };
 ```
 
@@ -248,11 +254,11 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 // core/services/logging.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
 export interface LogEntry {
-  level: 'info' | 'warn' | 'error' | 'debug';
+  level: "info" | "warn" | "error" | "debug";
   message: string;
   timestamp: Date;
   data?: any;
@@ -261,9 +267,9 @@ export interface LogEntry {
   userAgent?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class LoggingService {
-  private readonly logEndpoint = '/api/logs';
+  private readonly logEndpoint = "/api/logs";
   private logQueue: LogEntry[] = [];
   private readonly maxQueueSize = 100;
   private readonly flushInterval = 30000; // 30 seconds
@@ -273,54 +279,55 @@ export class LoggingService {
     setInterval(() => this.flush(), this.flushInterval);
 
     // Flush logs before page unload
-    window.addEventListener('beforeunload', () => this.flush());
+    window.addEventListener("beforeunload", () => this.flush());
   }
 
   info(message: string, data?: any): void {
-    this.log('info', message, data);
+    this.log("info", message, data);
   }
 
   warn(message: string, data?: any): void {
-    this.log('warn', message, data);
+    this.log("warn", message, data);
   }
 
   error(message: string, error?: any): void {
-    this.log('error', message, {
+    this.log("error", message, {
       error: error?.message,
-      stack: error?.stack
+      stack: error?.stack,
     });
   }
 
   debug(message: string, data?: any): void {
     if (!environment.production) {
-      this.log('debug', message, data);
+      this.log("debug", message, data);
     }
   }
 
   logError(errorData: Partial<LogEntry>): void {
     const entry: LogEntry = {
-      level: 'error',
-      message: errorData.message || 'Unknown error',
+      level: "error",
+      message: errorData.message || "Unknown error",
       timestamp: errorData.timestamp || new Date(),
-      ...errorData
+      ...errorData,
     };
-    
+
     this.addToQueue(entry);
   }
 
-  private log(level: LogEntry['level'], message: string, data?: any): void {
+  private log(level: LogEntry["level"], message: string, data?: any): void {
     const entry: LogEntry = {
       level,
       message,
       timestamp: new Date(),
       data,
       url: window.location.href,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     };
 
     // Console output
-    const consoleMethod = level === 'error' ? 'error' : level === 'warn' ? 'warn' : 'log';
-    console[consoleMethod](`[${level.toUpperCase()}] ${message}`, data || '');
+    const consoleMethod =
+      level === "error" ? "error" : level === "warn" ? "warn" : "log";
+    console[consoleMethod](`[${level.toUpperCase()}] ${message}`, data || "");
 
     this.addToQueue(entry);
   }
@@ -329,7 +336,7 @@ export class LoggingService {
     this.logQueue.push(entry);
 
     // Flush immediately for errors in production
-    if (entry.level === 'error' && environment.production) {
+    if (entry.level === "error" && environment.production) {
       this.flush();
     }
 
@@ -349,10 +356,10 @@ export class LoggingService {
       // Send to backend
       this.http.post(this.logEndpoint, { logs }).subscribe({
         error: (err) => {
-          console.error('Failed to send logs:', err);
+          console.error("Failed to send logs:", err);
           // Re-add to queue
           this.logQueue.unshift(...logs);
-        }
+        },
       });
     }
   }
@@ -367,45 +374,52 @@ export class LoggingService {
 
 ```typescript
 // core/services/notification.service.ts
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal } from "@angular/core";
 
 export interface Notification {
   id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   message: string;
   duration?: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NotificationService {
   private notificationsSignal = signal<Notification[]>([]);
   notifications = this.notificationsSignal.asReadonly();
 
   success(message: string, duration = 3000): void {
-    this.show('success', message, duration);
+    this.show("success", message, duration);
   }
 
   error(message: string, duration = 5000): void {
-    this.show('error', message, duration);
+    this.show("error", message, duration);
   }
 
   warning(message: string, duration = 4000): void {
-    this.show('warning', message, duration);
+    this.show("warning", message, duration);
   }
 
   info(message: string, duration = 3000): void {
-    this.show('info', message, duration);
+    this.show("info", message, duration);
   }
 
-  private show(type: Notification['type'], message: string, duration: number): void {
+  private show(
+    type: Notification["type"],
+    message: string,
+    duration: number,
+  ): void {
     const notification: Notification = {
       id: this.generateId(),
       type,
       message,
-      duration
+      duration,
     };
 
-    this.notificationsSignal.update(notifications => [...notifications, notification]);
+    this.notificationsSignal.update((notifications) => [
+      ...notifications,
+      notification,
+    ]);
 
     if (duration > 0) {
       setTimeout(() => this.remove(notification.id), duration);
@@ -413,8 +427,8 @@ export class NotificationService {
   }
 
   remove(id: string): void {
-    this.notificationsSignal.update(notifications =>
-      notifications.filter(n => n.id !== id)
+    this.notificationsSignal.update((notifications) =>
+      notifications.filter((n) => n.id !== id),
     );
   }
 
@@ -425,15 +439,16 @@ export class NotificationService {
 
 // notification.component.ts
 @Component({
-  selector: 'app-notifications',
+  selector: "app-notifications",
   standalone: true,
   imports: [CommonModule],
   template: `
     <div class="notifications-container">
       @for (notification of notifications(); track notification.id) {
-        <div 
+        <div
           class="notification notification-{{ notification.type }}"
-          (click)="close(notification.id)">
+          (click)="close(notification.id)"
+        >
           <span class="icon">{{ getIcon(notification.type) }}</span>
           <span class="message">{{ notification.message }}</span>
           <button class="close-btn" aria-label="Close">×</button>
@@ -441,69 +456,71 @@ export class NotificationService {
       }
     </div>
   `,
-  styles: [`
-    .notifications-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .notification {
-      min-width: 300px;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
+  styles: [
+    `
+      .notifications-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
-      to {
-        transform: translateX(0);
-        opacity: 1;
+
+      .notification {
+        min-width: 300px;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        animation: slideIn 0.3s ease-out;
       }
-    }
 
-    .notification-success {
-      background: #10b981;
-      color: white;
-    }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
 
-    .notification-error {
-      background: #ef4444;
-      color: white;
-    }
+      .notification-success {
+        background: #10b981;
+        color: white;
+      }
 
-    .notification-warning {
-      background: #f59e0b;
-      color: white;
-    }
+      .notification-error {
+        background: #ef4444;
+        color: white;
+      }
 
-    .notification-info {
-      background: #3b82f6;
-      color: white;
-    }
+      .notification-warning {
+        background: #f59e0b;
+        color: white;
+      }
 
-    .close-btn {
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: 24px;
-      cursor: pointer;
-      margin-left: auto;
-    }
-  `]
+      .notification-info {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 24px;
+        cursor: pointer;
+        margin-left: auto;
+      }
+    `,
+  ],
 })
 export class NotificationsComponent {
   notifications = inject(NotificationService).notifications;
@@ -516,12 +533,12 @@ export class NotificationsComponent {
 
   getIcon(type: string): string {
     const icons = {
-      success: '✓',
-      error: '✕',
-      warning: '⚠',
-      info: 'ℹ'
+      success: "✓",
+      error: "✕",
+      warning: "⚠",
+      info: "ℹ",
     };
-    return icons[type] || '';
+    return icons[type] || "";
   }
 }
 ```
@@ -534,8 +551,8 @@ export class NotificationsComponent {
 
 ```typescript
 // core/operators/smart-retry.operator.ts
-import { Observable, timer, throwError } from 'rxjs';
-import { retryWhen, mergeMap } from 'rxjs/operators';
+import { Observable, timer, throwError } from "rxjs";
+import { retryWhen, mergeMap } from "rxjs/operators";
 
 export interface RetryConfig {
   maxRetries?: number;
@@ -549,7 +566,7 @@ export function smartRetry<T>(config: RetryConfig = {}) {
     maxRetries = 3,
     delay = 1000,
     exponentialBackoff = true,
-    shouldRetry = (error) => error.status >= 500
+    shouldRetry = (error) => error.status >= 500,
   } = config;
 
   return (source: Observable<T>) =>
@@ -570,23 +587,23 @@ export function smartRetry<T>(config: RetryConfig = {}) {
               : delay;
 
             console.log(
-              `Retry attempt ${retryAttempt}/${maxRetries} after ${retryDelay}ms`
+              `Retry attempt ${retryAttempt}/${maxRetries} after ${retryDelay}ms`,
             );
 
             return timer(retryDelay);
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 }
 
 // Usage
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DataService {
   constructor(private http: HttpClient) {}
 
   getData(): Observable<Data[]> {
-    return this.http.get<Data[]>('/api/data').pipe(
+    return this.http.get<Data[]>("/api/data").pipe(
       smartRetry({
         maxRetries: 3,
         delay: 1000,
@@ -594,8 +611,8 @@ export class DataService {
         shouldRetry: (error) => {
           // Retry only for server errors and network issues
           return error.status === 0 || error.status >= 500;
-        }
-      })
+        },
+      }),
     );
   }
 }
@@ -609,11 +626,11 @@ export class DataService {
 
 ```typescript
 // core/services/network-status.service.ts
-import { Injectable, signal } from '@angular/core';
-import { fromEvent, merge, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, signal } from "@angular/core";
+import { fromEvent, merge, of } from "rxjs";
+import { map } from "rxjs/operators";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NetworkStatusService {
   private onlineSignal = signal(navigator.onLine);
   online = this.onlineSignal.asReadonly();
@@ -621,9 +638,9 @@ export class NetworkStatusService {
   constructor() {
     // Listen to online/offline events
     merge(
-      fromEvent(window, 'online').pipe(map(() => true)),
-      fromEvent(window, 'offline').pipe(map(() => false))
-    ).subscribe(status => {
+      fromEvent(window, "online").pipe(map(() => true)),
+      fromEvent(window, "offline").pipe(map(() => false)),
+    ).subscribe((status) => {
       this.onlineSignal.set(status);
       this.handleStatusChange(status);
     });
@@ -631,11 +648,11 @@ export class NetworkStatusService {
 
   private handleStatusChange(isOnline: boolean): void {
     if (isOnline) {
-      console.log('Connection restored');
+      console.log("Connection restored");
       // Retry failed requests
       this.retryFailedRequests();
     } else {
-      console.log('Connection lost');
+      console.log("Connection lost");
       // Show offline notification
     }
   }
@@ -647,7 +664,7 @@ export class NetworkStatusService {
 
 // offline-indicator.component.ts
 @Component({
-  selector: 'app-offline-indicator',
+  selector: "app-offline-indicator",
   standalone: true,
   template: `
     @if (!online()) {
@@ -656,19 +673,21 @@ export class NetworkStatusService {
       </div>
     }
   `,
-  styles: [`
-    .offline-banner {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #ef4444;
-      color: white;
-      padding: 12px;
-      text-align: center;
-      z-index: 9999;
-    }
-  `]
+  styles: [
+    `
+      .offline-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #ef4444;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        z-index: 9999;
+      }
+    `,
+  ],
 })
 export class OfflineIndicatorComponent {
   online = inject(NetworkStatusService).online;
@@ -679,21 +698,21 @@ export class OfflineIndicatorComponent {
 
 ```typescript
 // core/services/request-queue.service.ts
-import { Injectable } from '@angular/core';
-import { HttpRequest } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpRequest } from "@angular/common/http";
 
 interface QueuedRequest {
   request: HttpRequest<any>;
   timestamp: Date;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class RequestQueueService {
   private queue: QueuedRequest[] = [];
 
   constructor(
     private http: HttpClient,
-    private networkStatus: NetworkStatusService
+    private networkStatus: NetworkStatusService,
   ) {
     // Retry queued requests when back online
     effect(() => {
@@ -706,7 +725,7 @@ export class RequestQueueService {
   addToQueue(request: HttpRequest<any>): void {
     this.queue.push({
       request,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // Persist to localStorage
@@ -719,14 +738,14 @@ export class RequestQueueService {
 
     queue.forEach(({ request }) => {
       this.http.request(request).subscribe({
-        next: () => console.log('Queued request sent successfully'),
+        next: () => console.log("Queued request sent successfully"),
         error: (err) => {
-          console.error('Failed to send queued request:', err);
+          console.error("Failed to send queued request:", err);
           // Re-add to queue if still offline
           if (!this.networkStatus.online()) {
             this.addToQueue(request);
           }
-        }
+        },
       });
     });
 
@@ -734,11 +753,11 @@ export class RequestQueueService {
   }
 
   private saveQueue(): void {
-    localStorage.setItem('request-queue', JSON.stringify(this.queue));
+    localStorage.setItem("request-queue", JSON.stringify(this.queue));
   }
 
   private loadQueue(): void {
-    const saved = localStorage.getItem('request-queue');
+    const saved = localStorage.getItem("request-queue");
     if (saved) {
       this.queue = JSON.parse(saved);
     }
@@ -754,7 +773,7 @@ export class RequestQueueService {
 
 ```typescript
 // global-error-handler.spec.ts
-describe('GlobalErrorHandler', () => {
+describe("GlobalErrorHandler", () => {
   let handler: GlobalErrorHandler;
   let notificationService: jest.Mocked<NotificationService>;
   let loggingService: jest.Mocked<LoggingService>;
@@ -762,15 +781,15 @@ describe('GlobalErrorHandler', () => {
 
   beforeEach(() => {
     notificationService = {
-      error: jest.fn()
+      error: jest.fn(),
     } as any;
 
     loggingService = {
-      logError: jest.fn()
+      logError: jest.fn(),
     } as any;
 
     router = {
-      navigate: jest.fn()
+      navigate: jest.fn(),
     } as any;
 
     const injector = {
@@ -778,59 +797,59 @@ describe('GlobalErrorHandler', () => {
         if (token === NotificationService) return notificationService;
         if (token === LoggingService) return loggingService;
         if (token === Router) return router;
-      }
+      },
     } as any;
 
     handler = new GlobalErrorHandler();
     (handler as any).injector = injector;
   });
 
-  it('should handle HTTP 401 error', () => {
+  it("should handle HTTP 401 error", () => {
     const error = new HttpErrorResponse({
       status: 401,
-      statusText: 'Unauthorized'
+      statusText: "Unauthorized",
     });
 
     handler.handleError(error);
 
-    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    expect(router.navigate).toHaveBeenCalledWith(["/login"]);
     expect(notificationService.error).toHaveBeenCalledWith(
-      expect.stringContaining('login')
+      expect.stringContaining("login"),
     );
   });
 
-  it('should handle client-side error', () => {
-    const error = new TypeError('Cannot read property of null');
+  it("should handle client-side error", () => {
+    const error = new TypeError("Cannot read property of null");
 
     handler.handleError(error);
 
     expect(loggingService.logError).toHaveBeenCalledWith(
       expect.objectContaining({
         message: expect.any(String),
-        stack: expect.any(String)
-      })
+        stack: expect.any(String),
+      }),
     );
 
     expect(notificationService.error).toHaveBeenCalled();
   });
 
-  it('should handle HTTP 500 error', () => {
+  it("should handle HTTP 500 error", () => {
     const error = new HttpErrorResponse({
       status: 500,
-      statusText: 'Internal Server Error'
+      statusText: "Internal Server Error",
     });
 
     handler.handleError(error);
 
     expect(loggingService.logError).toHaveBeenCalled();
     expect(notificationService.error).toHaveBeenCalledWith(
-      expect.stringContaining('Server error')
+      expect.stringContaining("Server error"),
     );
   });
 });
 
 // error.interceptor.spec.ts
-describe('errorInterceptor', () => {
+describe("errorInterceptor", () => {
   let httpMock: HttpTestingController;
   let http: HttpClient;
 
@@ -838,8 +857,8 @@ describe('errorInterceptor', () => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([errorInterceptor])),
-        provideHttpClientTesting()
-      ]
+        provideHttpClientTesting(),
+      ],
     });
 
     httpMock = TestBed.inject(HttpTestingController);
@@ -850,43 +869,43 @@ describe('errorInterceptor', () => {
     httpMock.verify();
   });
 
-  it('should retry failed request', fakeAsync(() => {
+  it("should retry failed request", fakeAsync(() => {
     let callCount = 0;
 
-    http.get('/api/data').subscribe({
+    http.get("/api/data").subscribe({
       next: (data) => {
         expect(data).toEqual({ success: true });
         expect(callCount).toBe(2); // Initial + 1 retry
-      }
+      },
     });
 
     // First call fails
-    const req1 = httpMock.expectOne('/api/data');
+    const req1 = httpMock.expectOne("/api/data");
     callCount++;
-    req1.flush('Error', { status: 500, statusText: 'Server Error' });
+    req1.flush("Error", { status: 500, statusText: "Server Error" });
 
     tick(1000);
 
     // Second call succeeds
-    const req2 = httpMock.expectOne('/api/data');
+    const req2 = httpMock.expectOne("/api/data");
     callCount++;
     req2.flush({ success: true });
 
     tick();
   }));
 
-  it('should not retry 404 errors', () => {
-    http.get('/api/data').subscribe({
+  it("should not retry 404 errors", () => {
+    http.get("/api/data").subscribe({
       error: (err) => {
         expect(err.status).toBe(404);
-      }
+      },
     });
 
-    const req = httpMock.expectOne('/api/data');
-    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+    const req = httpMock.expectOne("/api/data");
+    req.flush("Not Found", { status: 404, statusText: "Not Found" });
 
     // Should not retry
-    httpMock.expectNone('/api/data');
+    httpMock.expectNone("/api/data");
   });
 });
 ```
@@ -899,11 +918,11 @@ describe('errorInterceptor', () => {
 
 ```typescript
 // core/services/monitoring.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 declare const Sentry: any;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class MonitoringService {
   constructor() {
     if (environment.production && environment.sentryDsn) {
@@ -914,24 +933,24 @@ export class MonitoringService {
   private initSentry(): void {
     Sentry.init({
       dsn: environment.sentryDsn,
-      environment: environment.production ? 'production' : 'development',
+      environment: environment.production ? "production" : "development",
       beforeSend(event: any) {
         // Filter out sensitive data
         if (event.request) {
           delete event.request.cookies;
         }
         return event;
-      }
+      },
     });
   }
 
   captureError(error: Error, context?: Record<string, any>): void {
     if (environment.production) {
       Sentry.captureException(error, {
-        extra: context
+        extra: context,
       });
     } else {
-      console.error('Error captured:', error, context);
+      console.error("Error captured:", error, context);
     }
   }
 
@@ -946,7 +965,7 @@ export class MonitoringService {
       Sentry.addBreadcrumb({
         message,
         data,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
   }
@@ -977,24 +996,24 @@ getData(): Observable<Data[]> {
 
 ```typescript
 // ✅ GOOD: Clear, actionable message
-"Unable to save changes. Please check your internet connection and try again."
+"Unable to save changes. Please check your internet connection and try again.";
 
 // ❌ BAD: Technical jargon
-"HTTP 500: Internal Server Error at /api/users/123"
+"HTTP 500: Internal Server Error at /api/users/123";
 ```
 
 ### 3. Log Contextual Information
 
 ```typescript
 // ✅ GOOD: Include context
-this.logger.error('Failed to load user', {
-  userId: '123',
+this.logger.error("Failed to load user", {
+  userId: "123",
   timestamp: new Date(),
-  url: window.location.href
+  url: window.location.href,
 });
 
 // ❌ BAD: Generic message
-this.logger.error('Error');
+this.logger.error("Error");
 ```
 
 ---
@@ -1002,24 +1021,28 @@ this.logger.error('Error');
 ## ✅ Checklist
 
 ### Error Handling
+
 - [ ] Global error handler implemented
 - [ ] HTTP error interceptor configured
 - [ ] User-friendly error messages
 - [ ] Retry strategies for transient failures
 
 ### Logging
+
 - [ ] Structured logging service
 - [ ] Error logging to backend
 - [ ] Context included in logs
 - [ ] Log levels configured
 
 ### User Experience
+
 - [ ] Error notifications displayed
 - [ ] Offline indicator shown
 - [ ] Loading states handled
 - [ ] Graceful degradation
 
 ### Monitoring
+
 - [ ] External monitoring integrated (Sentry, etc.)
 - [ ] Error tracking configured
 - [ ] User context captured
@@ -1030,6 +1053,7 @@ this.logger.error('Error');
 ## 🎓 Conclusión
 
 Error handling robusto es esencial:
+
 - **Global handler**: Captura todos los errores
 - **User-friendly**: Mensajes claros y accionables
 - **Resilience**: Retry strategies y offline support

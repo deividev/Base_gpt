@@ -91,7 +91,15 @@
             "purple": ["violet", "purple", "fuchsia"],
             "pink": ["pink", "rose"],
             "neutral": ["slate", "gray", "zinc", "neutral", "stone"],
-            "dark": ["dark", "dark-blue", "dark-purple", "dark-emerald", "dark-rose", "dark-orange", "dark-cyan"]
+            "dark": [
+              "dark",
+              "dark-blue",
+              "dark-purple",
+              "dark-emerald",
+              "dark-rose",
+              "dark-orange",
+              "dark-cyan"
+            ]
           },
           "themesSource": "Tailwind CSS v3 complete palette",
           "files": {
@@ -139,7 +147,12 @@
       "context": {
         "architectureStyle": "Feature-based + Clean Architecture simplificado",
         "documentation": "docs/architecture/",
-        "patterns": ["Functional Guards", "HTTP Interceptors", "Signals", "Barrel Exports"],
+        "patterns": [
+          "Functional Guards",
+          "HTTP Interceptors",
+          "Signals",
+          "Barrel Exports"
+        ],
         "layers": {
           "core": "Infraestructura singleton (services, guards, interceptors, models, config)",
           "features": "Módulos de negocio aislados con su propia lógica",
@@ -216,7 +229,12 @@
         "Priorizar issues (crítico, alto, medio, bajo)"
       ],
       "context": {
-        "focusAreas": ["performance", "security", "maintainability", "readability"]
+        "focusAreas": [
+          "performance",
+          "security",
+          "maintainability",
+          "readability"
+        ]
       }
     }
   },
@@ -225,12 +243,33 @@
     "automatic": true,
     "rules": [
       {
-        "keywords": ["component", "service", "directive", "pipe", "ui", "style", "design", "color", "layout", "theme", "tema"],
+        "keywords": [
+          "component",
+          "service",
+          "directive",
+          "pipe",
+          "ui",
+          "style",
+          "design",
+          "color",
+          "layout",
+          "theme",
+          "tema"
+        ],
         "agent": "angular-developer",
         "note": "Para UI ver design/design-system.md. Para crear features ver docs/architecture/02-features.md"
       },
       {
-        "keywords": ["architecture", "structure", "pattern", "feature", "core", "shared", "guard", "interceptor"],
+        "keywords": [
+          "architecture",
+          "structure",
+          "pattern",
+          "feature",
+          "core",
+          "shared",
+          "guard",
+          "interceptor"
+        ],
         "agent": "architecture",
         "note": "Consultar docs/architecture/ para estructura y patrones implementados"
       },

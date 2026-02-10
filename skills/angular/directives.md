@@ -40,27 +40,25 @@ Dominar la creación y uso de directivas personalizadas en Angular para reutiliz
 
 ```typescript
 // directives/highlight.directive.ts
-import { Directive, ElementRef, inject } from '@angular/core';
+import { Directive, ElementRef, inject } from "@angular/core";
 
 @Directive({
-  selector: '[appHighlight]',
+  selector: "[appHighlight]",
   standalone: true,
 })
 export class HighlightDirective {
   private el = inject(ElementRef);
-  
+
   constructor() {
-    this.el.nativeElement.style.backgroundColor = 'yellow';
+    this.el.nativeElement.style.backgroundColor = "yellow";
   }
 }
 
 // Uso
 @Component({
-  selector: 'app-demo',
+  selector: "app-demo",
   imports: [HighlightDirective],
-  template: `
-    <p appHighlight>Este texto está resaltado</p>
-  `,
+  template: ` <p appHighlight>Este texto está resaltado</p> `,
 })
 export class DemoComponent {}
 ```
@@ -76,14 +74,14 @@ import { Directive, ElementRef, Input, inject } from '@angular/core';
 })
 export class HighlightDirective {
   private el = inject(ElementRef);
-  
+
   @Input() appHighlight: string = 'yellow';
   @Input() defaultColor: string = 'transparent';
-  
+
   constructor() {
     this.el.nativeElement.style.backgroundColor = this.defaultColor;
   }
-  
+
   ngOnInit() {
     this.el.nativeElement.style.backgroundColor = this.appHighlight;
   }
@@ -97,11 +95,11 @@ export class HighlightDirective {
 ### Con HostBinding y HostListener
 
 ```typescript
-import { 
-  Directive, 
-  HostBinding, 
-  HostListener, 
-  Input 
+import {
+  Directive,
+  HostBinding,
+  HostListener,
+  Input
 } from '@angular/core';
 
 @Directive({
@@ -111,16 +109,16 @@ import {
 export class HighlightDirective {
   @Input() appHighlight: string = 'yellow';
   @Input() defaultColor: string = 'transparent';
-  
+
   // Bind a la propiedad style.backgroundColor del host
   @HostBinding('style.backgroundColor')
   backgroundColor: string = this.defaultColor;
-  
+
   @HostListener('mouseenter')
   onMouseEnter() {
     this.backgroundColor = this.appHighlight;
   }
-  
+
   @HostListener('mouseleave')
   onMouseLeave() {
     this.backgroundColor = this.defaultColor;
@@ -128,8 +126,8 @@ export class HighlightDirective {
 }
 
 // Uso
-<p 
-  appHighlight="lightblue" 
+<p
+  appHighlight="lightblue"
   defaultColor="white"
 >
   Hover para cambiar color
@@ -139,46 +137,42 @@ export class HighlightDirective {
 ### Directiva con Renderer2 (Recomendado)
 
 ```typescript
-import { 
-  Directive, 
-  ElementRef, 
-  Renderer2, 
-  HostListener, 
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  HostListener,
   Input,
-  inject
-} from '@angular/core';
+  inject,
+} from "@angular/core";
 
 @Directive({
-  selector: '[appHighlight]',
+  selector: "[appHighlight]",
   standalone: true,
 })
 export class HighlightDirective {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
-  
-  @Input() appHighlight: string = 'yellow';
-  @Input() defaultColor: string = 'transparent';
-  
+
+  @Input() appHighlight: string = "yellow";
+  @Input() defaultColor: string = "transparent";
+
   constructor() {
     this.setBackgroundColor(this.defaultColor);
   }
-  
-  @HostListener('mouseenter')
+
+  @HostListener("mouseenter")
   onMouseEnter() {
     this.setBackgroundColor(this.appHighlight);
   }
-  
-  @HostListener('mouseleave')
+
+  @HostListener("mouseleave")
   onMouseLeave() {
     this.setBackgroundColor(this.defaultColor);
   }
-  
+
   private setBackgroundColor(color: string) {
-    this.renderer.setStyle(
-      this.el.nativeElement,
-      'background-color',
-      color
-    );
+    this.renderer.setStyle(this.el.nativeElement, "background-color", color);
   }
 }
 ```
@@ -187,11 +181,11 @@ export class HighlightDirective {
 
 ```typescript
 import { Directive, Input } from '@angular/core';
-import { 
-  NG_VALIDATORS, 
-  Validator, 
-  AbstractControl, 
-  ValidationErrors 
+import {
+  NG_VALIDATORS,
+  Validator,
+  AbstractControl,
+  ValidationErrors
 } from '@angular/forms';
 
 @Directive({
@@ -207,23 +201,23 @@ import {
 })
 export class ForbiddenNameDirective implements Validator {
   @Input() appForbiddenName: string = '';
-  
+
   validate(control: AbstractControl): ValidationErrors | null {
     if (!this.appForbiddenName) {
       return null;
     }
-    
+
     const forbidden = new RegExp(this.appForbiddenName, 'i');
     const isForbidden = forbidden.test(control.value);
-    
-    return isForbidden 
-      ? { forbiddenName: { value: control.value } } 
+
+    return isForbidden
+      ? { forbiddenName: { value: control.value } }
       : null;
   }
 }
 
 // Uso en template
-<input 
+<input
   type="text"
   name="username"
   [(ngModel)]="username"
@@ -238,10 +232,10 @@ export class ForbiddenNameDirective implements Validator {
 ### Directiva Estructural Simple
 
 ```typescript
-import { 
-  Directive, 
-  Input, 
-  TemplateRef, 
+import {
+  Directive,
+  Input,
+  TemplateRef,
   ViewContainerRef,
   inject
 } from '@angular/core';
@@ -254,7 +248,7 @@ export class UnlessDirective {
   private templateRef = inject(TemplateRef<any>);
   private viewContainer = inject(ViewContainerRef);
   private hasView = false;
-  
+
   @Input() set appUnless(condition: boolean) {
     if (!condition && !this.hasView) {
       this.viewContainer.createEmbeddedView(this.templateRef);
@@ -275,10 +269,10 @@ export class UnlessDirective {
 ### Directiva con Contexto
 
 ```typescript
-import { 
-  Directive, 
-  Input, 
-  TemplateRef, 
+import {
+  Directive,
+  Input,
+  TemplateRef,
   ViewContainerRef,
   inject
 } from '@angular/core';
@@ -300,10 +294,10 @@ interface RepeatContext {
 export class RepeatDirective {
   private templateRef = inject(TemplateRef<RepeatContext>);
   private viewContainer = inject(ViewContainerRef);
-  
+
   @Input() set appRepeat(count: number) {
     this.viewContainer.clear();
-    
+
     for (let i = 0; i < count; i++) {
       this.viewContainer.createEmbeddedView(this.templateRef, {
         $implicit: i + 1,
@@ -327,10 +321,10 @@ export class RepeatDirective {
 ### Directiva de Permisos
 
 ```typescript
-import { 
-  Directive, 
-  Input, 
-  TemplateRef, 
+import {
+  Directive,
+  Input,
+  TemplateRef,
   ViewContainerRef,
   inject,
   OnInit,
@@ -348,9 +342,9 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
   private viewContainer = inject(ViewContainerRef);
   private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
-  
+
   @Input() appHasPermission: string | string[] = [];
-  
+
   ngOnInit() {
     this.authService.permissions$
       .pipe(takeUntil(this.destroy$))
@@ -358,27 +352,27 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
         this.updateView(permissions);
       });
   }
-  
+
   private updateView(userPermissions: string[]) {
     const hasPermission = this.checkPermissions(userPermissions);
-    
+
     if (hasPermission) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }
   }
-  
+
   private checkPermissions(userPermissions: string[]): boolean {
     const requiredPermissions = Array.isArray(this.appHasPermission)
       ? this.appHasPermission
       : [this.appHasPermission];
-    
+
     return requiredPermissions.some(permission =>
       userPermissions.includes(permission)
     );
   }
-  
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -402,10 +396,10 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
 ### Directiva Click Outside
 
 ```typescript
-import { 
-  Directive, 
-  Output, 
-  EventEmitter, 
+import {
+  Directive,
+  Output,
+  EventEmitter,
   ElementRef,
   HostListener,
   inject
@@ -417,13 +411,13 @@ import {
 })
 export class ClickOutsideDirective {
   @Output() clickOutside = new EventEmitter<void>();
-  
+
   private elementRef = inject(ElementRef);
-  
+
   @HostListener('document:click', ['$event.target'])
   onClick(targetElement: HTMLElement) {
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    
+
     if (!clickedInside) {
       this.clickOutside.emit();
     }
@@ -431,7 +425,7 @@ export class ClickOutsideDirective {
 }
 
 // Uso
-<div 
+<div
   class="dropdown"
   appClickOutside
   (clickOutside)="closeDropdown()"
@@ -443,10 +437,10 @@ export class ClickOutsideDirective {
 ### Directiva de Tooltip
 
 ```typescript
-import { 
-  Directive, 
-  Input, 
-  ElementRef, 
+import {
+  Directive,
+  Input,
+  ElementRef,
   Renderer2,
   HostListener,
   inject
@@ -459,56 +453,56 @@ import {
 export class TooltipDirective {
   @Input() appTooltip: string = '';
   @Input() tooltipPosition: 'top' | 'bottom' | 'left' | 'right' = 'top';
-  
+
   private elementRef = inject(ElementRef);
   private renderer = inject(Renderer2);
   private tooltipElement?: HTMLElement;
-  
+
   @HostListener('mouseenter')
   onMouseEnter() {
     if (!this.tooltipElement) {
       this.show();
     }
   }
-  
+
   @HostListener('mouseleave')
   onMouseLeave() {
     if (this.tooltipElement) {
       this.hide();
     }
   }
-  
+
   private show() {
     this.tooltipElement = this.renderer.createElement('div');
     this.tooltipElement.textContent = this.appTooltip;
-    
+
     this.renderer.addClass(this.tooltipElement, 'tooltip');
     this.renderer.addClass(this.tooltipElement, `tooltip-${this.tooltipPosition}`);
-    
+
     this.renderer.appendChild(
       document.body,
       this.tooltipElement
     );
-    
+
     this.positionTooltip();
   }
-  
+
   private hide() {
     if (this.tooltipElement) {
       this.renderer.removeChild(document.body, this.tooltipElement);
       this.tooltipElement = undefined;
     }
   }
-  
+
   private positionTooltip() {
     if (!this.tooltipElement) return;
-    
+
     const hostPos = this.elementRef.nativeElement.getBoundingClientRect();
     const tooltipPos = this.tooltipElement.getBoundingClientRect();
-    
+
     let top = 0;
     let left = 0;
-    
+
     switch (this.tooltipPosition) {
       case 'top':
         top = hostPos.top - tooltipPos.height - 5;
@@ -527,7 +521,7 @@ export class TooltipDirective {
         left = hostPos.right + 5;
         break;
     }
-    
+
     this.renderer.setStyle(this.tooltipElement, 'top', `${top}px`);
     this.renderer.setStyle(this.tooltipElement, 'left', `${left}px`);
   }
@@ -548,7 +542,7 @@ export class TooltipDirective {
 */
 
 // Uso
-<button 
+<button
   appTooltip="Click to save"
   tooltipPosition="top"
 >
@@ -559,9 +553,9 @@ export class TooltipDirective {
 ### Directiva de Lazy Load Images
 
 ```typescript
-import { 
-  Directive, 
-  Input, 
+import {
+  Directive,
+  Input,
   ElementRef,
   inject,
   OnInit,
@@ -574,10 +568,10 @@ import {
 })
 export class LazyLoadDirective implements OnInit, OnDestroy {
   @Input() appLazyLoad: string = '';
-  
+
   private elementRef = inject(ElementRef);
   private observer?: IntersectionObserver;
-  
+
   ngOnInit() {
     this.observer = new IntersectionObserver(
       entries => {
@@ -590,15 +584,15 @@ export class LazyLoadDirective implements OnInit, OnDestroy {
       },
       { threshold: 0.1 }
     );
-    
+
     this.observer.observe(this.elementRef.nativeElement);
   }
-  
+
   private loadImage() {
     const img = this.elementRef.nativeElement as HTMLImageElement;
     img.src = this.appLazyLoad;
   }
-  
+
   ngOnDestroy() {
     if (this.observer) {
       this.observer.disconnect();
@@ -607,7 +601,7 @@ export class LazyLoadDirective implements OnInit, OnDestroy {
 }
 
 // Uso
-<img 
+<img
   appLazyLoad="/assets/large-image.jpg"
   alt="Description"
   src="/assets/placeholder.jpg"
@@ -617,9 +611,9 @@ export class LazyLoadDirective implements OnInit, OnDestroy {
 ### Directiva de Auto-focus
 
 ```typescript
-import { 
-  Directive, 
-  ElementRef, 
+import {
+  Directive,
+  ElementRef,
   Input,
   inject,
   AfterViewInit
@@ -631,9 +625,9 @@ import {
 })
 export class AutoFocusDirective implements AfterViewInit {
   @Input() appAutoFocus: boolean = true;
-  
+
   private elementRef = inject(ElementRef);
-  
+
   ngAfterViewInit() {
     if (this.appAutoFocus) {
       setTimeout(() => {
@@ -644,13 +638,13 @@ export class AutoFocusDirective implements AfterViewInit {
 }
 
 // Uso
-<input 
+<input
   type="text"
   appAutoFocus
   placeholder="Auto focused"
 />
 
-<input 
+<input
   type="text"
   [appAutoFocus]="shouldFocus"
   placeholder="Conditionally focused"
@@ -665,12 +659,12 @@ export class AutoFocusDirective implements AfterViewInit {
 
 ```typescript
 // NO HACER ESTO
-@Directive({ selector: '[appBad]' })
+@Directive({ selector: "[appBad]" })
 export class BadDirective {
   constructor(private el: ElementRef) {
     // Manipulación directa del DOM
-    this.el.nativeElement.style.color = 'red';
-    this.el.nativeElement.innerHTML = '<span>Changed</span>';
+    this.el.nativeElement.style.color = "red";
+    this.el.nativeElement.innerHTML = "<span>Changed</span>";
   }
 }
 ```
@@ -678,16 +672,16 @@ export class BadDirective {
 ### ✅ BIEN: Usar Renderer2
 
 ```typescript
-@Directive({ selector: '[appGood]' })
+@Directive({ selector: "[appGood]" })
 export class GoodDirective {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
-  
+
   constructor() {
     // Usar Renderer2 para SSR y seguridad
-    this.renderer.setStyle(this.el.nativeElement, 'color', 'red');
-    const span = this.renderer.createElement('span');
-    const text = this.renderer.createText('Changed');
+    this.renderer.setStyle(this.el.nativeElement, "color", "red");
+    const span = this.renderer.createElement("span");
+    const text = this.renderer.createText("Changed");
     this.renderer.appendChild(span, text);
     this.renderer.appendChild(this.el.nativeElement, span);
   }
@@ -698,15 +692,15 @@ export class GoodDirective {
 
 ```typescript
 // NO HACER ESTO
-@Directive({ selector: '[appBad]' })
+@Directive({ selector: "[appBad]" })
 export class BadDirective {
   constructor() {
-    document.addEventListener('click', this.onClick);
+    document.addEventListener("click", this.onClick);
     // Nunca se limpia
   }
-  
+
   onClick = () => {
-    console.log('clicked');
+    console.log("clicked");
   };
 }
 ```
@@ -714,16 +708,16 @@ export class BadDirective {
 ### ✅ BIEN: Limpiar listeners
 
 ```typescript
-@Directive({ selector: '[appGood]' })
+@Directive({ selector: "[appGood]" })
 export class GoodDirective implements OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   constructor() {
-    fromEvent(document, 'click')
+    fromEvent(document, "click")
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => console.log('clicked'));
+      .subscribe(() => console.log("clicked"));
   }
-  
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -736,6 +730,7 @@ export class GoodDirective implements OnDestroy {
 ## 📋 Checklist
 
 ### Development
+
 - [ ] Usar `standalone: true` para directivas
 - [ ] Usar `Renderer2` en lugar de manipulación directa del DOM
 - [ ] Implementar `OnDestroy` si hay subscripciones
@@ -744,18 +739,21 @@ export class GoodDirective implements OnDestroy {
 - [ ] Documentar comportamiento y uso de la directiva
 
 ### Structural Directives
+
 - [ ] Inyectar `TemplateRef` y `ViewContainerRef`
 - [ ] Limpiar vistas con `viewContainer.clear()`
 - [ ] Proporcionar contexto tipado cuando sea necesario
 - [ ] Manejar cambios en `@Input()` correctamente
 
 ### Performance
+
 - [ ] Evitar operaciones pesadas en constructores
 - [ ] Usar `OnPush` en componentes host cuando sea posible
 - [ ] Desuscribirse de observables en `ngOnDestroy`
 - [ ] Considerar usar `IntersectionObserver` para lazy operations
 
 ### Testing
+
 - [ ] Crear tests para cada directiva
 - [ ] Probar con diferentes inputs
 - [ ] Verificar manipulación del DOM

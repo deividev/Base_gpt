@@ -10,7 +10,7 @@ describe('Navbar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Navbar],
-      providers: [ThemeService]
+      providers: [ThemeService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
@@ -38,10 +38,10 @@ describe('Navbar', () => {
   describe('Menu Toggle', () => {
     it('should toggle menu state', () => {
       expect((component as any).isMenuOpen()).toBe(false);
-      
+
       (component as any).toggleMenu();
       expect((component as any).isMenuOpen()).toBe(true);
-      
+
       (component as any).toggleMenu();
       expect((component as any).isMenuOpen()).toBe(false);
     });
@@ -49,7 +49,7 @@ describe('Navbar', () => {
     it('should close theme panel when menu opens', () => {
       (component as any).isThemePanelOpen.set(true);
       (component as any).toggleMenu();
-      
+
       expect((component as any).isMenuOpen()).toBe(true);
       expect((component as any).isThemePanelOpen()).toBe(false);
     });
@@ -58,10 +58,10 @@ describe('Navbar', () => {
   describe('Theme Panel Toggle', () => {
     it('should toggle theme panel state', () => {
       expect((component as any).isThemePanelOpen()).toBe(false);
-      
+
       (component as any).toggleThemePanel();
       expect((component as any).isThemePanelOpen()).toBe(true);
-      
+
       (component as any).toggleThemePanel();
       expect((component as any).isThemePanelOpen()).toBe(false);
     });
@@ -69,7 +69,7 @@ describe('Navbar', () => {
     it('should close menu when theme panel opens', () => {
       (component as any).isMenuOpen.set(true);
       (component as any).toggleThemePanel();
-      
+
       expect((component as any).isThemePanelOpen()).toBe(true);
       expect((component as any).isMenuOpen()).toBe(false);
     });
@@ -79,9 +79,9 @@ describe('Navbar', () => {
     it('should close menu and theme panel when navigating', () => {
       (component as any).isMenuOpen.set(true);
       (component as any).isThemePanelOpen.set(true);
-      
+
       (component as any).navigateToSection('contact');
-      
+
       expect((component as any).isMenuOpen()).toBe(false);
       expect((component as any).isThemePanelOpen()).toBe(false);
     });

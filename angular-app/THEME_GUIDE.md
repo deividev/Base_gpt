@@ -7,10 +7,10 @@ Los temas están basados en las paletas de colores profesionales de **Tailwind C
 
 ## 📍 Archivos de Configuración
 
-| Archivo | Propósito |
-|---------|-----------|
-| `src/styles/design-config.ts` | Tema por defecto (DEFAULT_THEME) |
-| `src/styles/themes.config.ts` | Definición de los 28 temas |
+| Archivo                          | Propósito                         |
+| -------------------------------- | --------------------------------- |
+| `src/styles/design-config.ts`    | Tema por defecto (DEFAULT_THEME)  |
+| `src/styles/themes.config.ts`    | Definición de los 28 temas        |
 | `src/app/core/services/theme.ts` | ThemeService para cambio dinámico |
 
 ---
@@ -22,7 +22,7 @@ Los temas están basados en las paletas de colores profesionales de **Tailwind C
 En `src/styles/design-config.ts`, modificar:
 
 ```typescript
-export const DEFAULT_THEME: ThemeName = 'blue';  // Cambiar a otro tema
+export const DEFAULT_THEME: ThemeName = 'blue'; // Cambiar a otro tema
 ```
 
 ⚠️ **Requiere recargar la página** (F5)
@@ -51,67 +51,67 @@ const themes = this.themeService.availableThemes;
 
 ### Colores Cálidos 🔥
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `red` | #ef4444 | Rojo vibrante | Alertas, urgencia, energía |
-| `orange` | #f97316 | Naranja cálido | Creatividad, e-commerce |
-| `amber` | #f59e0b | Ámbar dorado | Finanzas, premium |
-| `yellow` | #eab308 | Amarillo brillante | Optimismo, promociones |
+| Tema     | Primary | Descripción        | Uso Recomendado            |
+| -------- | ------- | ------------------ | -------------------------- |
+| `red`    | #ef4444 | Rojo vibrante      | Alertas, urgencia, energía |
+| `orange` | #f97316 | Naranja cálido     | Creatividad, e-commerce    |
+| `amber`  | #f59e0b | Ámbar dorado       | Finanzas, premium          |
+| `yellow` | #eab308 | Amarillo brillante | Optimismo, promociones     |
 
 ### Verdes 🌿
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `lime` | #84cc16 | Lima fresco | Apps juveniles, tecnología |
-| `green` | #22c55e | Verde clásico | Éxito, dinero, naturaleza |
-| `emerald` | #10b981 | Esmeralda | Salud, bienestar, sostenibilidad |
-| `teal` | #14b8a6 | Teal elegante | Spas, bienestar, profesional |
+| Tema      | Primary | Descripción   | Uso Recomendado                  |
+| --------- | ------- | ------------- | -------------------------------- |
+| `lime`    | #84cc16 | Lima fresco   | Apps juveniles, tecnología       |
+| `green`   | #22c55e | Verde clásico | Éxito, dinero, naturaleza        |
+| `emerald` | #10b981 | Esmeralda     | Salud, bienestar, sostenibilidad |
+| `teal`    | #14b8a6 | Teal elegante | Spas, bienestar, profesional     |
 
 ### Azules 💙
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `cyan` | #06b6d4 | Cian brillante | Tech, modernidad |
-| `sky` | #0ea5e9 | Cielo claro | Apps ligeras, comunicación |
+| Tema      | Primary | Descripción                 | Uso Recomendado               |
+| --------- | ------- | --------------------------- | ----------------------------- |
+| `cyan`    | #06b6d4 | Cian brillante              | Tech, modernidad              |
+| `sky`     | #0ea5e9 | Cielo claro                 | Apps ligeras, comunicación    |
 | `blue` ⭐ | #3b82f6 | Azul estándar **(DEFAULT)** | SaaS, dashboards, corporativo |
-| `indigo` | #6366f1 | Índigo profundo | Fintech, apps premium |
+| `indigo`  | #6366f1 | Índigo profundo             | Fintech, apps premium         |
 
 ### Púrpuras 💜
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `violet` | #8b5cf6 | Violeta suave | Gaming, entretenimiento |
-| `purple` | #a855f7 | Púrpura vibrante | Creatividad, innovación |
-| `fuchsia` | #d946ef | Fucsia llamativo | Moda, arte, diseño |
+| Tema      | Primary | Descripción      | Uso Recomendado         |
+| --------- | ------- | ---------------- | ----------------------- |
+| `violet`  | #8b5cf6 | Violeta suave    | Gaming, entretenimiento |
+| `purple`  | #a855f7 | Púrpura vibrante | Creatividad, innovación |
+| `fuchsia` | #d946ef | Fucsia llamativo | Moda, arte, diseño      |
 
 ### Rosas 💗
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `pink` | #ec4899 | Rosa intenso | Lifestyle, social |
-| `rose` | #f43f5e | Rosa rojizo | E-commerce, fashion |
+| Tema   | Primary | Descripción  | Uso Recomendado     |
+| ------ | ------- | ------------ | ------------------- |
+| `pink` | #ec4899 | Rosa intenso | Lifestyle, social   |
+| `rose` | #f43f5e | Rosa rojizo  | E-commerce, fashion |
 
 ### Neutrales 🔘
 
-| Tema | Primary | Descripción | Uso Recomendado |
-|------|---------|-------------|-----------------|
-| `slate` | #475569 | Gris azulado | Corporativo serio, B2B |
-| `gray` | #6b7280 | Gris neutro | Productividad, herramientas |
-| `zinc` | #71717a | Gris neutro | UI minimalista |
-| `neutral` | #737373 | Gris puro | Documentación, neutral |
-| `stone` | #78716c | Gris cálido | Apps orgánicas, artesanal |
+| Tema      | Primary | Descripción  | Uso Recomendado             |
+| --------- | ------- | ------------ | --------------------------- |
+| `slate`   | #475569 | Gris azulado | Corporativo serio, B2B      |
+| `gray`    | #6b7280 | Gris neutro  | Productividad, herramientas |
+| `zinc`    | #71717a | Gris neutro  | UI minimalista              |
+| `neutral` | #737373 | Gris puro    | Documentación, neutral      |
+| `stone`   | #78716c | Gris cálido  | Apps orgánicas, artesanal   |
 
 ### Modos Oscuros 🌙
 
-| Tema | Primary (sobre fondo oscuro) | Descripción |
-|------|------------------------------|-------------|
-| `dark` | #38bdf8 (sky-400) | Oscuro con acentos sky |
-| `dark-blue` | #60a5fa (blue-400) | Oscuro con acentos azules |
-| `dark-purple` | #c084fc (purple-400) | Oscuro con acentos púrpura |
-| `dark-emerald` | #34d399 (emerald-400) | Oscuro con acentos verdes |
-| `dark-rose` | #fb7185 (rose-400) | Oscuro con acentos rosa |
-| `dark-orange` | #fb923c (orange-400) | Oscuro con acentos naranja |
-| `dark-cyan` | #22d3ee (cyan-400) | Oscuro con acentos cyan |
+| Tema           | Primary (sobre fondo oscuro) | Descripción                |
+| -------------- | ---------------------------- | -------------------------- |
+| `dark`         | #38bdf8 (sky-400)            | Oscuro con acentos sky     |
+| `dark-blue`    | #60a5fa (blue-400)           | Oscuro con acentos azules  |
+| `dark-purple`  | #c084fc (purple-400)         | Oscuro con acentos púrpura |
+| `dark-emerald` | #34d399 (emerald-400)        | Oscuro con acentos verdes  |
+| `dark-rose`    | #fb7185 (rose-400)           | Oscuro con acentos rosa    |
+| `dark-orange`  | #fb923c (orange-400)         | Oscuro con acentos naranja |
+| `dark-cyan`    | #22d3ee (cyan-400)           | Oscuro con acentos cyan    |
 
 ---
 
@@ -147,34 +147,37 @@ this.themeService.setTheme('purple');
 
 ## 📝 Ejemplos de Solicitudes del Usuario
 
-| Solicitud | Tema Sugerido |
-|-----------|---------------|
-| "Tema profesional/corporativo" | `slate`, `blue` |
-| "Quiero algo más colorido" | `purple`, `fuchsia`, `rose` |
-| "App de salud/bienestar" | `emerald`, `teal` |
-| "Modo oscuro" | `dark`, `dark-blue`, `dark-purple` |
-| "E-commerce de moda" | `rose`, `pink` |
-| "App financiera" | `indigo`, `amber` |
-| "Tech/Moderno" | `cyan`, `blue`, `indigo` |
-| "Natural/Eco" | `emerald`, `green`, `lime` |
-| "Urgente/Alertas" | `red`, `orange` |
-| "Minimalista" | `gray`, `zinc`, `neutral` |
+| Solicitud                      | Tema Sugerido                      |
+| ------------------------------ | ---------------------------------- |
+| "Tema profesional/corporativo" | `slate`, `blue`                    |
+| "Quiero algo más colorido"     | `purple`, `fuchsia`, `rose`        |
+| "App de salud/bienestar"       | `emerald`, `teal`                  |
+| "Modo oscuro"                  | `dark`, `dark-blue`, `dark-purple` |
+| "E-commerce de moda"           | `rose`, `pink`                     |
+| "App financiera"               | `indigo`, `amber`                  |
+| "Tech/Moderno"                 | `cyan`, `blue`, `indigo`           |
+| "Natural/Eco"                  | `emerald`, `green`, `lime`         |
+| "Urgente/Alertas"              | `red`, `orange`                    |
+| "Minimalista"                  | `gray`, `zinc`, `neutral`          |
 
 ---
 
 ## 📊 Comparación de Temas Light vs Dark
 
 ### Temas Light (Fondo Claro)
+
 - Background: `#ffffff` o `gray-50`
 - Text: `gray-900` (oscuro)
 - Primary: Color-500 (saturación media)
 - 17 temas: red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose
 
 ### Temas Neutrales (Fondo Claro)
+
 - Primary: Grises con acentos de color
 - 5 temas: slate, gray, zinc, neutral, stone
 
 ### Temas Dark (Fondo Oscuro)
+
 - Background: `zinc-900` (#18181b)
 - Surface: `zinc-800` (#27272a)
 - Text: `gray-50` (claro)
@@ -188,6 +191,7 @@ this.themeService.setTheme('purple');
 ### Variables CSS Aplicadas
 
 Cada tema configura automáticamente:
+
 - `--color-primary`, `--color-primary-light`, `--color-primary-dark`
 - `--color-secondary`, `--color-secondary-light`, `--color-secondary-dark`
 - `--color-accent`, `--color-accent-light`, `--color-accent-dark`
@@ -203,6 +207,7 @@ Cada tema configura automáticamente:
 ### Consola de Verificación
 
 Al cambiar tema, la consola muestra:
+
 ```
 🎨 Tema cambiado a: Emerald
 ```

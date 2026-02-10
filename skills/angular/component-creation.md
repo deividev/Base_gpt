@@ -15,19 +15,21 @@ Crear componentes Angular optimizados, mantenibles y siguiendo las mejores prác
 ## ✅ Reglas Fundamentales
 
 ### 1. Usar Standalone Components por Defecto
+
 ```typescript
 // ✅ CORRECTO - Standalone component
 @Component({
-  selector: 'app-user-profile',
+  selector: "app-user-profile",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.scss'
+  templateUrl: "./user-profile.component.html",
+  styleUrl: "./user-profile.component.scss",
 })
 export class UserProfileComponent {}
 ```
 
 ### 2. Estructura de Archivos
+
 ```
 feature/
 ├── components/
@@ -39,15 +41,17 @@ feature/
 ```
 
 ### 3. Nomenclatura
+
 - **Selector**: Usar prefijo `app-` + nombre descriptivo en kebab-case
 - **Clase**: PascalCase + sufijo `Component`
 - **Archivo**: kebab-case + `.component.ts`
 
 ### 4. Signals para Estado Local
+
 ```typescript
 // ✅ CORRECTO - Usar signals
 export class UserProfileComponent {
-  userName = signal('John Doe');
+  userName = signal("John Doe");
   isLoading = signal(false);
   userData = signal<User | null>(null);
 
@@ -58,6 +62,7 @@ export class UserProfileComponent {
 ```
 
 ### 5. Change Detection OnPush
+
 ```typescript
 @Component({
   selector: 'app-user-profile',
@@ -70,37 +75,43 @@ export class UserProfileComponent {
 ## 📝 Template de Componente
 
 ```typescript
-import { Component, ChangeDetectionStrategy, signal, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  input,
+  output,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-example',
+  selector: "app-example",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './example.component.html',
-  styleUrl: './example.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./example.component.html",
+  styleUrl: "./example.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleComponent {
   // Inputs usando signals
-  title = input<string>(''); // input signal
+  title = input<string>(""); // input signal
   userId = input.required<number>(); // required input
 
   // Outputs
   itemSelected = output<string>();
-  
+
   // Estado local
   isActive = signal(false);
   items = signal<Item[]>([]);
-  
+
   // Computed values
   itemCount = computed(() => this.items().length);
-  
+
   // Lifecycle
   constructor() {
     // Inicialización
   }
-  
+
   // Methods
   onItemClick(item: string): void {
     this.itemSelected.emit(item);
@@ -111,16 +122,18 @@ export class ExampleComponent {
 ## 🚫 Malas Prácticas a Evitar
 
 ### ❌ No usar NgModules innecesarios
+
 ```typescript
 // ❌ INCORRECTO
 @NgModule({
   declarations: [UserProfileComponent],
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
-export class UserProfileModule { }
+export class UserProfileModule {}
 ```
 
 ### ❌ No usar @Input/@Output tradicionales
+
 ```typescript
 // ❌ INCORRECTO
 @Input() title?: string;
@@ -132,6 +145,7 @@ clicked = output<void>();
 ```
 
 ### ❌ Lógica de negocio en el componente
+
 ```typescript
 // ❌ INCORRECTO - Lógica compleja en el componente
 fetchUserData() {
@@ -154,37 +168,32 @@ ngOnInit() {
 ## ✨ Características Avanzadas
 
 ### 1. Control Flow Syntax (Angular 17+)
+
 ```html
 <!-- ✅ CORRECTO - Nueva sintaxis -->
 @if (isLoading()) {
-  <app-loading-spinner />
-}
-
-@for (item of items(); track item.id) {
-  <app-item-card [item]="item" />
-}
-
-@switch (status()) {
-  @case ('active') {
-    <span class="badge-success">Active</span>
-  }
-  @case ('inactive') {
-    <span class="badge-danger">Inactive</span>
-  }
-  @default {
-    <span class="badge-secondary">Unknown</span>
-  }
-}
+<app-loading-spinner />
+} @for (item of items(); track item.id) {
+<app-item-card [item]="item" />
+} @switch (status()) { @case ('active') {
+<span class="badge-success">Active</span>
+} @case ('inactive') {
+<span class="badge-danger">Inactive</span>
+} @default {
+<span class="badge-secondary">Unknown</span>
+} }
 ```
 
 ### 2. ViewChild con Signals
+
 ```typescript
 // Nueva API de ViewChild
-viewChild = viewChild<ElementRef>('myElement'); // signal-based
+viewChild = viewChild<ElementRef>("myElement"); // signal-based
 viewChildren = viewChildren(ItemComponent); // multiple elements
 ```
 
 ### 3. Effect para Side Effects
+
 ```typescript
 constructor() {
   // Ejecutar side effects cuando cambie un signal

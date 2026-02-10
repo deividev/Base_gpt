@@ -15,6 +15,7 @@ Se han instalado exitosamente las siguientes skills de **Angular Best Practices*
 **Prioridad**: Alta
 
 **Contenido**:
+
 - ✅ TypeScript con strict type checking
 - ✅ Componentes standalone modernos
 - ✅ Change Detection OnPush
@@ -37,6 +38,7 @@ Se han instalado exitosamente las siguientes skills de **Angular Best Practices*
 **Prioridad**: Media
 
 **Contenido**:
+
 - ✅ Layered Derivation Pattern
 - ✅ Form State with Signals
 - ✅ Parent-Child Communication
@@ -48,14 +50,14 @@ Se han instalado exitosamente las siguientes skills de **Angular Best Practices*
 
 ## 📊 Detalles de Importación
 
-| Propiedad | Valor |
-|-----------|-------|
-| **Fuente** | Boise State University - AgentCore Public Stack |
-| **URL** | https://github.com/Boise-State-Development/agentcore-public-stack |
-| **Licencia** | MIT |
-| **Skills Importadas** | 2 |
-| **Líneas de código** | ~2,300 líneas |
-| **Fecha de Importación** | 2026-02-08 |
+| Propiedad                | Valor                                                             |
+| ------------------------ | ----------------------------------------------------------------- |
+| **Fuente**               | Boise State University - AgentCore Public Stack                   |
+| **URL**                  | https://github.com/Boise-State-Development/agentcore-public-stack |
+| **Licencia**             | MIT                                                               |
+| **Skills Importadas**    | 2                                                                 |
+| **Líneas de código**     | ~2,300 líneas                                                     |
+| **Fecha de Importación** | 2026-02-08                                                        |
 
 ---
 
@@ -64,6 +66,7 @@ Se han instalado exitosamente las siguientes skills de **Angular Best Practices*
 Con estas skills instaladas, el sistema ahora puede:
 
 ### ✅ Desarrollo de Componentes
+
 - Crear componentes standalone con signals
 - Aplicar OnPush change detection automáticamente
 - Usar la nueva sintaxis de templates (@if, @for, @switch)
@@ -71,6 +74,7 @@ Con estas skills instaladas, el sistema ahora puede:
 - Seguir convenciones de nomenclatura modernas
 
 ### ✅ Gestión de Estado
+
 - Implementar patrones de derivación por capas
 - Crear computed signals para estado derivado
 - Manejar estado de formularios con signals
@@ -78,6 +82,7 @@ Con estas skills instaladas, el sistema ahora puede:
 - Aplicar debounce en búsquedas
 
 ### ✅ Best Practices
+
 - TypeScript strict mode
 - Lazy loading de rutas
 - Imágenes optimizadas
@@ -92,13 +97,14 @@ Con estas skills instaladas, el sistema ahora puede:
 ### Ejemplo 1: Crear un Componente Moderno
 
 ```
-"Como Angular Developer Agent, usando las skills de 
-angular-best-practices y component-creation, crea un 
-componente de dashboard con signals para mostrar 
+"Como Angular Developer Agent, usando las skills de
+angular-best-practices y component-creation, crea un
+componente de dashboard con signals para mostrar
 estadísticas en tiempo real"
 ```
 
 **Resultado Esperado**:
+
 - Componente standalone
 - OnPush change detection
 - Signals para estado
@@ -109,12 +115,13 @@ estadísticas en tiempo real"
 ### Ejemplo 2: Implementar Patrón Avanzado
 
 ```
-"Usando la skill de signal-patterns, implementa un 
-componente de lista con selección múltiple usando el 
+"Usando la skill de signal-patterns, implementa un
+componente de lista con selección múltiple usando el
 patrón 'List with Derived Selection State'"
 ```
 
 **Resultado Esperado**:
+
 - Lista con checkboxes
 - Select all/none
 - Estado derivado para selección
@@ -124,11 +131,12 @@ patrón 'List with Derived Selection State'"
 ### Ejemplo 3: Formulario con Estado
 
 ```
-"Aplicando signal-patterns, crea un formulario de 
+"Aplicando signal-patterns, crea un formulario de
 registro con validación y manejo de estado de submission"
 ```
 
 **Resultado Esperado**:
+
 - Reactive form
 - Signals para isSubmitting y errors
 - Computed para canSubmit
@@ -142,6 +150,7 @@ registro con validación y manejo de estado de submission"
 Cuando uses estas skills, verifica que el código generado incluya:
 
 ### Angular Best Practices
+
 - [ ] Componente standalone (sin declarar `standalone: true`)
 - [ ] `ChangeDetectionStrategy.OnPush`
 - [ ] Inputs usan `input()` o `input.required()`
@@ -154,6 +163,7 @@ Cuando uses estas skills, verifica que el código generado incluya:
 - [ ] Lazy loading configurado
 
 ### Signal Patterns
+
 - [ ] Estado organizado en capas lógicas
 - [ ] Computed signals sin side effects
 - [ ] Actualizaciones usan `update()` o `set()`
@@ -191,10 +201,12 @@ El archivo `config/skill-registry.json` ha sido actualizado para incluir:
 ## 📈 Estadísticas Actualizadas
 
 ### Antes de la Importación
+
 - Skills de Angular: 2/9 (22%)
 - Skills totales: 4/25+ (16%)
 
 ### Después de la Importación
+
 - Skills de Angular: 4/9 (44%) 🎉
 - Skills totales: 6/25+ (24%) 🎉
 - Líneas de documentación: +2,300 líneas
@@ -208,12 +220,14 @@ El archivo `config/skill-registry.json` ha sido actualizado para incluir:
 Estas skills han sido adaptadas del proyecto open-source **AgentCore Public Stack** de Boise State University, una plataforma de IA generativa full-stack construida sobre AWS Bedrock AgentCore.
 
 **Proyecto Original**:
+
 - Frontend: Angular v21
 - Backend: Python, FastAPI
 - Cloud: AWS Bedrock, ECS, CDK
 - Objetivo: Plataforma AI institucional con modelo pay-per-use
 
 **Contribuidores del proyecto original**:
+
 - Phil Merrell (@philmerrell)
 - Colin Smith (@colinmxs)
 - Derrick Fink (@DerrickF)
@@ -243,6 +257,7 @@ Estas skills han sido adaptadas del proyecto open-source **AgentCore Public Stac
    - Solicita una revisión con Code Review Agent
 
 3. **Genera el proyecto Angular**:
+
    ```bash
    cd "c:\Users\david\Desktop\Agent Games Web\Base_Skills"
    ng new angular-app --standalone --routing --style=scss

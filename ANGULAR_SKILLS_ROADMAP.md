@@ -9,34 +9,37 @@
 ## 📊 Prioridades Estratégicas
 
 ### 🔴 Crítico (Fase 1) - Bloquean desarrollo básico
+
 **Tiempo estimado**: 2-3 horas
 
-| Skill | Descripción | Razón |
-|-------|-------------|-------|
-| 🟥 `routing.md` | Rutas, guards, resolvers, lazy loading | Sin routing no hay navegación |
-| 🟥 `http-client.md` | APIs REST, interceptors, error handling | Sin HTTP no hay datos del backend |
-| 🟥 `forms.md` | Reactive forms, validación, formularios dinámicos | Fundamental para entrada de datos |
-| 🟥 `state-management.md` | Signals, NgRx, patrones de estado | Gestión de estado entre componentes |
+| Skill                    | Descripción                                       | Razón                               |
+| ------------------------ | ------------------------------------------------- | ----------------------------------- |
+| 🟥 `routing.md`          | Rutas, guards, resolvers, lazy loading            | Sin routing no hay navegación       |
+| 🟥 `http-client.md`      | APIs REST, interceptors, error handling           | Sin HTTP no hay datos del backend   |
+| 🟥 `forms.md`            | Reactive forms, validación, formularios dinámicos | Fundamental para entrada de datos   |
+| 🟥 `state-management.md` | Signals, NgRx, patrones de estado                 | Gestión de estado entre componentes |
 
 ### 🟠 Importante (Fase 2) - Mejoran calidad y productividad
+
 **Tiempo estimado**: 2-3 horas
 
-| Skill | Descripción | Razón |
-|-------|-------------|-------|
-| 🟧 `directives.md` | Directivas personalizadas y estructurales | Reutilización de lógica del DOM |
-| 🟧 `pipes.md` | Pipes personalizados y transformación de datos | Presentación de datos |
-| 🟧 `rxjs.md` | Operadores, patterns, manejo de observables | Programación reactiva avanzada |
-| 🟧 `performance.md` | Optimización, lazy loading, OnPush | Aplicaciones rápidas y escalables |
+| Skill               | Descripción                                    | Razón                             |
+| ------------------- | ---------------------------------------------- | --------------------------------- |
+| 🟧 `directives.md`  | Directivas personalizadas y estructurales      | Reutilización de lógica del DOM   |
+| 🟧 `pipes.md`       | Pipes personalizados y transformación de datos | Presentación de datos             |
+| 🟧 `rxjs.md`        | Operadores, patterns, manejo de observables    | Programación reactiva avanzada    |
+| 🟧 `performance.md` | Optimización, lazy loading, OnPush             | Aplicaciones rápidas y escalables |
 
 ### 🟡 Complementario (Fase 3) - Features avanzadas
+
 **Tiempo estimado**: 2 horas
 
-| Skill | Descripción | Razón |
-|-------|-------------|-------|
-| 🟨 `animations.md` | Angular animations y transiciones | UX mejorada |
-| 🟨 `i18n.md` | Internacionalización y localización | Apps multiidioma |
-| 🟨 `pwa.md` | Progressive Web App, service workers | Soporte offline |
-| 🟨 `dynamic-components.md` | Componentes dinámicos y ViewContainerRef | Casos avanzados |
+| Skill                      | Descripción                              | Razón            |
+| -------------------------- | ---------------------------------------- | ---------------- |
+| 🟨 `animations.md`         | Angular animations y transiciones        | UX mejorada      |
+| 🟨 `i18n.md`               | Internacionalización y localización      | Apps multiidioma |
+| 🟨 `pwa.md`                | Progressive Web App, service workers     | Soporte offline  |
+| 🟨 `dynamic-components.md` | Componentes dinámicos y ViewContainerRef | Casos avanzados  |
 
 ---
 
@@ -44,11 +47,11 @@
 
 ### 🔴 Crítico para Proyectos Grandes
 
-| Skill | Descripción | Impacto |
-|-------|-------------|---------|
-| 🟥 `solid-principles.md` | SOLID en TypeScript/Angular | Código mantenible |
-| 🟥 `modular-design.md` | Feature modules, organización | Escalabilidad |
-| 🟧 `design-patterns.md` | Singleton, Factory, Observer, etc. | Soluciones probadas |
+| Skill                    | Descripción                        | Impacto             |
+| ------------------------ | ---------------------------------- | ------------------- |
+| 🟥 `solid-principles.md` | SOLID en TypeScript/Angular        | Código mantenible   |
+| 🟥 `modular-design.md`   | Feature modules, organización      | Escalabilidad       |
+| 🟧 `design-patterns.md`  | Singleton, Factory, Observer, etc. | Soluciones probadas |
 
 ---
 
@@ -56,11 +59,11 @@
 
 ### 🔴 Indispensables para Calidad
 
-| Skill | Descripción | Cobertura |
-|-------|-------------|-----------|
-| 🟥 `unit-testing.md` | Jest setup (Jasmine deprecated), mocking, spies | Componentes y servicios |
-| 🟥 `integration-testing.md` | TestBed, ComponentFixture | Integración entre piezas |
-| 🟧 `e2e-testing.md` | Cypress/Playwright | Flujos completos de usuario |
+| Skill                       | Descripción                                     | Cobertura                   |
+| --------------------------- | ----------------------------------------------- | --------------------------- |
+| 🟥 `unit-testing.md`        | Jest setup (Jasmine deprecated), mocking, spies | Componentes y servicios     |
+| 🟥 `integration-testing.md` | TestBed, ComponentFixture                       | Integración entre piezas    |
+| 🟧 `e2e-testing.md`         | Cypress/Playwright                              | Flujos completos de usuario |
 
 ---
 
@@ -68,23 +71,25 @@
 
 ### 🔴 Necesarias para Producción
 
-| Skill | Descripción | Aplicación |
-|-------|-------------|------------|
-| 🟥 `error-handling.md` | Global error handler, logging | Manejo robusto de errores |
-| 🟧 `security.md` | XSS, CSRF, sanitización, auth | Seguridad de la app |
-| 🟧 `performance.md` | Profiling, bundle size, lazy loading | Optimización general |
+| Skill                  | Descripción                          | Aplicación                |
+| ---------------------- | ------------------------------------ | ------------------------- |
+| 🟥 `error-handling.md` | Global error handler, logging        | Manejo robusto de errores |
+| 🟧 `security.md`       | XSS, CSRF, sanitización, auth        | Seguridad de la app       |
+| 🟧 `performance.md`    | Profiling, bundle size, lazy loading | Optimización general      |
 
 ---
 
 ## 📋 Plan de Acción Completo
 
 ### ✅ Completado (4 skills)
+
 - [x] `component-creation.md`
 - [x] `services.md`
 - [x] `angular-best-practices.md` (Boise State)
 - [x] `signal-patterns.md` (Boise State)
 
 ### 🚀 Fase 1: Skills Críticas (4 skills) - **PRÓXIMO**
+
 **Objetivo**: Poder desarrollar features básicas completas
 
 1. **`routing.md`** (30 min)
@@ -126,6 +131,7 @@
 ---
 
 ### 🎯 Fase 2: Skills Importantes (4 skills)
+
 **Objetivo**: Mejorar calidad, reutilización y performance
 
 5. **`directives.md`** (20 min)
@@ -163,6 +169,7 @@
 ---
 
 ### 🎨 Fase 3: Skills Complementarias (3 skills)
+
 **Objetivo**: Features avanzadas y UX mejorada
 
 9. **`animations.md`** (30 min)
@@ -188,6 +195,7 @@
 ---
 
 ### 🏗️ Fase 4: Arquitectura (3 skills)
+
 **Objetivo**: Código escalable y mantenible
 
 12. **`solid-principles.md`** (30 min)
@@ -217,6 +225,7 @@
 ---
 
 ### 🧪 Fase 5: Testing (3 skills)
+
 **Objetivo**: Calidad asegurada
 
 15. **`unit-testing.md`** (45 min)
@@ -245,6 +254,7 @@
 ---
 
 ### 🔒 Fase 6: Core Skills (3 skills)
+
 **Objetivo**: Producción-ready
 
 18. **`error-handling.md`** (30 min)
@@ -296,6 +306,7 @@
 ## 🎯 Recomendación Inmediata
 
 ### Opción 1: Crear las 4 Skills Críticas AHORA (Fase 1)
+
 **Tiempo**: ~2.5 horas  
 **Impacto**: Podrás desarrollar features completas inmediatamente
 
@@ -309,10 +320,12 @@
 Después de esto, podrás crear dashboards, CRUDs, flujos completos.
 
 ### Opción 2: Crear TODO en una sesión
+
 **Tiempo**: 8-10 horas  
 **Impacto**: Sistema 100% completo para cualquier proyecto Angular
 
 ### Opción 3: Iterativo (Recomendado)
+
 **Fase 1 ahora** → Usarlo → **Fase 2 después** → Repetir
 
 ---
@@ -324,17 +337,18 @@ Después de esto, podrás crear dashboards, CRUDs, flujos completos.
 ```
 "Crea las 4 skills críticas de Angular:
 1. routing.md
-2. http-client.md  
+2. http-client.md
 3. forms.md
 4. state-management.md
 
-Usa el template de skills y asegúrate de incluir 
+Usa el template de skills y asegúrate de incluir
 ejemplos prácticos, anti-patterns, y checklist."
 ```
 
 Con estas 4 skills + las 4 que ya tienes = **8 skills** (53% del total de Angular)
 
 **Serás capaz de**:
+
 - ✅ Crear componentes modernos
 - ✅ Gestionar servicios
 - ✅ Navegar entre páginas
@@ -350,13 +364,13 @@ Con estas 4 skills + las 4 que ya tienes = **8 skills** (53% del total de Angula
 
 ## 📈 Métricas de Progreso
 
-| Categoría | Actual | Fase 1 | Fase 6 |
-|-----------|--------|--------|--------|
-| Angular Skills | 4/11 (36%) | 8/11 (73%) | 11/11 (100%) |
-| Architecture | 1/5 (20%) | 1/5 (20%) | 4/5 (80%) |
-| Testing | 0/4 (0%) | 0/4 (0%) | 3/4 (75%) |
-| Core | 1/7 (14%) | 1/7 (14%) | 4/7 (57%) |
-| **TOTAL** | **6/27 (22%)** | **10/27 (37%)** | **22/27 (81%)** |
+| Categoría      | Actual         | Fase 1          | Fase 6          |
+| -------------- | -------------- | --------------- | --------------- |
+| Angular Skills | 4/11 (36%)     | 8/11 (73%)      | 11/11 (100%)    |
+| Architecture   | 1/5 (20%)      | 1/5 (20%)       | 4/5 (80%)       |
+| Testing        | 0/4 (0%)       | 0/4 (0%)        | 3/4 (75%)       |
+| Core           | 1/7 (14%)      | 1/7 (14%)       | 4/7 (57%)       |
+| **TOTAL**      | **6/27 (22%)** | **10/27 (37%)** | **22/27 (81%)** |
 
 ---
 

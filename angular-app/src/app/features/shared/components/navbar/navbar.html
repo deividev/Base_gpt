@@ -3,30 +3,28 @@
     <div class="nav-brand">
       <span>🚀 AgentGames</span>
     </div>
-    
+
     <button class="mobile-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen()">
       <span class="hamburger"></span>
     </button>
 
-    <div class="nav-menu" [ngClass]="{'is-active': isMenuOpen()}">
+    <div class="nav-menu" [ngClass]="{ 'is-active': isMenuOpen() }">
       <a (click)="navigateToSection('hero')" class="nav-link">Home</a>
       <a (click)="navigateToSection('features')" class="nav-link">Features</a>
       <a (click)="navigateToSection('about')" class="nav-link">About</a>
       <a (click)="navigateToSection('projects')" class="nav-link">Projects</a>
       <a (click)="navigateToSection('contact')" class="nav-link">Contact</a>
-      
+
       <!-- Theme Toggle Button -->
-      <button class="theme-toggle-btn" (click)="toggleThemePanel()" title="Cambiar tema">
-        🎨
-      </button>
-      
+      <button class="theme-toggle-btn" (click)="toggleThemePanel()" title="Cambiar tema">🎨</button>
+
       <app-button variant="primary" (clicked)="navigateToSection('contact')">
         Get Started
       </app-button>
     </div>
-    
+
     <!-- Theme Panel -->
-    <div class="theme-panel" [ngClass]="{'is-active': isThemePanelOpen()}">
+    <div class="theme-panel" [ngClass]="{ 'is-active': isThemePanelOpen() }">
       <app-theme-switcher />
     </div>
   </div>

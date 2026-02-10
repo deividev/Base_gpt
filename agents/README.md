@@ -3,6 +3,7 @@
 ## 🤖 ¿Qué son los Agents?
 
 Los agents son perfiles especializados que Claude puede adoptar según la tarea. Cada agente tiene:
+
 - **Rol específico**: Frontend, Backend, Testing, Architecture, etc.
 - **Responsabilidades**: Qué debe hacer y qué no
 - **Skills asociadas**: Qué habilidades puede utilizar
@@ -11,21 +12,25 @@ Los agents son perfiles especializados que Claude puede adoptar según la tarea.
 ## 📋 Agents Disponibles
 
 ### 1. Angular Developer Agent
+
 - **Archivo**: `angular-developer.json`
 - **Rol**: Desarrollo de componentes, servicios y features de Angular
 - **Skills**: Angular, TypeScript, RxJS, State Management
 
 ### 2. Architecture Agent
+
 - **Archivo**: `architecture-agent.json`
 - **Rol**: Diseño de estructura, patrones y decisiones arquitectónicas
 - **Skills**: Design Patterns, SOLID, Clean Architecture
 
 ### 3. Testing Agent
+
 - **Archivo**: `testing-agent.json`
 - **Rol**: Creación y mantenimiento de tests
 - **Skills**: Jest, Jasmine, Testing Library, E2E
 
 ### 4. Code Review Agent
+
 - **Archivo**: `code-review-agent.json`
 - **Rol**: Revisar código y sugerir mejoras
 - **Skills**: Best Practices, Performance, Security

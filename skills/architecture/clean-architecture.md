@@ -10,7 +10,7 @@
 ## 📖 Documentación Implementada
 
 > **IMPORTANTE**: La arquitectura del proyecto está documentada en `docs/architecture/`.
-> 
+>
 > - **Vista general**: [01-overview.md](../../../docs/architecture/01-overview.md)
 > - **Crear features**: [02-features.md](../../../docs/architecture/02-features.md)
 > - **Guards e Interceptors**: [04-guards-interceptors.md](../../../docs/architecture/04-guards-interceptors.md)
@@ -82,6 +82,7 @@ src/
 ## ✅ Reglas de Dependencias
 
 ### 1. Dirección de Dependencias
+
 ```typescript
 // ✅ CORRECTO: Capas externas dependen de internas
 // Presentation → Application → Domain
@@ -91,6 +92,7 @@ src/
 ```
 
 ### 2. Domain Layer (Core del negocio)
+
 ```typescript
 // domain/entities/user.entity.ts
 export interface User {
@@ -105,7 +107,7 @@ export class UserEntity implements User {
     public id: number,
     public name: string,
     public email: string,
-    public isActive: boolean = true
+    public isActive: boolean = true,
   ) {}
 
   deactivate(): void {
@@ -113,33 +115,35 @@ export class UserEntity implements User {
   }
 
   validate(): boolean {
-    return this.email.includes('@') && this.name.length > 0;
+    return this.email.includes("@") && this.name.length > 0;
   }
 }
 ```
 
 ### 3. Repository Interface (Domain)
+
 ```typescript
 // domain/repositories/user.repository.ts
 export abstract class UserRepository {
   abstract getAll(): Observable<User[]>;
   abstract getById(id: number): Observable<User>;
-  abstract create(user: Omit<User, 'id'>): Observable<User>;
+  abstract create(user: Omit<User, "id">): Observable<User>;
   abstract update(id: number, user: Partial<User>): Observable<User>;
   abstract delete(id: number): Observable<void>;
 }
 ```
 
 ### 4. Use Cases (Application Layer)
+
 ```typescript
 // domain/use-cases/get-users.usecase.ts
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { UserRepository } from '../repositories/user.repository';
-import { User } from '../entities/user.entity';
+import { Injectable, inject } from "@angular/core";
+import { Observable } from "rxjs";
+import { UserRepository } from "../repositories/user.repository";
+import { User } from "../entities/user.entity";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class GetUsersUseCase {
   private userRepository = inject(UserRepository);
@@ -151,44 +155,49 @@ export class GetUsersUseCase {
 ```
 
 ### 5. Repository Implementation (Infrastructure)
+
 ```typescript
 // infrastructure/repositories/user.repository.impl.ts
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { UserRepository } from '../../domain/repositories/user.repository';
-import { User, UserEntity } from '../../domain/entities/user.entity';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { UserRepository } from "../../domain/repositories/user.repository";
+import { User, UserEntity } from "../../domain/entities/user.entity";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UserRepositoryImpl implements UserRepository {
   private http = inject(HttpClient);
-  private apiUrl = '/api/users';
+  private apiUrl = "/api/users";
 
   getAll(): Observable<User[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map(users => users.map(u => new UserEntity(u.id, u.name, u.email, u.isActive)))
-    );
+    return this.http
+      .get<any[]>(this.apiUrl)
+      .pipe(
+        map((users) =>
+          users.map((u) => new UserEntity(u.id, u.name, u.email, u.isActive)),
+        ),
+      );
   }
 
   getById(id: number): Observable<User> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
-      map(u => new UserEntity(u.id, u.name, u.email, u.isActive))
-    );
+    return this.http
+      .get<any>(`${this.apiUrl}/${id}`)
+      .pipe(map((u) => new UserEntity(u.id, u.name, u.email, u.isActive)));
   }
 
-  create(user: Omit<User, 'id'>): Observable<User> {
-    return this.http.post<any>(this.apiUrl, user).pipe(
-      map(u => new UserEntity(u.id, u.name, u.email, u.isActive))
-    );
+  create(user: Omit<User, "id">): Observable<User> {
+    return this.http
+      .post<any>(this.apiUrl, user)
+      .pipe(map((u) => new UserEntity(u.id, u.name, u.email, u.isActive)));
   }
 
   update(id: number, user: Partial<User>): Observable<User> {
-    return this.http.patch<any>(`${this.apiUrl}/${id}`, user).pipe(
-      map(u => new UserEntity(u.id, u.name, u.email, u.isActive))
-    );
+    return this.http
+      .patch<any>(`${this.apiUrl}/${id}`, user)
+      .pipe(map((u) => new UserEntity(u.id, u.name, u.email, u.isActive)));
   }
 
   delete(id: number): Observable<void> {
@@ -198,35 +207,37 @@ export class UserRepositoryImpl implements UserRepository {
 ```
 
 ### 6. Configuración de Providers
+
 ```typescript
 // feature/user-management/user-management.config.ts
-import { Provider } from '@angular/core';
-import { UserRepository } from './domain/repositories/user.repository';
-import { UserRepositoryImpl } from './infrastructure/repositories/user.repository.impl';
+import { Provider } from "@angular/core";
+import { UserRepository } from "./domain/repositories/user.repository";
+import { UserRepositoryImpl } from "./infrastructure/repositories/user.repository.impl";
 
 export const USER_MANAGEMENT_PROVIDERS: Provider[] = [
   {
     provide: UserRepository,
-    useClass: UserRepositoryImpl
-  }
+    useClass: UserRepositoryImpl,
+  },
 ];
 ```
 
 ### 7. Component usando Use Case
+
 ```typescript
 // presentation/pages/user-list/user-list.component.ts
-import { Component, signal, inject, OnInit } from '@angular/core';
-import { GetUsersUseCase } from '../../../domain/use-cases/get-users.usecase';
-import { User } from '../../../domain/entities/user.entity';
+import { Component, signal, inject, OnInit } from "@angular/core";
+import { GetUsersUseCase } from "../../../domain/use-cases/get-users.usecase";
+import { User } from "../../../domain/entities/user.entity";
 
 @Component({
-  selector: 'app-user-list',
+  selector: "app-user-list",
   standalone: true,
-  templateUrl: './user-list.component.html',
+  templateUrl: "./user-list.component.html",
 })
 export class UserListComponent implements OnInit {
   private getUsersUseCase = inject(GetUsersUseCase);
-  
+
   users = signal<User[]>([]);
   isLoading = signal(false);
 
@@ -242,9 +253,9 @@ export class UserListComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error loading users:', err);
+        console.error("Error loading users:", err);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 }

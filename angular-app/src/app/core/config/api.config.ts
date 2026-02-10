@@ -1,12 +1,12 @@
 /**
  * API Configuration
- * 
+ *
  * Centralized API-related configuration
  */
 
 /**
  * API Endpoints
- * 
+ *
  * Group endpoints by domain for better organization
  */
 export const API_ENDPOINTS = {

@@ -3,6 +3,7 @@
 ## 📖 Introducción
 
 Este sistema permite a Claude trabajar de manera más estructurada y autónoma mediante la definición de:
+
 - **Agents**: Roles especializados con responsabilidades claras
 - **Skills**: Conocimientos y patrones específicos que los agents aplican
 
@@ -17,12 +18,12 @@ graph TD
     B -->|Diseñar estructura| D[Architecture Agent]
     B -->|Escribir tests| E[Testing Agent]
     B -->|Revisar código| F[Code Review Agent]
-    
+
     C --> G[Carga Skills: component-creation, services]
     D --> H[Carga Skills: clean-architecture, patterns]
     E --> I[Carga Skills: unit-testing, e2e-testing]
     F --> J[Carga Skills: best-practices, performance]
-    
+
     G --> K[Ejecuta tarea aplicando mejores prácticas]
     H --> K
     I --> K
@@ -37,13 +38,15 @@ graph TD
 "Necesito un componente de perfil de usuario que muestre nombre, email y avatar"
 
 **Claude activa:**
+
 - **Agent**: Angular Developer
-- **Skills**: 
+- **Skills**:
   - `angular/component-creation`
   - `angular/services`
   - `core/typescript-advanced`
 
 **Resultado:**
+
 - Componente standalone con signals
 - OnPush change detection
 - Template con nueva sintaxis (@if, @for)
@@ -56,6 +59,7 @@ graph TD
 "Voy a crear un módulo de gestión de productos, ¿cómo lo estructuro?"
 
 **Claude activa:**
+
 - **Agent**: Architecture Agent
 - **Skills**:
   - `architecture/clean-architecture`
@@ -63,6 +67,7 @@ graph TD
   - `architecture/solid-principles`
 
 **Resultado:**
+
 - Estructura de carpetas por capas
 - Definición de entities, use cases, repositories
 - Diagramas de arquitectura
@@ -74,6 +79,7 @@ graph TD
 "Revisa este componente y sugiere mejoras"
 
 **Claude activa:**
+
 - **Agent**: Code Review Agent
 - **Skills**:
   - `angular/best-practices`
@@ -81,6 +87,7 @@ graph TD
   - `core/security`
 
 **Resultado:**
+
 - Lista de issues encontrados
 - Sugerencias específicas con código
 - Priorización de cambios
@@ -107,8 +114,8 @@ graph TD
 ### Combinar Agents y Skills
 
 ```
-"Como Angular Developer, usando las skills de 
-component-creation y state-management, crea un 
+"Como Angular Developer, usando las skills de
+component-creation y state-management, crea un
 dashboard con gestión de estado local"
 ```
 
@@ -125,6 +132,7 @@ dashboard con gestión de estado local"
 2. Usa el template en `skills/_template-skill.md`
 
 3. Actualiza `config/skill-registry.json`:
+
 ```json
 {
   "skills": {
@@ -141,6 +149,7 @@ dashboard con gestión de estado local"
 ### Agregar Nuevos Agents
 
 1. Actualiza `config/agent-config.json`:
+
 ```json
 {
   "agents": {
@@ -148,12 +157,8 @@ dashboard con gestión de estado local"
       "id": "nuevo-001",
       "name": "Nuevo Agent",
       "role": "rol-especifico",
-      "skills": [
-        "lista-de-skills"
-      ],
-      "responsibilities": [
-        "Lista de responsabilidades"
-      ]
+      "skills": ["lista-de-skills"],
+      "responsibilities": ["Lista de responsabilidades"]
     }
   }
 }
@@ -162,18 +167,22 @@ dashboard con gestión de estado local"
 ## 🎓 Mejores Prácticas
 
 ### 1. Ser Específico
+
 ✅ "Crea un componente standalone con signals para mostrar una lista de usuarios"  
 ❌ "Crea un componente de usuarios"
 
 ### 2. Mencionar el Contexto
+
 ✅ "Usando Clean Architecture, crea el repository para productos"  
 ❌ "Crea un repository"
 
 ### 3. Solicitar Revisiones
+
 ✅ "Revisa este código y verifica que siga las skills de Angular"  
 ❌ "¿Está bien este código?"
 
 ### 4. Pedir Explicaciones
+
 ✅ "Explica por qué usaste signals en lugar de observables"  
 ❌ "¿Por qué lo hiciste así?"
 
@@ -214,6 +223,7 @@ Al completar una tarea, Claude verifica:
 ### Claude no aplica una skill
 
 **Solución**: Menciona explícitamente la skill:
+
 ```
 "Usando la skill de component-creation, crea..."
 ```
@@ -221,17 +231,19 @@ Al completar una tarea, Claude verifica:
 ### El código no sigue las convenciones
 
 **Solución**: Solicita una revisión:
+
 ```
-"Revisa este código con el Code Review Agent y 
+"Revisa este código con el Code Review Agent y
 verifica que cumpla todas las skills de Angular"
 ```
 
 ### Necesitas una skill que no existe
 
-**Solución**: 
+**Solución**:
+
 1. Solicita su creación:
    ```
-   "Crea una skill para [tema específico] siguiendo 
+   "Crea una skill para [tema específico] siguiendo
    el template de skills"
    ```
 2. Claude la creará y la documentará
