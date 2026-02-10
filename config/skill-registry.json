@@ -1,0 +1,294 @@
+{
+  "$schema": "./schemas/skill-schema.json",
+  "version": "1.0.0",
+  "description": "Registro centralizado de todas las skills disponibles",
+  "categories": {
+    "angular": {
+      "name": "Angular Skills",
+      "description": "Skills específicas para desarrollo con Angular",
+      "path": "../skills/angular"
+    },
+    "architecture": {
+      "name": "Architecture Skills",
+      "description": "Patrones y principios arquitectónicos. Ver también: docs/architecture/",
+      "path": "../skills/architecture",
+      "documentation": "../docs/architecture/"
+    },
+    "design": {
+      "name": "Design Skills",
+      "description": "Sistema de diseño, temas y estilos visuales",
+      "path": "../skills/design",
+      "themeGuide": "../angular-app/THEME_GUIDE.md"
+    },
+    "testing": {
+      "name": "Testing Skills",
+      "description": "Testing con Vitest y Quality Assurance",
+      "path": "../skills/testing"
+    },
+    "core": {
+      "name": "Core Skills",
+      "description": "Habilidades fundamentales de desarrollo",
+      "path": "../skills/core"
+    }
+  },
+  "skills": {
+    "angular/component-creation": {
+      "file": "component-creation.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Creación de componentes standalone y modulares"
+    },
+    "angular/services": {
+      "file": "services.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Servicios, dependency injection y providedIn"
+    },
+    "angular/routing": {
+      "file": "routing.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Rutas, guards funcionales y resolvers. Ver docs/architecture/04-guards-interceptors.md"
+    },
+    "angular/state-management": {
+      "file": "state-management.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Gestión de estado con signals y NgRx"
+    },
+    "angular/forms": {
+      "file": "forms.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Reactive forms y validaciones"
+    },
+    "angular/http-client": {
+      "file": "http-client.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Integración con APIs y manejo de HTTP. Ver docs/architecture/03-api-guide.md"
+    },
+    "angular/best-practices": {
+      "file": "angular-best-practices.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Angular 21 - Mejores prácticas modernas (Boise State)",
+      "source": "https://github.com/Boise-State-Development/agentcore-public-stack"
+    },
+    "angular/signal-patterns": {
+      "file": "signal-patterns.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Patrones avanzados con signals (Boise State)",
+      "source": "https://github.com/Boise-State-Development/agentcore-public-stack"
+    },
+    "angular/directives": {
+      "file": "directives.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Directivas personalizadas y estructurales"
+    },
+    "angular/pipes": {
+      "file": "pipes.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Pipes personalizados y transformación de datos"
+    },
+    "angular/rxjs": {
+      "file": "rxjs.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Operadores RxJS y programación reactiva"
+    },
+    "angular/performance": {
+      "file": "performance.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Optimización y performance en Angular"
+    },
+    "angular/animations": {
+      "file": "animations.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Animaciones y transiciones"
+    },
+    "angular/i18n": {
+      "file": "i18n.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Internacionalización y localización"
+    },
+    "angular/pwa": {
+      "file": "pwa.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Progressive Web App con service workers"
+    },
+    "architecture/clean-architecture": {
+      "file": "clean-architecture.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Clean Architecture en Angular. Ver docs/architecture/01-overview.md"
+    },
+    "architecture/project-architecture": {
+      "file": "project-architecture.md",
+      "status": "active",
+      "priority": "critical",
+      "description": "Arquitectura implementada del proyecto. Referencia rápida a docs/architecture/"
+    },
+    "architecture/design-patterns": {
+      "file": "design-patterns.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Patrones de diseño aplicables (Creational, Structural, Behavioral)"
+    },
+    "architecture/solid-principles": {
+      "file": "solid-principles.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Principios SOLID en TypeScript/Angular"
+    },
+    "architecture/modular-design": {
+      "file": "modular-design.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Diseño modular feature-based. Ver docs/architecture/02-features.md"
+    },
+    "design/design-system": {
+      "file": "design-system.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Sistema de diseño con 28 temas Tailwind CSS. ThemeService para cambio dinámico"
+    },
+    "design/theming": {
+      "file": "README.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Guía de temas. Ver angular-app/THEME_GUIDE.md para cambio de tema"
+    },
+    "testing/unit-testing": {
+      "file": "unit-testing.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Unit testing con Vitest (vi.fn, vi.spyOn)"
+    },
+    "testing/integration-testing": {
+      "file": "integration-testing.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Tests de integración (componentes, routing, forms, HTTP)"
+    },
+    "testing/e2e-testing": {
+      "file": "e2e-testing.md",
+      "status": "active",
+      "priority": "medium",
+      "description": "Tests end-to-end con Cypress y Playwright"
+    },
+    "testing/tdd": {
+      "file": "tdd.md",
+      "status": "pending",
+      "priority": "low",
+      "description": "Test-Driven Development workflow (no incluido en roadmap)"
+    },
+    "core/typescript-advanced": {
+      "file": "typescript-advanced.md",
+      "status": "active",
+      "priority": "high",
+      "description": "TypeScript avanzado y tipos complejos"
+    },
+    "core/error-handling": {
+      "file": "error-handling.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Manejo de errores con interceptors. Ver docs/architecture/04-guards-interceptors.md"
+    },
+    "core/performance": {
+      "file": "performance.md",
+      "status": "pending",
+      "priority": "medium",
+      "description": "Optimización de performance (cubierto en angular/performance)"
+    },
+    "core/security": {
+      "file": "security.md",
+      "status": "active",
+      "priority": "high",
+      "description": "Mejores prácticas de seguridad (XSS, CSRF, Auth, Authorization)"
+    },
+    "core/documentation": {
+      "file": "documentation.md",
+      "status": "pending",
+      "priority": "low",
+      "description": "Documentación de código (no incluido en roadmap)"
+    },
+    "core/code-review": {
+      "file": "code-review.md",
+      "status": "pending",
+      "priority": "medium",
+      "description": "Checklist y proceso de code review (no incluido en roadmap)"
+    }
+  },
+  "metadata": {
+    "totalSkills": 28,
+    "completedSkills": 25,
+    "pendingSkills": 3,
+    "roadmapSkills": 25,
+    "roadmapCompleted": 25,
+    "roadmapProgress": "100%",
+    "lastUpdated": "2026-02-09",
+    "totalLines": 23150,
+    "architectureDocumentation": {
+      "location": "docs/architecture/",
+      "files": [
+        "01-overview.md - Estructura de carpetas y principios",
+        "02-features.md - Guía para crear features",
+        "03-api-guide.md - Cliente HTTP, payloads, respuestas",
+        "04-guards-interceptors.md - Guards e interceptors",
+        "05-models-types.md - Interfaces, DTOs, types",
+        "06-core-services.md - Servicios singleton"
+      ]
+    },
+    "testingFramework": {
+      "runner": "Vitest 4.0.8",
+      "mockSyntax": "vi.fn()",
+      "spySyntax": "vi.spyOn()",
+      "notJasmine": "NO usar jasmine.createSpy() ni spyOn() global"
+    },
+    "breakdown": {
+      "angular": {
+        "total": 15,
+        "completed": 15,
+        "lines": 11500
+      },
+      "architecture": {
+        "total": 4,
+        "completed": 4,
+        "lines": 2600
+      },
+      "testing": {
+        "total": 4,
+        "completed": 3,
+        "lines": 2650
+      },
+      "core": {
+        "total": 5,
+        "completed": 3,
+        "lines": 2600
+      }
+    },
+    "externalSources": [
+      {
+        "name": "Boise State University - AgentCore",
+        "url": "https://github.com/Boise-State-Development/agentcore-public-stack",
+        "license": "MIT",
+        "skillsImported": ["angular/best-practices", "angular/signal-patterns"]
+      }
+    ],
+    "notes": [
+      "Roadmap 100% completo - Todas las fases (1-6) completadas",
+      "Testing skills usan Jest en lugar de Jasmine deprecated",
+      "E2E testing incluye Cypress y Playwright",
+      "Skills pendientes no están en el roadmap principal",
+      "Sistema production-ready para desarrollo Angular profesional"
+    ]
+  }
+}

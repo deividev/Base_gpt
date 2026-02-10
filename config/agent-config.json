@@ -1,0 +1,254 @@
+{
+  "$schema": "./schemas/agent-schema.json",
+  "version": "1.0.0",
+  "description": "Configuración global de agents para el proyecto",
+  "agents": {
+    "angular-developer": {
+      "id": "angular-dev-001",
+      "name": "Angular Developer Agent",
+      "role": "frontend-developer",
+      "description": "Agente especializado en desarrollo Angular con las últimas mejores prácticas",
+      "active": true,
+      "skills": [
+        "angular/component-creation",
+        "angular/services",
+        "angular/routing",
+        "angular/state-management",
+        "angular/forms",
+        "angular/http-client",
+        "design/design-system",
+        "core/typescript-advanced",
+        "core/error-handling"
+      ],
+      "responsibilities": [
+        "Crear y mantener componentes Angular en features/",
+        "Implementar servicios con dependency injection",
+        "Configurar routing con guards funcionales",
+        "Gestionar estado con Angular Signals",
+        "Integrar con APIs usando ApiService de @core/services",
+        "Aplicar mejores prácticas de Angular 21",
+        "Crear features siguiendo docs/architecture/02-features.md",
+        "Cambiar temas visuales cuando se solicite (ver THEME_GUIDE.md)"
+      ],
+      "constraints": [
+        "SIEMPRE consultar docs/architecture/ antes de crear features o servicios",
+        "Seguir estructura: core/ para singletons, features/ para lógica de negocio",
+        "Colocar componentes compartidos en features/shared/components/",
+        "Usar barrel exports (index.ts) en cada carpeta",
+        "Mantener componentes pequeños y enfocados (< 400 líneas)",
+        "Usar standalone components por defecto",
+        "Preferir signals sobre observables cuando sea apropiado",
+        "Usar ApiService de @core/services para peticiones HTTP",
+        "SIEMPRE consultar design/design-system.md para implementaciones visuales",
+        "Usar variables CSS del design system en lugar de valores hardcodeados"
+      ],
+      "context": {
+        "framework": "Angular 21",
+        "typescript": "5.8+",
+        "buildTool": "esbuild",
+        "packageManager": "npm",
+        "nodeVersion": "18.19+/20.11+",
+        "rxjs": "7.8+",
+        "testingFramework": "Vitest 4.0.8",
+        "architecture": {
+          "documentation": "docs/architecture/",
+          "overview": "docs/architecture/01-overview.md",
+          "featuresGuide": "docs/architecture/02-features.md",
+          "apiGuide": "docs/architecture/03-api-guide.md",
+          "guardsInterceptors": "docs/architecture/04-guards-interceptors.md",
+          "modelsTypes": "docs/architecture/05-models-types.md",
+          "coreServices": "docs/architecture/06-core-services.md"
+        },
+        "folderStructure": {
+          "core": "src/app/core/ - Singletons (services, guards, interceptors, models, config)",
+          "features": "src/app/features/ - Módulos de negocio independientes",
+          "shared": "src/app/features/shared/ - Componentes/pipes/utils compartidos",
+          "environments": "src/environments/ - Configuración por entorno"
+        },
+        "coreServices": {
+          "ApiService": "@core/services - Cliente HTTP tipado",
+          "StorageService": "@core/services - LocalStorage/SessionStorage wrapper",
+          "LoggerService": "@core/services - Logging centralizado",
+          "LoadingService": "@core/services - Estado de carga global",
+          "ThemeService": "@core/services - Sistema de 28 temas"
+        },
+        "guards": {
+          "authGuard": "Requiere autenticación",
+          "guestGuard": "Solo usuarios NO autenticados",
+          "roleGuard": "Verifica roles específicos"
+        },
+        "interceptors": {
+          "errorInterceptor": "Manejo centralizado de errores HTTP",
+          "loadingInterceptor": "Estado de loading automático"
+        },
+        "designSystem": {
+          "totalThemes": 28,
+          "defaultTheme": "blue",
+          "themeCategories": {
+            "warm": ["red", "orange", "amber", "yellow"],
+            "green": ["lime", "green", "emerald", "teal"],
+            "blue": ["cyan", "sky", "blue", "indigo"],
+            "purple": ["violet", "purple", "fuchsia"],
+            "pink": ["pink", "rose"],
+            "neutral": ["slate", "gray", "zinc", "neutral", "stone"],
+            "dark": ["dark", "dark-blue", "dark-purple", "dark-emerald", "dark-rose", "dark-orange", "dark-cyan"]
+          },
+          "themesSource": "Tailwind CSS v3 complete palette",
+          "files": {
+            "config": "src/styles/design-config.ts",
+            "themes": "src/styles/themes.config.ts",
+            "service": "src/app/core/services/theme.ts",
+            "guide": "THEME_GUIDE.md"
+          },
+          "changeTheme": {
+            "static": "Modificar DEFAULT_THEME en design-config.ts + recargar (F5)",
+            "dynamic": "ThemeService.setTheme('nombreTema')"
+          }
+        }
+      }
+    },
+    "architecture": {
+      "id": "arch-001",
+      "name": "Architecture Agent",
+      "role": "architect",
+      "description": "Agente enfocado en decisiones arquitectónicas y diseño de sistemas",
+      "active": true,
+      "skills": [
+        "architecture/clean-architecture",
+        "architecture/design-patterns",
+        "architecture/solid-principles",
+        "architecture/modular-design",
+        "core/documentation"
+      ],
+      "responsibilities": [
+        "Mantener y evolucionar docs/architecture/",
+        "Diseñar estructura de carpetas según 01-overview.md",
+        "Definir ubicación de nuevos features siguiendo 02-features.md",
+        "Establecer modelos y DTOs según 05-models-types.md",
+        "Revisar uso correcto de servicios core según 06-core-services.md",
+        "Crear diagramas y documentación técnica"
+      ],
+      "constraints": [
+        "SIEMPRE consultar docs/architecture/ como fuente de verdad",
+        "Core solo para singletons - NO componentes UI",
+        "Features NO pueden importar de otras features",
+        "Shared solo para código usado en 2+ features",
+        "Mantener barrel exports actualizados",
+        "Documentar decisiones en docs/architecture/"
+      ],
+      "context": {
+        "architectureStyle": "Feature-based + Clean Architecture simplificado",
+        "documentation": "docs/architecture/",
+        "patterns": ["Functional Guards", "HTTP Interceptors", "Signals", "Barrel Exports"],
+        "layers": {
+          "core": "Infraestructura singleton (services, guards, interceptors, models, config)",
+          "features": "Módulos de negocio aislados con su propia lógica",
+          "shared": "Componentes/pipes/utils reutilizables entre features"
+        }
+      }
+    },
+    "testing": {
+      "id": "test-001",
+      "name": "Testing Agent",
+      "role": "qa-engineer",
+      "description": "Agente especializado en testing y aseguramiento de calidad",
+      "active": true,
+      "skills": [
+        "testing/unit-testing",
+        "testing/integration-testing",
+        "testing/e2e-testing",
+        "testing/tdd",
+        "core/debugging"
+      ],
+      "responsibilities": [
+        "Crear tests unitarios con Vitest",
+        "Implementar tests de integración para servicios",
+        "Implementar tests E2E para flujos críticos",
+        "Mantener cobertura de código > 80%",
+        "Crear archivos .spec.ts junto a cada componente/servicio"
+      ],
+      "constraints": [
+        "Usar vi.fn() para mocks (NO jasmine.createSpy)",
+        "Usar vi.spyOn() para espiar métodos (NO spyOn)",
+        "Tests deben ser independientes entre sí",
+        "Tests deben ser rápidos (< 100ms por unit test)",
+        "Nombrar archivos como: componente.spec.ts"
+      ],
+      "context": {
+        "testRunner": "Vitest 4.0.8",
+        "syntax": {
+          "mock": "vi.fn()",
+          "spy": "vi.spyOn(object, 'method')",
+          "describe": "describe('name', () => {})",
+          "test": "it('should...', () => {})",
+          "expect": "expect(value).toBe(expected)"
+        },
+        "commands": {
+          "run": "npm test",
+          "watch": "npm test -- --watch",
+          "coverage": "npm test -- --coverage"
+        },
+        "coverageTarget": 80
+      }
+    },
+    "code-reviewer": {
+      "id": "review-001",
+      "name": "Code Review Agent",
+      "role": "code-reviewer",
+      "description": "Agente para revisar código y sugerir mejoras",
+      "active": true,
+      "skills": [
+        "core/code-review",
+        "core/performance",
+        "core/security",
+        "angular/best-practices"
+      ],
+      "responsibilities": [
+        "Revisar PRs y código nuevo",
+        "Identificar problemas de performance",
+        "Detectar vulnerabilidades de seguridad",
+        "Sugerir refactorizaciones",
+        "Verificar cumplimiento de estándares"
+      ],
+      "constraints": [
+        "Críticas constructivas y específicas",
+        "Sugerir soluciones, no solo problemas",
+        "Priorizar issues (crítico, alto, medio, bajo)"
+      ],
+      "context": {
+        "focusAreas": ["performance", "security", "maintainability", "readability"]
+      }
+    }
+  },
+  "defaultAgent": "angular-developer",
+  "agentSelection": {
+    "automatic": true,
+    "rules": [
+      {
+        "keywords": ["component", "service", "directive", "pipe", "ui", "style", "design", "color", "layout", "theme", "tema"],
+        "agent": "angular-developer",
+        "note": "Para UI ver design/design-system.md. Para crear features ver docs/architecture/02-features.md"
+      },
+      {
+        "keywords": ["architecture", "structure", "pattern", "feature", "core", "shared", "guard", "interceptor"],
+        "agent": "architecture",
+        "note": "Consultar docs/architecture/ para estructura y patrones implementados"
+      },
+      {
+        "keywords": ["test", "testing", "spec", "e2e", "vitest", "mock"],
+        "agent": "testing",
+        "note": "Framework: Vitest. Usar vi.fn() y vi.spyOn()"
+      },
+      {
+        "keywords": ["review", "improve", "refactor", "optimize"],
+        "agent": "code-reviewer"
+      }
+    ]
+  },
+  "documentation": {
+    "architecture": "docs/architecture/",
+    "design": "skills/design/design-system.md",
+    "themes": "THEME_GUIDE.md",
+    "quickStart": "QUICK_START.md"
+  }
+}

@@ -1,0 +1,47 @@
+<div class="data-table-wrapper w-full">
+  <p-table 
+    [value]="data()" 
+    [tableStyle]="tableStyle()"
+    [paginator]="paginator()"
+    [rows]="rows()"
+    [showCurrentPageReport]="paginator()"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+  >
+    <ng-template #header>
+      <tr>
+        @for (col of columns(); track col.field) {
+          <th [pSortableColumn]="col.sortable ? col.field : undefined">
+            {{ col.header }}
+            @if (col.sortable) {
+              <p-sortIcon [field]="col.field" />
+            }
+          </th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-rowData>
+      <tr>
+        @for (col of columns(); track col.field) {
+          <td>
+            @if (!col.template || col.template === 'text') {
+              <strong class="text-[var(--text-primary)]">{{ rowData[col.field] }}</strong>
+            }
+            @if (col.template === 'badge') {
+              <span class="status-badge" [class]="'status-' + rowData[col.field].toLowerCase().replace(' ', '-')">
+                {{ rowData[col.field] }}
+              </span>
+            }
+            @if (col.template === 'progress') {
+              <div class="flex items-center gap-3">
+                <div class="flex-1 h-2 bg-[var(--surface-alt)] rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-500" [style.width.%]="rowData[col.field]"></div>
+                </div>
+                <span class="text-sm font-semibold text-[var(--primary)] min-w-[3rem]">{{ rowData[col.field] }}%</span>
+              </div>
+            }
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

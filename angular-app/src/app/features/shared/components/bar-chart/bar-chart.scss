@@ -1,0 +1,17 @@
+// Bar Chart Component - Tailwind CSS
+// Solo estilos para PrimeNG que requieren ::ng-deep
+
+:host {
+  display: block;
+}
+
+::ng-deep {
+  .p-chart {
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+      cursor: pointer;
+    }
+  }
+}
+

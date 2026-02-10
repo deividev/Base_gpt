@@ -1,0 +1,51 @@
+// Section Header Component
+
+:host {
+  display: block;
+}
+
+.section-header {
+  margin-bottom: 3rem;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 4rem;
+  }
+  
+  &.align-left {
+    text-align: left;
+  }
+  
+  &.align-center {
+    text-align: center;
+    
+    .section-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  &.align-right {
+    text-align: right;
+  }
+}
+
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+  }
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 36rem;
+  
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+  }
+}

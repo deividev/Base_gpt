@@ -1,0 +1,11 @@
+<div class="section-header" 
+     [ngClass]="{
+       'align-left': align() === 'left',
+       'align-center': align() === 'center',
+       'align-right': align() === 'right'
+     }">
+  <h2 class="section-title">{{ title() }}</h2>
+  @if (subtitle()) {
+    <p class="section-subtitle">{{ subtitle() }}</p>
+  }
+</div>

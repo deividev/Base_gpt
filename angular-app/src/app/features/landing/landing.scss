@@ -1,0 +1,310 @@
+// Landing Page Component
+
+:host {
+  display: block;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+// ============================================================================
+// HERO SECTION
+// ============================================================================
+.hero-section {
+  padding: 8rem 0 5rem;
+  margin-top: 4rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.hero-content {
+  position: relative;
+  text-align: center;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  
+  @media (min-width: 768px) {
+    font-size: 3rem;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 3.75rem;
+  }
+}
+
+.gradient-text {
+  // Amarillo/dorado brillante que contrasta bien sobre cualquier gradiente de color
+  background: linear-gradient(135deg, #fde047 0%, #facc15 50%, #eab308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+// ============================================================================
+// SECTIONS
+// ============================================================================
+.section {
+  padding: 5rem 0;
+  background: var(--background);
+  
+  &.section-alt {
+    background: var(--surface);
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ============================================================================
+// ABOUT SECTION
+// ============================================================================
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.about-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+  }
+}
+
+.about-text {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.about-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.about-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.about-image {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 0.75rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.about-image-content {
+  text-align: center;
+  color: white;
+}
+
+.about-image-icon {
+  font-size: 4.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.about-image-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.about-image-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+}
+
+// ============================================================================
+// PROJECTS SECTION
+// ============================================================================
+.projects-table-wrapper {
+  background: var(--surface-alt);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.chart-controls {
+  background: var(--surface-alt);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.chart-controls-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.chart-control-group {
+  flex: 1;
+}
+
+.chart-control-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.chart-control-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chart-control-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.chart-info-text {
+  color: var(--text-secondary);
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.selected-data-point {
+  background: rgba(var(--primary-rgb), 0.1);
+  border: 1px solid var(--primary);
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.selected-label {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.selected-value {
+  color: var(--text-primary);
+  margin-left: 0.5rem;
+}
+
+// ============================================================================
+// CONTACT SECTION
+// ============================================================================
+.contact-form {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.contact-form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contact-form-input {
+  flex: 1;
+}
+
+.contact-privacy {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}

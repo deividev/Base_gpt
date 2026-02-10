@@ -1,0 +1,46 @@
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div>
+        <span class="footer-brand">🚀 AgentGames</span>
+        <p class="footer-description">
+          Building the future of web development with Angular 21
+        </p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-links-column">
+          <h4>Product</h4>
+          <a (click)="navigateToSection('features')">Features</a>
+          <a (click)="navigateToSection('about')">About</a>
+          <a (click)="navigateToSection('contact')">Contact</a>
+        </div>
+        
+        <div class="footer-links-column">
+          <h4>Resources</h4>
+          <a href="#">Documentation</a>
+          <a href="#">Tutorials</a>
+          <a href="#">Blog</a>
+        </div>
+        
+        <div class="footer-links-column">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Privacy</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        © {{ currentYear() }} AgentGames. Built with Angular 21 & ❤️
+      </p>
+      <div class="footer-social">
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="GitHub">💻</a>
+        <a href="#" aria-label="LinkedIn">💼</a>
+      </div>
+    </div>
+  </div>
+</footer>

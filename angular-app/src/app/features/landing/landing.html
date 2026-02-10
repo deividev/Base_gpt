@@ -1,0 +1,255 @@
+<!-- Navigation -->
+<app-navbar (sectionClick)="scrollToSection($event)" />
+
+<!-- Hero Section -->
+<section id="hero" class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Build Amazing Web Apps with
+        <span class="gradient-text">Angular 21</span>
+      </h1>
+      <p class="hero-description">
+        Create professional, scalable applications with the latest Angular features.
+        Modern architecture, signals, and best practices built-in.
+      </p>
+      <div class="hero-buttons">
+        <app-button 
+          variant="primary" 
+          size="large" 
+          (clicked)="scrollToSection('contact')"
+        >
+          Start Your Project
+        </app-button>
+        <app-button 
+          variant="secondary" 
+          size="large" 
+          (clicked)="scrollToSection('features')"
+        >
+          Learn More
+        </app-button>
+      </div>
+      <div class="hero-stats">
+        <app-stat value="100%" label="Standalone" />
+        <app-stat value="⚡" label="ESBuild" />
+        <app-stat value="Signals" label="Reactive" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="section">
+  <div class="container">
+    <app-section-header 
+      title="Why Choose Us?" 
+      subtitle="Everything you need to build modern web applications"
+    />
+
+    <div class="features-grid">
+      @for (feature of features(); track feature.title) {
+        <app-feature-card 
+          [icon]="feature.icon"
+          [title]="feature.title"
+          [description]="feature.description"
+        />
+      }
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <h2 class="about-title">About Our Platform</h2>
+        <p class="about-text">
+          We're passionate about building cutting-edge web applications using the latest
+          technologies and best practices. Our platform is built with Angular 21, featuring
+          standalone components, signals for reactive programming, and ESBuild for lightning-fast
+          compilation.
+        </p>
+        <p class="about-text">
+          Whether you're building a small startup project or an enterprise application, our
+          architecture scales with your needs. We follow clean code principles, comprehensive
+          testing strategies, and security best practices.
+        </p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <span class="about-stat-value">5+</span>
+            <span class="about-stat-label">Years Experience</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-value">100+</span>
+            <span class="about-stat-label">Projects Delivered</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-value">99%</span>
+            <span class="about-stat-label">Client Satisfaction</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="about-image">
+          <div class="about-image-content">
+            <span class="about-image-icon">🚀</span>
+            <p class="about-image-title">Angular 21</p>
+            <p class="about-image-subtitle">Modern Web Development</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="section section-alt">
+  <div class="container">
+    <app-section-header 
+      title="Active Projects"
+      subtitle="Track our current projects and their progress"
+    />
+
+    <div class="projects-table-wrapper">
+      <app-data-table
+        [data]="projects()"
+        [columns]="projectColumns()"
+        [paginator]="true"
+        [rows]="5"
+        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} projects'"
+        [tableStyle]="{'min-width': '50rem'}"
+      />
+    </div>
+
+    <!-- Chart Controls -->
+    <div class="chart-controls">
+      <div class="chart-controls-inner">
+        <div class="chart-control-group">
+          <h4 class="chart-control-title">📊 Chart Type:</h4>
+          <div class="chart-control-buttons">
+            <app-button 
+              [variant]="currentChartType() === 'bar' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('bar')"
+            >Bar</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'line' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('line')"
+            >Line</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'pie' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('pie')"
+            >Pie</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'doughnut' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('doughnut')"
+            >Doughnut</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'radar' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('radar')"
+            >Radar</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'polarArea' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('polarArea')"
+            >Polar</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'bubble' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('bubble')"
+            >Bubble</app-button>
+            <app-button 
+              [variant]="currentChartType() === 'scatter' ? 'primary' : 'outline'"
+              [size]="'small'"
+              (click)="changeChartType('scatter')"
+            >Scatter</app-button>
+          </div>
+        </div>
+
+        @if (currentChartType() !== 'bubble' && currentChartType() !== 'scatter') {
+          <div class="chart-control-group">
+            <h4 class="chart-control-title">📁 Dataset:</h4>
+            <div class="chart-control-buttons">
+              <app-button 
+                [variant]="currentDataset() === 'projects' ? 'primary' : 'outline'"
+                [size]="'small'"
+                (click)="changeDataset('projects')"
+              >Projects</app-button>
+              <app-button 
+                [variant]="currentDataset() === 'hours' ? 'primary' : 'outline'"
+                [size]="'small'"
+                (click)="changeDataset('hours')"
+              >Hours</app-button>
+              <app-button 
+                [variant]="currentDataset() === 'team' ? 'primary' : 'outline'"
+                [size]="'small'"
+                (click)="changeDataset('team')"
+              >Team</app-button>
+            </div>
+          </div>
+        } @else {
+          <div class="chart-control-info">
+            <p class="chart-info-text">
+              ℹ️ This chart type uses a specialized dataset optimized for its visualization
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (selectedDataPoint()) {
+      <div class="selected-data-point">
+        <strong class="selected-label">📍 Selected:</strong> 
+        <span class="selected-value">{{ selectedDataPoint() }}</span>
+      </div>
+    }
+
+    <!-- Projects Chart -->
+    <app-bar-chart
+      [data]="chartData()"
+      [options]="chartOptions()"
+      [title]="chartTitle()"
+      [height]="'400px'"
+      [type]="currentChartType()"
+      (chartClick)="onChartClick($event)"
+    />
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="section">
+  <div class="container">
+    <app-section-header 
+      title="Get Started Today"
+      subtitle="Subscribe to receive updates and exclusive content"
+    />
+
+    <form class="contact-form" (submit)="handleEmailSubmit($event)">
+      <div class="contact-form-row">
+        <div class="contact-form-input">
+          <app-input
+            type="email"
+            placeholder="Enter your email"
+            [value]="email()"
+            [required]="true"
+            (valueChange)="email.set($event)"
+          />
+        </div>
+        <app-button type="submit" variant="primary">
+          Subscribe Now
+        </app-button>
+      </div>
+      <p class="contact-privacy">
+        🔒 We respect your privacy. Unsubscribe at any time.
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<app-footer (sectionClick)="scrollToSection($event)" />

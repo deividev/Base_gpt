@@ -1,0 +1,17 @@
+<button
+  [type]="type()"
+  [disabled]="disabled()"
+  class="btn"
+  [ngClass]="{
+    'btn-primary': variant() === 'primary',
+    'btn-secondary': variant() === 'secondary',
+    'btn-outline': variant() === 'outline',
+    'btn-small': size() === 'small',
+    'btn-medium': size() === 'medium',
+    'btn-large': size() === 'large'
+  }"
+  [attr.aria-label]="ariaLabel()"
+  (click)="onClick($event)"
+>
+  <ng-content></ng-content>
+</button>

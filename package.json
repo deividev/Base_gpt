@@ -1,0 +1,34 @@
+{
+  "name": "agent-games-web",
+  "version": "1.0.0",
+  "description": "Sistema de Agents y Skills para desarrollo con Claude AI - Base para proyectos Angular",
+  "author": "David",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "tu-repositorio-aqui"
+  },
+  "scripts": {
+    "setup": "echo 'Sistema de Agents y Skills configurado' && npm run info",
+    "info": "echo '\n📚 Revisa README.md para comenzar\n🚀 Ejecuta: cd angular-app && ng serve (después de crear el proyecto Angular)\n📖 Documentación completa en docs/usage-guide.md\n'",
+    "create-angular": "ng new angular-app --standalone --routing --style=scss",
+    "serve": "cd angular-app && ng serve",
+    "build": "cd angular-app && ng build",
+    "test": "cd angular-app && ng test",
+    "lint": "cd angular-app && ng lint"
+  },
+  "keywords": [
+    "angular",
+    "claude",
+    "ai-agents",
+    "skills",
+    "development",
+    "clean-architecture",
+    "typescript"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.24",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
+  }
+}

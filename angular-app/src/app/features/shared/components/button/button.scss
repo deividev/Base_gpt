@@ -1,0 +1,98 @@
+// Button Component
+
+:host {
+  display: inline-block;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // Variants
+  &.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+  
+  &.btn-secondary {
+    background: var(--surface-alt);
+    color: var(--text-primary);
+    border: 2px solid var(--gray-300);
+    backdrop-filter: blur(10px);
+    
+    &:hover {
+      background: var(--gray-200);
+      border-color: var(--gray-400);
+    }
+    
+    // En el hero (con fondo de gradiente), usar estilos para fondo oscuro
+    :host-context(.hero-section) & {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.3);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+  
+  &.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    
+    &:hover {
+      background: var(--primary);
+      color: white;
+    }
+  }
+  
+  // Sizes
+  &.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  &.btn-medium {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  &.btn-large {
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+  }
+}

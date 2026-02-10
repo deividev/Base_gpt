@@ -1,0 +1,45 @@
+// Stat Component
+
+:host {
+  display: block;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+  }
+  
+  // En el hero, usar blanco
+  :host-context(.hero-section) & {
+    color: white;
+  }
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+  }
+  
+  // En el hero, usar blanco con opacidad
+  :host-context(.hero-section) & {
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
