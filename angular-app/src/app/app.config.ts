@@ -7,6 +7,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
 import { ThemeService } from './core/services';
 import { errorInterceptor, loadingInterceptor } from './core/interceptors';
 
@@ -32,7 +33,9 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       ripple: true,
-      theme: 'none', // Using our own styles
+      theme: {
+        preset: Aura,
+      },
     }),
     {
       provide: APP_INITIALIZER,
