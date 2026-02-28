@@ -286,6 +286,17 @@
 }
 
 // ============================================================================
+// CALENDAR SECTION
+// ============================================================================
+.calendar-section-card {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+// ============================================================================
 // CONTACT SECTION
 // ============================================================================
 .contact-form {

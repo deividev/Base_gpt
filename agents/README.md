@@ -51,3 +51,9 @@ Los agents son perfiles especializados que Claude puede adoptar según la tarea.
 → Usa skills: angular/component-creation, angular/routing, angular/services
 → Aplica: Mejores prácticas de Angular 21
 ```
+
+## 📌 Nota operativa para este proyecto
+
+- Priorizar consistencia visual con `src/app/features/shared/components/README.md`.
+- Para PrimeNG, usar la guía `skills/angular/primeng-components.md`.
+- Evitar crear rutas nuevas para demos UI salvo petición explícita.

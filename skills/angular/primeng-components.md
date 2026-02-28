@@ -54,8 +54,15 @@ Usar PrimeNG con Angular moderno (standalone, signals, control flow `@if/@for`) 
 - Virtual scroll/lazy loading en listas extensas.
 - Evitar pipes costosos dentro de celdas en tablas grandes.
 
+## Integración visual específica de este proyecto
+- Antes de crear UI nueva, revisar `angular-app/src/app/features/shared/components/README.md` para respetar tokens, espaciado y patrones de componentes.
+- Usar variables del tema (`--surface`, `--surface-alt`, `--text-primary`, `--text-secondary`, `--primary`) y evitar colores hardcoded.
+- Si se añade una demo/componente funcional, integrarlo en una sección de la landing existente salvo que se pida explícitamente una ruta nueva.
+- Alinear tarjetas/contenedores con `border-radius: 0.75rem`, sombras del design system y paddings consistentes.
+
 ## Checklist antes de merge
 - [ ] Sin `*ngIf/*ngFor/*ngSwitch` en templates nuevos o modificados.
 - [ ] Componente PrimeNG correctamente tipado y accesible.
+- [ ] Integración visual coherente con el design system del proyecto (sin colores hardcoded).
 - [ ] Build OK (`npm run build`).
 - [ ] Sin warnings críticos en consola de Angular.

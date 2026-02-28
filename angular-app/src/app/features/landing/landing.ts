@@ -14,6 +14,7 @@ import {
 } from '../shared/components';
 import { transformToRadialDataset, isRadialChartType } from '../shared/utils';
 import { ThemeService } from '../../core/services';
+import { CalendarioComponent } from '../calendario/calendario.component';
 
 interface Feature {
   icon: string;
@@ -43,6 +44,7 @@ interface Project {
     Footer,
     DataTable,
     BarChart,
+    CalendarioComponent,
   ],
   templateUrl: './landing.html',
   styleUrl: './landing.scss',

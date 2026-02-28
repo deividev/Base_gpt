@@ -1,13 +1,12 @@
 import { Component, signal, output, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { Button } from '../button/button';
 import { ThemeService } from '../../../../core/services';
 import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 
 @Component({
   selector: 'app-navbar',
-  imports: [Button, NgClass, ThemeSwitcher, RouterLink],
+  imports: [Button, NgClass, ThemeSwitcher],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
