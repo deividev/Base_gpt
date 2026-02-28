@@ -1,7 +1,12 @@
 .calendario-wrapper {
   display: grid;
   gap: 1rem;
-  width: min(100%, 32rem);
+}
+
+.calendar-demo-card {
+  display: flex;
+  justify-content: center;
+  padding: 0.25rem 0;
 }
 
 .fecha-seleccionada {
