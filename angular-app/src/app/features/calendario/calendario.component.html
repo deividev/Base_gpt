@@ -1,6 +1,6 @@
 <div class="calendario-wrapper">
-  <p-calendar [(ngModel)]="fecha" showIcon="true" dateFormat="dd/mm/yy" placeholder="Selecciona una fecha"></p-calendar>
-  <div *ngIf="fecha" class="fecha-seleccionada">
-    Fecha seleccionada: {{ fecha | date: 'fullDate' }}
-  </div>
+  <p-datepicker [(ngModel)]="fecha" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="Selecciona una fecha" />
+  @if (fecha) {
+    <div class="fecha-seleccionada">Fecha seleccionada: {{ fecha | date: 'fullDate' }}</div>
+  }
 </div>
