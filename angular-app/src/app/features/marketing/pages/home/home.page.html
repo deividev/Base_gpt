@@ -1,0 +1,33 @@
+<app-hero
+  title="Desarrollo de software e implementaciones de IA para negocios que quieren ejecutar mejor"
+  subtitle="En Nous Labs construimos sistemas prácticos para ahorrar tiempo, mejorar operación y acelerar resultados."
+  primaryLabel="Ver servicios"
+  secondaryLabel="Reservar diagnóstico (20 min)"
+/>
+
+<section class="container section-grid">
+  <h2>Qué hacemos</h2>
+  <div class="cards-grid">
+    @for (service of services; track service.title) {
+      <p-card [header]="service.title"><p>{{ service.description }}</p></p-card>
+    }
+  </div>
+</section>
+
+<section class="container section-grid">
+  <h2>Método de trabajo</h2>
+  <app-process-steps [steps]="process" />
+</section>
+
+<section class="container section-grid">
+  <h2>FAQ rápida</h2>
+  <app-faq-accordion [items]="faq" />
+</section>
+
+<section class="container section-grid cta-final">
+  <h2>¿Quieres ordenar operación y ganar foco esta semana?</h2>
+  <div class="cta-group">
+    <app-whatsapp-cta [number]="contactConfig.whatsappNumber" [message]="contactConfig.whatsappMessage" />
+    <a routerLink="/contacto"><p-button label="Ir a contacto" severity="secondary" /></a>
+  </div>
+</section>

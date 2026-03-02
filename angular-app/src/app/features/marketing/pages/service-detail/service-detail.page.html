@@ -1,0 +1,32 @@
+<app-hero
+  title="Asistente IA Operativo para organizar tu negocio en días"
+  subtitle="Agenda, correo y documentación con una operativa clara y usable"
+  primaryLabel="Solicitar implementación"
+  primaryRoute="/contacto"
+/>
+
+<section class="container section-grid">
+  <h2>Niveles del servicio</h2>
+  <div class="cards-grid">
+    @for (tier of tiers; track tier.name) {
+      <app-pricing-tier-card [tier]="tier" (selected)="goToContact($event)" />
+    }
+  </div>
+</section>
+
+<section class="container section-grid">
+  <h2>Cómo es el onboarding</h2>
+  <app-process-steps [steps]="onboarding" />
+</section>
+
+<section class="container section-grid">
+  <h2>Preguntas frecuentes</h2>
+  <app-faq-accordion [items]="faq" />
+</section>
+
+<section class="container section-grid cta-final">
+  <h2>Diagnóstico gratuito de 20 min · Sin compromiso</h2>
+  <div class="cta-group">
+    <app-whatsapp-cta [number]="contactConfig.whatsappNumber" [message]="contactConfig.whatsappMessage" />
+  </div>
+</section>

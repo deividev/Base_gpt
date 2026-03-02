@@ -1,0 +1,10 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <h1>{{ title() }}</h1>
+    <p>{{ subtitle() }}</p>
+    <div class="hero-cta">
+      <a [routerLink]="primaryRoute()"><p-button [label]="primaryLabel()" /></a>
+      <a [routerLink]="secondaryRoute()"><p-button [label]="secondaryLabel()" severity="secondary" /></a>
+    </div>
+  </div>
+</section>

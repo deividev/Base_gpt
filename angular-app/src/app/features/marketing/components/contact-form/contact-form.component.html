@@ -1,0 +1,35 @@
+<p-toast />
+<form [formGroup]="form" (ngSubmit)="submit()" class="contact-form">
+  <label>
+    Nombre
+    <input pInputText formControlName="name" />
+    @if (form.controls.name.invalid && form.controls.name.touched) {
+      <small>Campo obligatorio.</small>
+    }
+  </label>
+
+  <label>
+    Email
+    <input pInputText formControlName="email" />
+    @if (form.controls.email.invalid && form.controls.email.touched) {
+      <small>Email inválido.</small>
+    }
+  </label>
+
+  <label>
+    Tipo de negocio
+    <p-select [options]="businessTypes" optionLabel="label" optionValue="value" formControlName="businessType" />
+  </label>
+
+  <label>
+    Objetivo principal
+    <input pInputText formControlName="objective" />
+  </label>
+
+  <label>
+    Mensaje
+    <textarea pTextarea rows="4" formControlName="message"></textarea>
+  </label>
+
+  <p-button type="submit" [loading]="loading()" label="Enviar solicitud" />
+</form>

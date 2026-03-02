@@ -113,3 +113,26 @@ body {
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
 }
+
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+
+.section-grid {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+
+.cards-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.cta-group {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
